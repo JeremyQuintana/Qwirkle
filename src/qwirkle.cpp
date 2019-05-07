@@ -12,6 +12,7 @@ void loadGame();
 void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
+void toUpperCase(std::string& str);
 
 int main(void) {
   int option = 0;
@@ -69,7 +70,7 @@ void loadGame(){
   std::string lines[500];
   int lineNumber = 0;
   if(!inFile){
-    std::cout << "Error - Can not open or fine file" << std::endl;
+    std::cout << "Error - Can not open or find file" << std::endl;
   } else{
     while (!inFile.eof()){
       std::getline(inFile, lines[lineNumber]);
@@ -78,6 +79,10 @@ void loadGame(){
   }
 
   //TODO check that file is in correct format
+  //check all player deets
+  //check board
+  //check bag
+  //check all pieces in hand and bag is correct amount
 
   std::cout << std::endl;
 }
@@ -146,6 +151,13 @@ std::string promptForPlayer(int playerNumber){
   << "> ";
   std::string player = "";
   std::cin >> player;
+  toUpperCase(player);
 
   return player;
+}
+
+void toUpperCase(std::string& str){
+  for (int i = 0; str[i] != '\0'; i++){
+    str[i] = toupper(str[i]);
+  }
 }
