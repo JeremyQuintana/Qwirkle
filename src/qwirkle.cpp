@@ -12,7 +12,6 @@ void loadGame();
 void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
-void toUpperCase(std::string& str);
 
 int main(void) {
   int option = 0;
@@ -144,20 +143,28 @@ int menuOptions(){
 
 //prompts for player and returns a player name
 std::string promptForPlayer(int playerNumber){
+  std::string player = "";
   std::cout
                                                               << std::endl
   << "Enter a name for player " << playerNumber
   <<                           " (uppercase characters only)" << std::endl
   << "> ";
-  std::string player = "";
-  std::cin >> player;
-  toUpperCase(player);
+
+  //loop until name input is correct
+  bool validate = false;
+  while (validate == false){
+    std::cin >> player;
+
+    //check input is all upper case letters
+    validate = true;
+    for (int i = 0; player[i] != '\0'; i++){
+      if (player.at(i) < 'A' || player.at(i) > 'Z') validate = false;
+    }
+
+    //prints error message if incorrect
+    if (validate == false)
+      std::cout << "Invalid input" << std::endl << "> ";
+  }
 
   return player;
-}
-
-void toUpperCase(std::string& str){
-  for (int i = 0; str[i] != '\0'; i++){
-    str[i] = toupper(str[i]);
-  }
 }
