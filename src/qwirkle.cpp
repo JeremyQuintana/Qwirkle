@@ -3,6 +3,7 @@
 
 #include "fstream"
 #include <iostream>
+#include "GameEngine.h"
 
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 2
@@ -50,6 +51,7 @@ void newGame(){
   //TODO implement the creation of the game using the array of players
 
   std::cout << std::endl;
+  GameEngine* game= new GameEngine();
 }
 
 //loads game from a given file name
