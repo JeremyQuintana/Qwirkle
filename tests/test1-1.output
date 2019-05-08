@@ -4,28 +4,35 @@ Menu
 ----
 1. New Game
 2. Load Game
-3. Show student information
+3. Show Student Information
 4. Quit
 
 >
 
 -----------------------------------
-Name: Jeremy Quintana
-Student ID: s3719476
-Email: s3719476@student.rmit.edu.au
-
-Name: Justin Seymour
-Student ID: s3655931
-Email: s3655931@student.rmit.edu.au
-
-Name: Edward Kahiro Kuo
-Student ID: s3691466
+Name: Edward Kahiro Kuo"
+Student ID: s3691466"
 Email: s3691466@student.rmit.edu.au
 
-Name: Luke Di Guglielmo
-Student ID: s3724928
+Name: Justin Seymour"
+Student ID: s3655931"
+Email: s3655931@student.rmit.edu.au
+
+Name: Jeremy Quintana"
+Student ID: s3719476"
+Email: s3719476@student.rmit.edu.au
+
+Name: Luke Di Guglielmo"
+Student ID: s3724928"
 Email: s3724928@student.rmit.edu.au
 -----------------------------------
+
+Menu
+----
+1. New Game
+2. Load Game
+3. Show Student Information
+4. Quit
 
 >
 
