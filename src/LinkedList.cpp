@@ -135,7 +135,7 @@ void LinkedList::deleteBack()
     }
 }
 
-void LinkedList::deleteTile(Tile data) //No error checks, need to do later
+void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
 {
     Node* temp = head;
     Node* prev = nullptr; //Keeps track of last node
