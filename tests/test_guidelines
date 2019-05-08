@@ -15,8 +15,8 @@ invalid moves will also include:
 - attempting to place piece on square that is occupied
 
 
-0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
--------------------------------------------------------------------------------
+   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+---------------------------------------------------------------------------------
 A |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 B |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 C |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -30,11 +30,11 @@ J |  |  |  |  |  |  |  |  |  |  |  |Y4|R4|G4|B4|  |  |  |  |  |  |  |  |  |  |  
 K |  |  |  |  |  |  |  |  |  |  |  |  |R3|  |B2|  |  |  |  |  |  |  |  |  |  |  |
 L |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B1|B4|B1|  |  |  |  |  |  |  |  |  |
 M |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B3|  |G1|  |  |  |  |  |  |  |  |  |
-N |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B6|  |R1|R2|  |  |  |  |  |  |  |  |
-O |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |R3|B3|G3|  |  |  |  |  |  |
-P |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |R4|  |  |  |  |  |  |  |  |
-Q |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |R5|B5|G5|  |  |  |  |  |  |
-R |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |G4|  |  |  |  |  |  |
+N |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B6|  |R1|  |  |  |  |  |  |  |  |  |
+O |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |O1|O3|O4|O5|  |  |  |  |  |  |
+P |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |O4|  |  |  |  |  |  |  |  |
+Q |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |O5|B5|G5|  |  |  |  |  |  |
+R |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B5|  |  |  |  |  |  |
 S |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 U |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -45,14 +45,14 @@ Y |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 
 
-place R1 at L13  - valid // satisfies vertical colour
-place R2 at L13  - invalid // can't double up in the same 6
-place B4 at J11  - invalid // can't double up in the same 6
-place G5 at I14  - valid // satisfies vertical and horizontal and rules maintained upon conjoining
-place G3 at I14  - invalid // satisfies vertical but not horizontal
-place Y5 at I14  - invalid // satisfies horizontal but not vertical
-place B1 at N16  - invalid // satisfies left and right, but upon conjoining, rule for the 6 is broken - colour/symbol
-place G4 at P20  - invalid // satisfies up and down, but upon conjoining, rule for the 6 is broken - repetition
+place R1 at L12  - valid // satisfies vertical colour
+place R2 at L12  - invalid // can't double up in the same 6
+place B4 at J10  - invalid // can't double up in the same 6
+place G5 at I13  - valid // satisfies vertical and horizontal and rules maintained upon conjoining
+place G3 at I13  - invalid // satisfies vertical but not horizontal
+place Y5 at I13  - invalid // satisfies horizontal but not vertical
+place B1 at N15  - invalid // satisfies left and right, but upon conjoining, rule for the 6 is broken - colour/symbol
+place B5 at P19  - invalid // satisfies up and down, but upon conjoining, rule for the 6 is broken - repetition
 
 
 logic >>
@@ -72,8 +72,11 @@ if(!'index' exist on board)
 if('index' currently occupied)
    invalid
 
+
 for(N, E, S, W)
 update variables existsN, existsE, existsS, existsW
+if(existsN, existsE, existsS, existsW all == false)
+   invalid
 
 for(each direction that exists)
    if(existsCurrentDirection == true)
