@@ -1,0 +1,92 @@
+some move test cases...
+
+
+for valid move:
+- satisfies vertical colour/symbol
+- satisfies horizontal colour/symbol
+- doesn't already exist in vertical/horizontal 6
+- when connecting two verticals or two horizontals, the row/column rules must be satisfied after conjoining
+   -no doubling symbols
+   -overarching rule satisfied for whole row (colour or symbol)
+
+invalid moves will also include:
+- attempting to place piece that isn't in hand
+- attempting to place piece on square that isn't on board
+- attempting to place piece on square that is occupied
+
+
+0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+-------------------------------------------------------------------------------
+A |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+C |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+D |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+E |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+F |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+G |  |  |  |  |  |  |  |  |  |  |  |  |R6|  |  |  |  |  |  |  |  |  |  |  |  |  |
+H |  |  |  |  |  |  |  |  |  |  |  |  |R2|  |  |  |  |  |  |  |  |  |  |  |  |  |
+I |  |  |  |  |  |  |  |  |  |  |  |  |R5|  |B5|  |  |  |  |  |  |  |  |  |  |  |
+J |  |  |  |  |  |  |  |  |  |  |  |Y4|R4|G4|B4|  |  |  |  |  |  |  |  |  |  |  |
+K |  |  |  |  |  |  |  |  |  |  |  |  |R3|  |B2|  |  |  |  |  |  |  |  |  |  |  |
+L |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B1|B4|B1|  |  |  |  |  |  |  |  |  |
+M |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B3|  |G1|  |  |  |  |  |  |  |  |  |
+N |  |  |  |  |  |  |  |  |  |  |  |  |  |  |B6|  |R1|R2|  |  |  |  |  |  |  |  |
+O |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |R3|B3|G3|  |  |  |  |  |  |
+P |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |R4|  |  |  |  |  |  |  |  |
+Q |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |R5|B5|G5|  |  |  |  |  |  |
+R |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |G4|  |  |  |  |  |  |
+S |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+U |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+V |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+W |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+X |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+Y |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+
+place R1 at L13  - valid // satisfies vertical colour
+place R2 at L13  - invalid // can't double up in the same 6
+place B4 at J11  - invalid // can't double up in the same 6
+place G5 at I14  - valid // satisfies vertical and horizontal and rules maintained upon conjoining
+place G3 at I14  - invalid // satisfies vertical but not horizontal
+place Y5 at I14  - invalid // satisfies horizontal but not vertical
+place B1 at N16  - invalid // satisfies left and right, but upon conjoining, rule for the 6 is broken - colour/symbol
+place G4 at P20  - invalid // satisfies up and down, but upon conjoining, rule for the 6 is broken - repetition
+
+
+logic >>
+discovering rules:
+colour is valid if all in a direction are a certain colour
+symbol is valid if all in a direction are a certain symbol
+eg. placing next to a single tile both colour an symbol are valid
+eg2. placing next to a string of tiles only colour or symbol will be valid
+
+as soon as invalid is called; logic should break and simply return invalid
+
+place 'tile' at 'index' validity check
+if (!exist in hand)
+   invalid
+if(!'index' exist on board)
+   invalid
+if('index' currently occupied)
+   invalid
+
+for(N, E, S, W)
+update variables existsN, existsE, existsS, existsW
+
+for(each direction that exists)
+   if(existsCurrentDirection == true)
+      discover rule for current direction
+      if('tile' !satisfy rule)
+         invalid
+      if ('tile' already exists in current direction)
+         invalid
+for(N and E)
+   if(existsCurrentDirection == true && existsOppositeDirection == true)
+      discover rule for current direction
+      discover rule for opposite direction
+      if(ruleCurrent != ruleOpposite)
+         invalid
+      if(any tile in current direction exists in opposite direction)
+         invalid
