@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+\.idea/
+
+src/cmake-build-debug/
+
+src/CMakeLists\.txt
