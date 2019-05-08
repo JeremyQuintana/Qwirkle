@@ -15,6 +15,9 @@ std::string promptForPlayer(int playerNumber);
 bool checkStringCharBetween(std::string str, char min, char max);
 
 int main(void) {
+  std::cout
+  << "Welcome to Qwirkle!"           << std::endl
+  << "-------------------"           << std::endl;
   int option = 0;
 
   while (option != 4){
@@ -152,9 +155,6 @@ void showStudentInformation(){
 //prints the menu options and returns valid option
 int menuOptions(){
   std::cout
-  << "Welcome to Qwirkle!"           << std::endl
-  << "-------------------"           << std::endl
-                                     << std::endl
   << "Menu"                          << std::endl
   << "----"                          << std::endl
   << "1. New Game"                   << std::endl
