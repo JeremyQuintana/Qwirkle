@@ -2,7 +2,11 @@
 #include "Tile.h"
 
 Tile::Tile(){
-    shape = 0;
+}
+
+Tile::Tile(char colour, int shape){
+    this->colour= colour;
+    this->shape= shape;
 }
 
 String Tile::getValue() {
@@ -15,4 +19,12 @@ char Tile::getColour() {
 
 int Tile::getShape() {
     return getShape();
+}
+
+void Tile::setColour(char colour) {
+    this->colour= colour;
+}
+
+void Tile::setShape(int shape) {
+    this->shape= shape;
 }

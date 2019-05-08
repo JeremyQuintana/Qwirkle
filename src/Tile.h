@@ -20,8 +20,11 @@ public:
    char getColour();
    int getShape();
    String getValue();
+   void setShape(int);
+   void setColour(char);
 
    Tile();
+   Tile(char, int);
    ~Tile();
 
 };
