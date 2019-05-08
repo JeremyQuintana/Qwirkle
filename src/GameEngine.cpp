@@ -18,16 +18,20 @@ GameEngine::GameEngine() {
 }
 
 void GameEngine::printBoard() {
-    cout << " -";
+    cout << "   ";
     for(int k=0;k<BOARD_LENGTH;k++) {
-        cout << "-" << k << "-";
+        cout << " " << k << " ";
     }
-    cout << "-" << endl;
+    cout << endl;
+    //for(int k=0;k<BOARD_LENGTH;k++) {
+    //    cout << "----";
+    //}
+    //cout << "-" << endl;
     char alfa= 'A';
     for (int i = 0; i < BOARD_LENGTH; i++) {
 
         cout<< alfa;
-        cout << "|";
+        cout << " |";
         for (int j = 0; j < BOARD_LENGTH; j++) {
             String value = "  ";
             if (board[i][j]->getValue().compare("0")>0) {
@@ -39,8 +43,8 @@ void GameEngine::printBoard() {
         cout << endl;
 
     }
-    for(int k=0;k<BOARD_LENGTH;k++) {
-        cout << "---";
-    }
+    //for(int k=0;k<BOARD_LENGTH;k++) {
+    //    cout << "---";
+    //}
     cout << endl;
 }
