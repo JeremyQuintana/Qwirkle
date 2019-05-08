@@ -4,9 +4,17 @@
 
 #include "GameEngine.h"
 
-#define BOARD_LENGTH 10
+#define BOARD_LENGTH boardLength
+
+using std::cin;
 
 GameEngine::GameEngine() {
+    startGame();
+}
+
+void GameEngine::startGame() {
+    cout << "Please enter board size (MxM): ";
+    cin >> boardLength;
     board= new Board[BOARD_LENGTH];
     for (int i=0;i<BOARD_LENGTH;i++){
         board[i]= new BoardRow[BOARD_LENGTH];
@@ -18,9 +26,18 @@ GameEngine::GameEngine() {
 }
 
 void GameEngine::printBoard() {
-    cout << "   ";
+    String initial = "   ";
+    if(boardLength>10){
+        initial= "  ";
+    }
+    cout << initial;
+    String prefix= " ";
+    String postfix= " ";
     for(int k=0;k<BOARD_LENGTH;k++) {
-        cout << " " << k << " ";
+        if(k>10){
+            prefix= "";
+        }
+        cout << prefix << k << postfix;
     }
     cout << endl;
     //for(int k=0;k<BOARD_LENGTH;k++) {

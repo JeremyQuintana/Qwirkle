@@ -22,6 +22,8 @@ public:
 private:
     Board* board;
     void printBoard();
+    void startGame();
+    int boardLength;
 };
 
 #endif //SRC_GAMEENGINE_H
