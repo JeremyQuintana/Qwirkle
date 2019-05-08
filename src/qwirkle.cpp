@@ -12,6 +12,7 @@ void loadGame();
 void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
+bool checkStringCharBetween(std::string str, char min, char max);
 
 int main(void) {
   int option = 0;
@@ -77,9 +78,47 @@ void loadGame(){
     }
   }
 
-  //TODO check that file is in correct format
   //check all player deets
+  int currentLine = 0;
+  bool validate = true;
+  //validate playerList
+  //loop validation for each player
+  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+    //validate name
+    if (checkStringCharBetween(lines[currentLine], 'A', 'Z') == false)
+      validate = false;
+    currentLine++;
+    //validate score
+    if (checkStringCharBetween(lines[currentLine], '1', '9') == false)
+      validate = false;
+    currentLine++;
+    //while loop to validate hand
+    bool read = false;
+    int c = 0;
+    std::string line = lines[currentLine];
+    while (read == false && validate == true){
+      //validate colour
+      if (c >= line.length()
+      || checkStringCharBetween(line.substr(c, 1), 'A', 'Z') == false)
+        validate = false;
+      c++;
+      //validate shape
+      if (c >= line.length()
+      || checkStringCharBetween(line.substr(c, 1), '1', '9') == false)
+        validate = false;
+      c++;
+      //validate ',' or end
+      if (c < line.length() && line.at(c) != ',') validate = false;
+      else if (c >= line.length()) read = true;
+      c++;
+    }
+    currentLine++;
+  }
+  std::cout << validate << std::endl;
+
+  //TODO
   //check board
+
   //check bag
   //check all pieces in hand and bag is correct amount
 
@@ -156,10 +195,7 @@ std::string promptForPlayer(int playerNumber){
     std::cin >> player;
 
     //check input is all upper case letters
-    validate = true;
-    for (int i = 0; player[i] != '\0'; i++){
-      if (player.at(i) < 'A' || player.at(i) > 'Z') validate = false;
-    }
+    validate = checkStringCharBetween(player, 'A', 'Z');
 
     //prints error message if incorrect
     if (validate == false)
@@ -167,4 +203,12 @@ std::string promptForPlayer(int playerNumber){
   }
 
   return player;
+}
+
+bool checkStringCharBetween(std::string str, char min, char max){
+  bool validate = true;
+  for (int i = 0; str[i] != '\0'; i++){
+    if (str.at(i) < min || str.at(i) > max) validate = false;
+  }
+  return validate;
 }
