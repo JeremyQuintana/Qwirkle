@@ -138,15 +138,18 @@ void LinkedList::deleteBack()
 void LinkedList::deleteTile(Tile data) //No error checks, need to do later
 {
     Node* temp = head;
+    Node* prev = nullptr; //Keeps track of last node
 
     while (temp != nullptr)
     {
         if ((temp->tile->colour == data.colour) && (temp->tile->shape == data.shape))
         {
+           prev->next = temp->next;
            delete temp;
            return;
         }
-
+        
+        prev = temp;
         temp = temp->next;
     }
 }
