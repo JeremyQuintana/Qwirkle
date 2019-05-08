@@ -10,8 +10,21 @@ public:
    LinkedList();
    ~LinkedList();
 
+   int size();
+   void clear();
+   Tile get(int i); 
+
+   void addFront(Tile data);
+   void addBack(Tile data);
+
+   void deleteFront();
+   void deleteBack();
+
 private:
    Node* head;
+   Node* tail;
+   int count;
+
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
