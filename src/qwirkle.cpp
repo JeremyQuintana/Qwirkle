@@ -1,10 +1,10 @@
 
 #include "LinkedList.h"
 #include "TileCodes.h"
+#include "GameEngine.h"
 
 #include "fstream"
 #include <iostream>
-#include "GameEngine.h"
 
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 2
@@ -31,7 +31,7 @@ int main(void) {
     if (option == 3) showStudentInformation();
   }
 
-  std::cout << "Goodbye";
+  std::cout << "Goodbye" << std::endl;
   //previous code starter code, not sure what its for
   // LinkedList* list = new LinkedList();
   // delete list;
@@ -56,7 +56,7 @@ void newGame(){
   //TODO implement the creation of the game using the array of players
 
   std::cout << std::endl;
-  GameEngine* game= new GameEngine();
+  new GameEngine();
 }
 
 //loads game from a given file name
@@ -102,12 +102,13 @@ void loadGame(){
     line = lines[currentLine];
 
     bool handRead = false;
+    int handLength = line.length();
     int c = 0;
     while (handRead == false){
       std::string tile = line.substr(c, 2);
       if (checkValidTile(tile) == false) validate = false;
       c += 2;
-      if (c >= line.length()) handRead = true;
+      if (c >= handLength) handRead = true;
       c++;
     }
     currentLine++;
@@ -123,25 +124,28 @@ void loadGame(){
   while (boardRead == false){
     bool rowRead = false;
     int c = 3;
-    while (rowRead == false && c < line.length()){
+    int rowLength = line.length();
+    while (rowRead == false && c < rowLength){
       std::string tile = line.substr(c, 2);
       if (checkValidTile(tile) == false && tile != "  ") validate = false;
       c += 3;
-      if (c >= line.length()) rowRead = true;
+      if (c >= rowLength) rowRead = true;
     }
 
     currentLine++;
     line = lines[currentLine];
     if (line.at(1) != ' ') boardRead = true;
   }
+
   //check bag
   bool bagRead = false;
   int c = 0;
+  int bagLength = line.length();
   while (bagRead == false){
     std::string tile = line.substr(c, 2);
     if (checkValidTile(tile) == false) validate = false;
     c += 2;
-    if (c >= line.length()) bagRead = true;
+    if (c >= bagLength) bagRead = true;
     c++;
   }
   currentLine++;
@@ -189,7 +193,6 @@ int menuOptions(){
   << "4. Quit"                       << std::endl
                                      << std::endl
   << "> ";
-
   //validate input from user
   int option = 0;
   bool validated = false;
