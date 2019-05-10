@@ -1,5 +1,6 @@
 
 #include "LinkedList.h"
+#include "TileCodes.h"
 
 #include "fstream"
 #include <iostream>
@@ -14,6 +15,7 @@ void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
 bool checkStringCharBetween(std::string str, char min, char max);
+bool checkValidTile(std::string tile);
 
 int main(void) {
   std::cout
@@ -83,50 +85,72 @@ void loadGame(){
     }
   }
 
-  //check all player deets
+  // check all player deets
   int currentLine = 0;
+  std::string line = lines[currentLine];
   bool validate = true;
-  //validate playerList
-  //loop validation for each player
-  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
-    //validate name
-    if (checkStringCharBetween(lines[currentLine], 'A', 'Z') == false)
+  bool playersRead = false;
+  while (playersRead == false){
+    if (checkStringCharBetween(line, 'A', 'Z') == false)
       validate = false;
     currentLine++;
-    //validate score
-    if (checkStringCharBetween(lines[currentLine], '1', '9') == false)
+    line = lines[currentLine];
+
+    if (checkStringCharBetween(line, '1', '9') == false)
       validate = false;
     currentLine++;
-    //while loop to validate hand
-    bool read = false;
+    line = lines[currentLine];
+
+    bool handRead = false;
     int c = 0;
-    std::string line = lines[currentLine];
-    while (read == false && validate == true){
-      //validate colour
-      if (c >= line.length()
-      || checkStringCharBetween(line.substr(c, 1), 'A', 'Z') == false)
-        validate = false;
-      c++;
-      //validate shape
-      if (c >= line.length()
-      || checkStringCharBetween(line.substr(c, 1), '1', '9') == false)
-        validate = false;
-      c++;
-      //validate ',' or end
-      if (c < line.length() && line.at(c) != ',') validate = false;
-      else if (c >= line.length()) read = true;
+    while (handRead == false){
+      std::string tile = line.substr(c, 2);
+      if (checkValidTile(tile) == false) validate = false;
+      c += 2;
+      if (c >= line.length()) handRead = true;
       c++;
     }
     currentLine++;
+    line = lines[currentLine];
+
+    if (line.at(0) == ' ') playersRead = true;
   }
-  std::cout << validate << std::endl;
 
-  //TODO
   //check board
+  currentLine += 2;
+  line = lines[currentLine];
+  bool boardRead = false;
+  while (boardRead == false){
+    bool rowRead = false;
+    int c = 3;
+    while (rowRead == false && c < line.length()){
+      std::string tile = line.substr(c, 2);
+      if (checkValidTile(tile) == false && tile != "  ") validate = false;
+      c += 3;
+      if (c >= line.length()) rowRead = true;
+    }
 
+    currentLine++;
+    line = lines[currentLine];
+    if (line.at(1) != ' ') boardRead = true;
+  }
   //check bag
-  //check all pieces in hand and bag is correct amount
+  bool bagRead = false;
+  int c = 0;
+  while (bagRead == false){
+    std::string tile = line.substr(c, 2);
+    if (checkValidTile(tile) == false) validate = false;
+    c += 2;
+    if (c >= line.length()) bagRead = true;
+    c++;
+  }
+  currentLine++;
+  line = lines[currentLine];
 
+  if (checkStringCharBetween(line, 'A', 'Z') == false)
+    validate = false;
+  //check all pieces in hand and bag is correct amount
+  std::cout << validate << std::endl;
   std::cout << std::endl;
 }
 
@@ -213,4 +237,34 @@ bool checkStringCharBetween(std::string str, char min, char max){
     if (str.at(i) < min || str.at(i) > max) validate = false;
   }
   return validate;
+}
+
+bool checkValidTile(std::string tile){
+  bool validColour = false;
+  bool validShape = false;
+  if (tile.length() == 2){
+    char colour = tile.at(0);
+    int shape = tile.at(1) - '0';
+    if (
+      colour == RED     ||
+      colour == ORANGE  ||
+      colour == YELLOW  ||
+      colour == GREEN   ||
+      colour == BLUE    ||
+      colour == PURPLE
+    ) validColour = true;
+    if (
+      shape == CIRCLE   ||
+      shape == STAR_4   ||
+      shape == DIAMOND  ||
+      shape == SQUARE   ||
+      shape == STAR_6   ||
+      shape == CLOVER
+    ) validShape = true;
+  }
+
+  bool valid = false;
+  if (validColour == true && validShape == true) valid = true;
+
+  return valid;
 }
