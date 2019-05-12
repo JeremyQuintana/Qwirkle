@@ -144,11 +144,20 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
     {
         if ((temp->tile->colour == data.colour) && (temp->tile->shape == data.shape))
         {
-           prev->next = temp->next;
-           delete temp;
-           return;
+            if (temp == head)
+            {
+                head = temp->next;
+                delete temp;
+            }
+            else
+            {
+                prev->next = temp->next;
+                delete temp;
+            }
+
+            return;
         }
-        
+
         prev = temp;
         temp = temp->next;
     }
