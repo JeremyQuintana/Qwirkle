@@ -21,9 +21,18 @@ public:
 
 private:
     Board* board;
+    int boardLength;
+    int turn;
+    bool inGame;
+    Tile* tileBagOne;
+    Tile* tileBagTwo;
     void printBoard();
     void startGame();
-    int boardLength;
+    void assembleBoard();
+    void cycleTurn();
+    void playTile();
+    void pickTile();
+    void placeTile();
 };
 
 #endif //SRC_GAMEENGINE_H

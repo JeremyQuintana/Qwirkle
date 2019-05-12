@@ -22,6 +22,7 @@ public:
    String getValue();
    void setShape(int);
    void setColour(char);
+   bool isPlacementValid();
 
    Tile();
    Tile(char, int);

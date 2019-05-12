@@ -28,3 +28,7 @@ void Tile::setColour(char colour) {
 void Tile::setShape(int shape) {
     this->shape= shape;
 }
+
+bool Tile::isPlacementValid() {
+    return true;
+}

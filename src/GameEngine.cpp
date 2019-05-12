@@ -9,10 +9,21 @@
 using std::cin;
 
 GameEngine::GameEngine() {
+    turn= 0;
+    inGame= true;
     startGame();
 }
 
 void GameEngine::startGame() {
+    assembleBoard();
+    /*while(inGame){
+        playTile();
+        cycleTurn();
+        printBoard();
+    }*/
+}
+
+void GameEngine::assembleBoard(){
     cout << "Please enter board size (MxM): ";
     cin >> boardLength;
     board= new Board[BOARD_LENGTH];
@@ -23,6 +34,21 @@ void GameEngine::startGame() {
         }
     }
     printBoard();
+}
+
+void GameEngine::playTile() {
+}
+
+void GameEngine::pickTile() {
+
+}
+
+void GameEngine::placeTile() {
+
+}
+
+void GameEngine::cycleTurn() {
+    turn= abs(turn-1);
 }
 
 void GameEngine::printBoard() {
