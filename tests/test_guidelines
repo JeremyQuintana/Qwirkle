@@ -72,19 +72,18 @@ if(!'index' exist on board)
 if('index' currently occupied)
    invalid
 
-
-for(N, E, S, W)
 update variables existsN, existsE, existsS, existsW
 if(existsN, existsE, existsS, existsW all == false)
-   invalid
+      invalid
 
-for(each direction that exists)
-   if(existsCurrentDirection == true)
-      discover rule for current direction
+for(N, E, S, W)
+      if(existsCurrentDirection == true)
+         discover rule for current direction
       if('tile' !satisfy rule)
          invalid
       if ('tile' already exists in current direction)
          invalid
+
 for(N and E)
    if(existsCurrentDirection == true && existsOppositeDirection == true)
       discover rule for current direction
