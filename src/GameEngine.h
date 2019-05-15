@@ -6,6 +6,7 @@
 #define SRC_GAMEENGINE_H
 
 #include "Tile.h"
+#include "LinkedList.h"
 
 typedef Tile** Board;
 typedef Tile* BoardRow;

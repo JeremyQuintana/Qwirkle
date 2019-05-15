@@ -20,7 +20,6 @@ public:
 
    Tile();
    Tile(Colour, Shape);
-   ~Tile();
 
    String getValue();
 };
