@@ -28,11 +28,12 @@ private:
     Tile* tileBagTwo;
     void printBoard();
     void startGame();
-    void assembleBoard();
-    void cycleTurn();
-    void playTile();
-    void pickTile();
+    int boardLength;
     void placeTile();
+    void pickTile();
+    void playTile();
+    void cycleTurn();
+    void assembleBoard();
 };
 
 #endif //SRC_GAMEENGINE_H
