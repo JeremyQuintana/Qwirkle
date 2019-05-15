@@ -1,9 +1,10 @@
 
 #include "LinkedList.h"
+#include "TileCodes.h"
+#include "GameEngine.h"
 
 #include "fstream"
 #include <iostream>
-#include "GameEngine.h"
 
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 2
@@ -13,9 +14,13 @@ void loadGame();
 void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
-void toUpperCase(std::string& str);
+bool checkStringCharBetween(std::string str, char min, char max);
+bool checkValidTile(std::string tile);
 
 int main(void) {
+  std::cout
+  << "Welcome to Qwirkle!"           << std::endl
+  << "-------------------"           << std::endl;
   int option = 0;
 
   while (option != 4){
@@ -26,7 +31,7 @@ int main(void) {
     if (option == 3) showStudentInformation();
   }
 
-  std::cout << "Goodbye";
+  std::cout << "Goodbye" << std::endl;
   //previous code starter code, not sure what its for
   // LinkedList* list = new LinkedList();
   // delete list;
@@ -51,7 +56,7 @@ void newGame(){
   //TODO implement the creation of the game using the array of players
 
   std::cout << std::endl;
-  GameEngine* game= new GameEngine();
+  new GameEngine();
 }
 
 //loads game from a given file name
@@ -80,12 +85,76 @@ void loadGame(){
     }
   }
 
-  //TODO check that file is in correct format
-  //check all player deets
-  //check board
-  //check bag
-  //check all pieces in hand and bag is correct amount
+  // check all player deets
+  int currentLine = 0;
+  std::string line = lines[currentLine];
+  bool validate = true;
+  bool playersRead = false;
+  while (playersRead == false){
+    if (checkStringCharBetween(line, 'A', 'Z') == false)
+      validate = false;
+    currentLine++;
+    line = lines[currentLine];
 
+    if (checkStringCharBetween(line, '1', '9') == false)
+      validate = false;
+    currentLine++;
+    line = lines[currentLine];
+
+    bool handRead = false;
+    int handLength = line.length();
+    int c = 0;
+    while (handRead == false){
+      std::string tile = line.substr(c, 2);
+      if (checkValidTile(tile) == false) validate = false;
+      c += 2;
+      if (c >= handLength) handRead = true;
+      c++;
+    }
+    currentLine++;
+    line = lines[currentLine];
+
+    if (line.at(0) == ' ') playersRead = true;
+  }
+
+  //check board
+  currentLine += 2;
+  line = lines[currentLine];
+  bool boardRead = false;
+  while (boardRead == false){
+    bool rowRead = false;
+    int c = 3;
+    int rowLength = line.length();
+    while (rowRead == false && c < rowLength){
+      std::string tile = line.substr(c, 2);
+      if (checkValidTile(tile) == false && tile != "  ") validate = false;
+      c += 3;
+      if (c >= rowLength) rowRead = true;
+    }
+
+    currentLine++;
+    line = lines[currentLine];
+    if (line.at(1) != ' ') boardRead = true;
+  }
+
+  //check bag
+  bool bagRead = false;
+  int c = 0;
+  int bagLength = line.length();
+  while (bagRead == false){
+    std::string tile = line.substr(c, 2);
+    if (checkValidTile(tile) == false) validate = false;
+    c += 2;
+    if (c >= bagLength) bagRead = true;
+    c++;
+  }
+  currentLine++;
+  line = lines[currentLine];
+
+  if (checkStringCharBetween(line, 'A', 'Z') == false)
+    validate = false;
+  //check all pieces in hand and bag is correct amount
+  std::cout << validate << std::endl;
   std::cout << std::endl;
 }
 
@@ -116,9 +185,6 @@ void showStudentInformation(){
 //prints the menu options and returns valid option
 int menuOptions(){
   std::cout
-  << "Welcome to Qwirkle!"           << std::endl
-  << "-------------------"           << std::endl
-                                     << std::endl
   << "Menu"                          << std::endl
   << "----"                          << std::endl
   << "1. New Game"                   << std::endl
@@ -127,7 +193,6 @@ int menuOptions(){
   << "4. Quit"                       << std::endl
                                      << std::endl
   << "> ";
-
   //validate input from user
   int option = 0;
   bool validated = false;
@@ -146,20 +211,63 @@ int menuOptions(){
 
 //prompts for player and returns a player name
 std::string promptForPlayer(int playerNumber){
+  std::string player = "";
   std::cout
                                                               << std::endl
   << "Enter a name for player " << playerNumber
   <<                           " (uppercase characters only)" << std::endl
   << "> ";
-  std::string player = "";
-  std::cin >> player;
-  toUpperCase(player);
+
+  //loop until name input is correct
+  bool validate = false;
+  while (validate == false){
+    std::cin >> player;
+
+    //check input is all upper case letters
+    validate = checkStringCharBetween(player, 'A', 'Z');
+
+    //prints error message if incorrect
+    if (validate == false)
+      std::cout << "Invalid input" << std::endl << "> ";
+  }
 
   return player;
 }
 
-void toUpperCase(std::string& str){
+bool checkStringCharBetween(std::string str, char min, char max){
+  bool validate = true;
   for (int i = 0; str[i] != '\0'; i++){
-    str[i] = toupper(str[i]);
+    if (str.at(i) < min || str.at(i) > max) validate = false;
   }
+  return validate;
+}
+
+bool checkValidTile(std::string tile){
+  bool validColour = false;
+  bool validShape = false;
+  if (tile.length() == 2){
+    char colour = tile.at(0);
+    int shape = tile.at(1) - '0';
+    if (
+      colour == RED     ||
+      colour == ORANGE  ||
+      colour == YELLOW  ||
+      colour == GREEN   ||
+      colour == BLUE    ||
+      colour == PURPLE
+    ) validColour = true;
+    if (
+      shape == CIRCLE   ||
+      shape == STAR_4   ||
+      shape == DIAMOND  ||
+      shape == SQUARE   ||
+      shape == STAR_6   ||
+      shape == CLOVER
+    ) validShape = true;
+  }
+
+  bool valid = false;
+  if (validColour == true && validShape == true) valid = true;
+
+  return valid;
 }
