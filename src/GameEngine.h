@@ -24,8 +24,7 @@ private:
     int boardLength;
     int turn;
     bool inGame;
-    Tile* tileBagOne;
-    Tile* tileBagTwo;
+    LinkedList tileBag;
     void printBoard();
     void startGame();
     void assembleBoard();
