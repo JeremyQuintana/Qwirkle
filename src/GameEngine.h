@@ -27,7 +27,6 @@ private:
     LinkedList tileBag;
     void printBoard();
     void startGame();
-    int boardLength;
     void placeTile();
     void pickTile();
     void playTile();
