@@ -12,10 +12,10 @@ public:
 
    int size();
    void clear();
-   Tile get(int i); //Find
+   Tile* get(int i); //Find
 
-   void addFront(Tile data);
-   void addBack(Tile data);
+   void addFront(Tile* data);
+   void addBack(Tile* data);
 
    void deleteFront();
    void deleteBack();

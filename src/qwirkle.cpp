@@ -19,6 +19,7 @@ bool checkValidTile(std::string tile);
 
 int main(void) {
   std::cout
+
   << "Welcome to Qwirkle!"           << std::endl
   << "-------------------"           << std::endl;
   int option = 0;
@@ -32,11 +33,6 @@ int main(void) {
   }
 
   std::cout << "Goodbye" << std::endl;
-  //previous code starter code, not sure what its for
-  // LinkedList* list = new LinkedList();
-  // delete list;
-  //
-  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
 
    return EXIT_SUCCESS;
 }

@@ -6,6 +6,7 @@
 #define SRC_GAMEENGINE_H
 
 #include "Tile.h"
+#include "Player.h"
 
 typedef Tile** Board;
 typedef Tile* BoardRow;
@@ -28,7 +29,6 @@ private:
     Player* playerList;
     void printBoard();
     void startGame();
-    int boardLength;
     void assembleBoard();
     void takeTurn();
     void placeTile(Tile tile);
