@@ -14,8 +14,11 @@ GameEngine::GameEngine() {
     startGame();
 }
 
+
+//main function that runs the actual game
 void GameEngine::startGame() {
     assembleBoard();
+    //loops while there is no winner yet and game is still running
     /*while(inGame){
          takeTurn() calls placeTile() or replaceTile()
             both above call drawTile
@@ -25,6 +28,8 @@ void GameEngine::startGame() {
     }*/
 }
 
+
+//assembles the board according to the size inputted in the console
 void GameEngine::assembleBoard(){
     cout << "Please enter board size (MxM): ";
     cin >> boardLength;
@@ -53,6 +58,7 @@ void GameEngine::endTurn() {
     turn= abs(turn-1);
 }
 
+//prints the entire board to the system console including the tiles placed
 void GameEngine::printBoard() {
     String initial = "   ";
     if(boardLength>10){
