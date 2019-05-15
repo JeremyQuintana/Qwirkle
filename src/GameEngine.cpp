@@ -20,9 +20,11 @@ void GameEngine::startGame() {
     assembleBoard();
     //loops while there is no winner yet and game is still running
     /*while(inGame){
-        playTile();
-        cycleTurn();
-        printBoard();
+         takeTurn() calls placeTile() or replaceTile()
+            both above call drawTile
+         printBoard();
+         endTurn();
+
     }*/
 }
 
@@ -41,22 +43,22 @@ void GameEngine::assembleBoard(){
     printBoard();
 }
 
-//starts the sequence of the player movement, which includes pickTile() and placeTile()
-void GameEngine::playTile() {
-}
-
-//picks the tile after being shown a list from the bag, which changes based on the turn
-void GameEngine::pickTile() {
+void GameEngine::takeTurn() {
 
 }
 
-//places the tile on the board, which will include validation which is done by both another function in the tile
-void GameEngine::placeTile() {
+void GameEngine::placeTile(Tile tile) {
+}
+
+void GameEngine::replaceTile(Tile tile) {
 
 }
 
-//cycles the turn, will go from 0 to 1 and back forth.
-void GameEngine::cycleTurn() {
+void GameEngine::drawTile() {
+
+}
+
+void GameEngine::endTurn() {
     turn= abs(turn-1);
 }
 

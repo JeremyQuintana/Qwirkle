@@ -14,19 +14,14 @@ typedef int Shape;
 
 class Tile {
 public:
+   // Public. Can point to
    Colour colour;
    Shape  shape;
 
-   char getColour();
-   int getShape();
-   String getValue();
-   void setShape(int);
-   void setColour(char);
-   bool isPlacementValid();
-
    Tile();
-   Tile(char, int);
-
+   Tile(Colour, Shape);
+   ~Tile();
+   
 };
 
 #endif // ASSIGN2_TILE_H

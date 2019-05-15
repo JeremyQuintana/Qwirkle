@@ -8,9 +8,11 @@ public:
   Player(std::string name, LinkedList* hand);
   ~Player();
   int getScore();
-  LinkedList* getHand();
-  bool useTile(Tile tileToUse);
-  bool replaceTile(Tile bagTile, Tile toReplace);
+  String handTostring();
+  Tile getTile(Tile tileToUse);
+  void addTile(Tile tileToAdd);
+  void removeTile(Tile tileToRemove);
+  void addScore(int score);
 
 private:
   std::string name;
