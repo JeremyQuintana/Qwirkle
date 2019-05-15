@@ -28,7 +28,6 @@ private:
     Tile* tileBagTwo;
     void printBoard();
     void startGame();
-    int boardLength;
     void placeTile();
     void pickTile();
     void playTile();

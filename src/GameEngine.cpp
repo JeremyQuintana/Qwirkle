@@ -31,6 +31,10 @@ void GameEngine::startGame() {
 void GameEngine::assembleBoard(){
     cout << "Please enter board size (MxM): ";
     cin >> boardLength;
+    board= new Board[BOARD_LENGTH];
+    for (int i=0;i<BOARD_LENGTH;i++){
+        board[i]= new BoardRow[BOARD_LENGTH];
+    }
     printBoard();
 }
 
