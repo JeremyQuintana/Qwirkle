@@ -17,9 +17,11 @@ GameEngine::GameEngine() {
 void GameEngine::startGame() {
     assembleBoard();
     /*while(inGame){
-        playTile();
-        cycleTurn();
-        printBoard();
+         takeTurn() calls placeTile() or replaceTile()
+            both above call drawTile
+         printBoard();
+         endTurn();
+
     }*/
 }
 
@@ -36,18 +38,18 @@ void GameEngine::assembleBoard(){
     printBoard();
 }
 
-void GameEngine::playTile() {
+void GameEngine::placeTile(Tile tile) {
 }
 
-void GameEngine::pickTile() {
-
-}
-
-void GameEngine::placeTile() {
+void GameEngine::replaceTile(Tile tile) {
 
 }
 
-void GameEngine::cycleTurn() {
+void GameEngine::drawTile() {
+
+}
+
+void GameEngine::endTurn() {
     turn= abs(turn-1);
 }
 

@@ -29,10 +29,10 @@ private:
     void printBoard();
     void startGame();
     void assembleBoard();
-    void cycleTurn();
-    void playTile();
-    void pickTile();
-    void placeTile();
+    void placeTile(Tile tile);
+    void replaceTile(Tile tile);
+    void drawTile();
+    void endTurn();
 };
 
 #endif //SRC_GAMEENGINE_H
