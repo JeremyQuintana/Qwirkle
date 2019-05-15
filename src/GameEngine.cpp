@@ -33,13 +33,6 @@ void GameEngine::startGame() {
 void GameEngine::assembleBoard(){
     cout << "Please enter board size (MxM): ";
     cin >> boardLength;
-    board= new Board[BOARD_LENGTH];
-    for (int i=0;i<BOARD_LENGTH;i++){
-        board[i]= new BoardRow[BOARD_LENGTH];
-        for(int j=0; j<BOARD_LENGTH; j++){
-            board[i][j]= new Tile;
-        }
-    }
     printBoard();
 }
 
@@ -80,12 +73,11 @@ void GameEngine::printBoard() {
     //cout << "-" << endl;
     char alfa= 'A';
     for (int i = 0; i < BOARD_LENGTH; i++) {
-
         cout<< alfa;
         cout << " |";
         for (int j = 0; j < BOARD_LENGTH; j++) {
             String value = "  ";
-            if (board[i][j]->getValue().compare("0")>0) {
+            if (board[i][j]!=nullptr) {
               value = board[i][j]->getValue();
             }
             cout << value << "|";
