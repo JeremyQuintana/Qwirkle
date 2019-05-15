@@ -24,8 +24,7 @@ private:
     int boardLength;
     int turn;
     bool inGame;
-    Tile* tileBagOne;
-    Tile* tileBagTwo;
+    LinkedList tileBag;
     void printBoard();
     void startGame();
     int boardLength;
@@ -34,6 +33,10 @@ private:
     void playTile();
     void cycleTurn();
     void assembleBoard();
+    void placeTile(Tile tile);
+    void replaceTile(Tile tile);
+    void drawTile();
+    void endTurn();
 };
 
 #endif //SRC_GAMEENGINE_H
