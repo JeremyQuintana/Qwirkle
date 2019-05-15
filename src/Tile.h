@@ -21,7 +21,7 @@ public:
    Tile();
    Tile(Colour, Shape);
    ~Tile();
-
+   
 };
 
 #endif // ASSIGN2_TILE_H

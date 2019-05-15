@@ -25,15 +25,14 @@ private:
     int turn;
     bool inGame;
     LinkedList tileBag;
+    Player* playerList;
     void printBoard();
     void startGame();
     int boardLength;
-    void placeTile();
-    void pickTile();
-    void playTile();
-    void cycleTurn();
     void assembleBoard();
+    void takeTurn();
     void placeTile(Tile tile);
+    void calcScore();
     void replaceTile(Tile tile);
     void drawTile();
     void endTurn();

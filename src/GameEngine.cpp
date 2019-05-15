@@ -43,6 +43,10 @@ void GameEngine::assembleBoard(){
     printBoard();
 }
 
+void GameEngine::takeTurn() {
+
+}
+
 void GameEngine::placeTile(Tile tile) {
 }
 
