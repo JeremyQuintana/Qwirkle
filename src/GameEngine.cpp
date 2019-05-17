@@ -63,10 +63,10 @@ void GameEngine::takeTurn() {
         std::cin.ignore();
     }
     if(option == 1) {
-        GameEngine::placeTile();
+        placeTile();
     }
     if(option == 2) {
-        GameEngine::replaceTile();
+        replaceTile();
     }
 }
 
