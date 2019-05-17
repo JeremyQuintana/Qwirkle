@@ -18,6 +18,7 @@ GameEngine::GameEngine() {
 //main function that runs the actual game
 void GameEngine::startGame() {
     assembleBoard();
+    //dealTiles() function needed to assign opening hands and remove these tiles from tile bag
     //loops while there is no winner yet and game is still running
     /*while(inGame){
          takeTurn() calls placeTile() or replaceTile()
@@ -63,19 +64,27 @@ void GameEngine::takeTurn() {
         std::cin.ignore();
     }
     if(option == 1) {
-        placeTile();
+        // does this work??
+        placeTile(Tile(Colour playerCommand.at(6), Shape playerCommand.at(7)), playerCommand.substring(12,2));
     }
     if(option == 2) {
-        replaceTile();
+        // as above ^
+        replaceTile(Tile(Colour playerCommand.at(8), Shape playerCommand.at(9)));
     }
 }
 
-void GameEngine::placeTile(Tile tile) {
+void GameEngine::placeTile(Tile tile, std::string coordinate) {
+    
+}
+
+void GameEngine:::calcScore() {
 
 }
 
 void GameEngine::replaceTile(Tile tile) {
-
+    playerList[currentPlayer].removeTile(tile);
+    playerLIst[currentPlayer].addTile(tileBag.get(0));
+    tileBag.deleteFront();
 }
 
 void GameEngine::drawTile() {
