@@ -18,6 +18,7 @@ GameEngine::GameEngine() {
 //main function that runs the actual game
 void GameEngine::startGame() {
     assembleBoard();
+    //dealTiles() function needed to assign opening hands and remove these tiles from tile bag
     //loops while there is no winner yet and game is still running
     /*while(inGame){
          takeTurn() calls placeTile() or replaceTile()
@@ -44,14 +45,46 @@ void GameEngine::assembleBoard(){
 }
 
 void GameEngine::takeTurn() {
-
+    std::cout << "> ";
+    int option = 0;
+    bool validated = false;
+    while (validated == false) {
+        std::cin >> playerCommand;
+        std::string shouldBeAt = playerCmmand.substring(8,4);
+        if(playerCommand.starts_with(std::string("place ")) && shoudlBeAt.compare(std::string(" at ")) == 0) {
+            option = 1;
+            validated = true;
+        }
+        if(playerCommand.starts_with(std::string("replace "))) {
+            option = 2;
+            validated = true;
+        }
+        else std::cout << "Error - Invalid option" << std::endl << "> ";
+        std::cin.clear();
+        std::cin.ignore();
+    }
+    if(option == 1) {
+        // does this work??
+        placeTile(Tile(Colour playerCommand.at(6), Shape playerCommand.at(7)), playerCommand.substring(12,2));
+    }
+    if(option == 2) {
+        // as above ^
+        replaceTile(Tile(Colour playerCommand.at(8), Shape playerCommand.at(9)));
+    }
 }
 
-void GameEngine::placeTile(Tile tile) {
+void GameEngine::placeTile(Tile tile, std::string coordinate) {
+    
+}
+
+void GameEngine:::calcScore() {
+
 }
 
 void GameEngine::replaceTile(Tile tile) {
-
+    playerList[currentPlayer].removeTile(tile);
+    playerLIst[currentPlayer].addTile(tileBag.get(0));
+    tileBag.deleteFront();
 }
 
 void GameEngine::drawTile() {

@@ -25,17 +25,19 @@ private:
     int boardLength;
     int turn;
     bool inGame;
+    std::string playerCommand;
     LinkedList tileBag;
     Player* playerList;
-    void printBoard();
+    int currentPlayer;
     void startGame();
     void assembleBoard();
     void takeTurn();
-    void placeTile(Tile tile);
+    void placeTile(Tile tile, std::string coordinate);
     void calcScore();
     void replaceTile(Tile tile);
     void drawTile();
     void endTurn();
+    void printBoard();
 };
 
 #endif //SRC_GAMEENGINE_H
