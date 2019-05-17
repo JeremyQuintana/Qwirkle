@@ -24,6 +24,7 @@ private:
     int boardLength;
     int turn;
     bool inGame;
+    std::string playerCommand;
     LinkedList tileBag;
     Player* playerList;
     void printBoard();

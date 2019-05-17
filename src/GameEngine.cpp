@@ -44,10 +44,34 @@ void GameEngine::assembleBoard(){
 }
 
 void GameEngine::takeTurn() {
-
+    std::cout << "> ";
+    int option = 0;
+    bool validated = false;
+    while (validated == false) {
+        std::cin >> playerCommand;
+        std::string shouldBeAt = playerCmmand.substring(8,4);
+        if(playerCommand.starts_with(std::string("place ")) && shoudlBeAt.compare(std::string(" at ")) == 0) {
+            option = 1;
+            validated = true;
+        }
+        if(playerCommand.starts_with(std::string("replace "))) {
+            option = 2;
+            validated = true;
+        }
+        else std::cout << "Error - Invalid option" << std::endl << "> ";
+        std::cin.clear();
+        std::cin.ignore();
+    }
+    if(option == 1) {
+        GameEngine::placeTile();
+    }
+    if(option == 2) {
+        GameEngine::replaceTile();
+    }
 }
 
 void GameEngine::placeTile(Tile tile) {
+
 }
 
 void GameEngine::replaceTile(Tile tile) {

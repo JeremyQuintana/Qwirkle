@@ -212,8 +212,7 @@ int menuOptions(){
 //prompts for player and returns a player name
 std::string promptForPlayer(int playerNumber){
   std::string player = "";
-  std::cout
-                                                              << std::endl
+  std::cout << std::endl
   << "Enter a name for player " << playerNumber
   <<                           " (uppercase characters only)" << std::endl
   << "> ";
