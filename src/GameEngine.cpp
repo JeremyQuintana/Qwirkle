@@ -7,6 +7,7 @@
 #define BOARD_LENGTH boardLength
 
 using std::cin;
+using std::stoi;
 
 GameEngine::GameEngine() {
     turn= 0;
@@ -84,6 +85,19 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
 }
 
 void GameEngine::saveGame(){
+
+    bool
+    while
+
+
+
+
+
+
+
+
+
+
 
 }
 
