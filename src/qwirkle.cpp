@@ -34,24 +34,24 @@ int main(void) {
 
   std::cout << "Goodbye" << std::endl;
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 //starts a new game
 void newGame(){
-  std::cout << "Starting a New Game" << std::endl;
-
-  //array for all player names
-  std::string playerList[NUMBER_OF_PLAYERS];
-
-  //loop to prompt for players to however many players are playing
-  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
-    playerList[i] = promptForPlayer(i+1);
-  }
-
-  //TODO implement the creation of the game using the array of players
-
-  std::cout << std::endl;
+  // std::cout << "Starting a New Game" << std::endl;
+  //
+  // //array for all player names
+  // std::string playerList[NUMBER_OF_PLAYERS];
+  //
+  // //loop to prompt for players to however many players are playing
+  // for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+  //   playerList[i] = promptForPlayer(i+1);
+  // }
+  //
+  // //TODO implement the creation of the game using the array of players
+  //
+  // std::cout << std::endl;
   new GameEngine();
 }
 

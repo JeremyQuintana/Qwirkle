@@ -43,8 +43,7 @@ Tile* LinkedList::get(int i)
     // Tile result; //In case value is invalid returns 0 for both components
     // result.colour = 0;
     // result.shape = 0;
-
-    if (i <= this->count)
+    if (i < this->count)
     {
         while (listCount < i) //Indexing starts at 0
         {

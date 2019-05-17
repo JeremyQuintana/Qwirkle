@@ -7,6 +7,7 @@
 
 #include "Tile.h"
 #include "Player.h"
+#include "LinkedList.h"
 
 typedef Tile** Board;
 typedef Tile* BoardRow;
@@ -27,17 +28,18 @@ private:
     bool inGame;
     std::string playerCommand;
     LinkedList tileBag;
-    Player* playerList;
+    Player* *playerList;
     int currentPlayer;
     void startGame();
     void assembleBoard();
     void takeTurn();
-    void placeTile(Tile tile, std::string coordinate);
+    bool placeTile(Tile tile, std::string coordinate);
     void calcScore();
-    void replaceTile(Tile tile);
+    bool replaceTile(Tile tile);
     void drawTile();
     void endTurn();
     void printBoard();
+    void saveGame();
 };
 
 #endif //SRC_GAMEENGINE_H
