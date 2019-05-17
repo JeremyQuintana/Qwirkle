@@ -7,6 +7,7 @@
 #define BOARD_LENGTH boardLength
 
 using std::cin;
+using std::stoi;
 
 GameEngine::GameEngine() {
     turn= 0;
@@ -50,14 +51,33 @@ void GameEngine::takeTurn() {
     bool validated = false;
     std::string errorMessage = "Error";
     while (validated == false) {
+        // take player input
         std::cin >> playerCommand;
         std::string shouldBeAt = playerCmmand.substring(8,4);
+        // below checks assume tile validation was done on player side
+        // check standard format for 'placeTile' operation
         if(playerCommand.starts_with(std::string("place ")) && shoudlBeAt.compare(std::string(" at ")) == 0) {
-            if(/*check coordinate exists*/) {
-                if(/* check coordinate is not currently occupied*/) {
-                    // also need a check to make sure it's adjacent to at least 1 tile
+            char rowAsChar = playerCommand.at(12);
+            char rowAsInt = (Integer)rowAChar;
+            std::string columnAsString = playerCommand.substring(13);
+            int columnAsInt = std::stoi(columnAsString);
+            // check coordinate exists - needs to be changed for dynamic boards in future
+            if(rowAsInt >= 65 && rowAsInt <= 65 + BOARD_LENGTH && columnAsInt >= 0 && columnAsInt <= BOARD_LENGTH) {
+                // check coordinate is not currently occupied
+                if(board[rowAsInt][columnAsInt]!= NULL) {
+                    // // check it's adjacent to at least 1 tile
+                    // // also needs changing for dynamic board
+                    // bool existsN = (board[rowAsInt-1][columnAsInt] == NULL || rowAsInt == 0) ? false : true;
+                    // bool existsS = (board[rowAsInt+1][columnAsInt] == NULL || rowAsInt == (BOARD_LENGTH - 1)) ? false : true;
+                    // bool existsE = (board[rowAsInt][columnAsInt+1] == NULL || columnAsInt == (BOARD_LENGTH - 1)) ? false : true;
+                    // bool existsW = (board[rowAsInt][columnAsInt-1] == NULL || columnAsInt == 0) ? false : true;
+                    // if(existsN || existsS || existsE || existsW) {
                     option = 1;
                     validated = true;
+                    // }
+                    // else {
+                    //     errorMessage = "Error - Tile must be placed adjacent to an existing tile";
+                    // }
                 }
                 else {
                     errorMessage = "Error - A tile already exists at ";
@@ -65,18 +85,18 @@ void GameEngine::takeTurn() {
                 }
             }
             else {
-                errorMessage = "Error - Invalid coordinate"
+                errorMessage = "Error - Invalid coordinate";
             }
         }
+        // check standard format for 'replaceTile' operation
         if(playerCommand.starts_with(std::string("replace "))) {
             option = 2;
             validated = true;
         }
         else {
-            std::cout << "Error - Invalid command" << std::endl
-        << "Command should be in the format: place <tile> at <coordinate>";
+            errorMessage = "Error - Invalid command\nCommand should be in the format: place <tile> at <coordinate>";
         }
-        std::cout << std::endl << "> ";
+        std::cout << errorMessage << std::endl << "> ";
         std::cin.clear();
         std::cin.ignore();
     }
@@ -91,15 +111,29 @@ void GameEngine::takeTurn() {
 }
 
 void GameEngine::placeTile(Tile tile, std::string coordinate) {
+    // row player asked for
     char row = coordinate.at(0);
     int destinationRow = row - 65;
-    int destinationColumn = (Integer)coordinate.substring(1);
+    // column player asked for
+    std::string column = coordinate.substring(1);
+    int destinationColumn = std::stoi(column);
+    // copies of these to use as counters
     int currentRow = destinationRow;
     int currentColumn = destinationColumn;
-    std::string reqColour = tile.getValue().at(0);
-    std::string reqShape = tile.getValue().at(1);
+    // required colour and/or shape
+    std::string reqColour = tile.getValue().at(0); // eg. "R"
+    std::string reqShape = tile.getValue().at(1); // eg. "3"
 
-    
+    bool existsN = (board[destinationRow-1][destinationColumn] == NULL || destinationRow == 0) ? false : true;
+    bool existsS = (board[destinationRow+1][destinationColumn] == NULL || destinationRow == (BOARD_LENGTH - 1)) ? false : true;
+    bool existsE = (board[destinationRow][destinationColumn+1] == NULL || destinationColumn == (BOARD_LENGTH - 1)) ? false : true;
+    bool existsW = (board[destinationRow][destinationColumn-1] == NULL || destinationColumn == 0) ? false : true;
+
+    bool
+    while
+
+
+
 
 
 
