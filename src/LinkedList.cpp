@@ -15,7 +15,7 @@ LinkedList::~LinkedList()
 }
 
 int LinkedList::size()
-{ 
+{
     return this->count;
 }
 
@@ -35,14 +35,14 @@ void LinkedList::clear()
     count = 0;
 }
 
-Tile LinkedList::get(int i)
+Tile* LinkedList::get(int i)
 {
     int listCount = 0;
     Node* temp = head;
-    
-    Tile result; //In case value is invalid returns 0 for both components
-    result.colour = 0;
-    result.shape = 0;
+
+    // Tile result; //In case value is invalid returns 0 for both components
+    // result.colour = 0;
+    // result.shape = 0;
 
     if (i <= this->count)
     {
@@ -53,15 +53,14 @@ Tile LinkedList::get(int i)
             listCount++;
         }
 
-        result = *(temp->tile);
+        // result = *(temp->tile);
     }
-    
-    return result; //Dereferences tile pointer
+    return temp->tile; //Dereferences tile pointer
 }
 
-void LinkedList::addFront(Tile data)
+void LinkedList::addFront(Tile* data)
 {
-    Node* temp = new Node(&data, nullptr);
+    Node* temp = new Node(data, nullptr);
 
     if (head == nullptr)
     {
@@ -81,10 +80,10 @@ void LinkedList::addFront(Tile data)
     count++; //Update size counter
 }
 
-void LinkedList::addBack(Tile data)
+void LinkedList::addBack(Tile* data)
 {
-    Node* temp = new Node(&data, nullptr);
-    
+    Node* temp = new Node(data, nullptr);
+
     if (tail == nullptr)
     {
         tail = temp;
