@@ -18,15 +18,32 @@ GameEngine::GameEngine() {
 //main function that runs the actual game
 void GameEngine::startGame() {
     assembleBoard();
-    //dealTiles() function needed to assign opening hands and remove these tiles from tile bag
+    playerList = new Player*[4];
+    //should have a constructor to initialise the player names from qwirkle class
+    playerList[0] = new Player("1", new LinkedList);
+    playerList[1] = new Player("2", new LinkedList);
+    dealTiles();
+    inGame = true;
     //loops while there is no winner yet and game is still running
-    /*while(inGame){
-         takeTurn() calls placeTile() or replaceTile()
-            both above call drawTile
-         printBoard();
-         endTurn();
+    while(inGame){
+      std::cout << std::endl
+      << playerList[currentPlayer]->getName()
+      << ", it's your turn" << std::endl;
 
-    }*/
+      for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+        std::cout
+        << "Score for " << playerList[i]->getName()
+        << ": " << playerList[i]->getScore() << std::endl;
+
+      }
+      printBoard();
+      std::cout
+      << "Your hand is:"                           << std::endl
+      << playerList[currentPlayer]->handToString() << std::endl << std::endl;
+
+      takeTurn();
+      endTurn();
+    }
 }
 
 
@@ -41,12 +58,11 @@ void GameEngine::assembleBoard(){
             board[i][j]= new Tile;
         }
     }
-    printBoard();
+    std::cin.clear();
+    std::cin.ignore();
 }
 
 void GameEngine::takeTurn() {
-    std::cin.clear();
-    std::cin.ignore();
     int option = 0;
     bool validated = false;
     std::string playerCommand = "";
@@ -72,7 +88,7 @@ void GameEngine::takeTurn() {
           Tile tile = Tile(playerCommand.at(8), playerCommand.at(9) - '0');
           if (replaceTile(tile)) validated = true;;
         } else if(option == 3) {
-          saveGame();
+          saveGame(playerCommand.substr(5, playerCommand.length()-5));
           validated= true;
         }
         option = 0;
@@ -83,8 +99,27 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
   return false;
 }
 
-void GameEngine::saveGame(){
+void GameEngine::saveGame(std::string fileName){
+  std::ofstream outFile;
+  outFile.open(fileName);
 
+  //loop to print players and deets to file
+  //prints max 4 players but not necissarily needs to be 4
+  for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+    outFile
+      << playerList[i]->getName()      << endl
+      << playerList[i]->getScore()     << endl
+      << playerList[i]->handToString() << endl;
+  }
+
+  //TODO
+  //print board, possibly turn the printBoard function to return String
+
+  outFile << tileBag.listToString() << endl;
+  outFile << playerList[currentPlayer]->getName() << endl;
+
+  outFile.close();
+  std::cout << std::endl << "Game successfully saved" << std::endl;
 }
 
 void GameEngine::calcScore() {
@@ -95,8 +130,9 @@ bool GameEngine::replaceTile(Tile tile) {
     bool successful = false;
     if (playerList[currentPlayer]->getTilePtr(tile) != nullptr){
       playerList[currentPlayer]->removeTile(tile);
-      playerList[currentPlayer]->addTile(tileBag.get(0));
-      tileBag.deleteFront();
+      Tile* tile = tileBag.get(0);
+      playerList[currentPlayer]->addTile(tile);
+      tileBag.deleteTile(*tile);
       successful = true;
     }
     else std::cout << "Error - Tile Not Found" << std::endl;
@@ -110,6 +146,15 @@ void GameEngine::drawTile() {
 
 void GameEngine::endTurn() {
     turn= abs(turn-1);
+
+    //increment to next player
+    currentPlayer++;
+    if (playerList[currentPlayer] == nullptr) currentPlayer = 0;
+
+    //end game if tileBag is empty
+    if (tileBag.size() == 0) inGame = false;
+
+    //TODO check if theres valid moves
 }
 
 //prints the entire board to the system console including the tiles placed
@@ -135,7 +180,7 @@ void GameEngine::printBoard() {
     char alfa= 'A';
     for (int i = 0; i < BOARD_LENGTH; i++) {
 
-        cout<< alfa;
+        cout << alfa;
         cout << " |";
         for (int j = 0; j < BOARD_LENGTH; j++) {
             String value = "  ";
@@ -152,4 +197,28 @@ void GameEngine::printBoard() {
     //    cout << "---";
     //}
     cout << endl;
+}
+
+void GameEngine::dealTiles(){
+  //create tileBag
+  Colour tileColours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+  Shape tileShapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
+
+  for (Colour colour : tileColours){
+    for (Shape shape : tileShapes){
+      Tile* tile = new Tile(colour, shape);
+      tileBag.addFront(tile);
+    }
+  }
+
+  //TODO need a shuffle function for the linked list here
+
+  //draw from tileBag into each players hand;
+  for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+    for (int x = 0; x < 6; x++){
+      Tile* tile = tileBag.get(0);
+      playerList[i]->addTile(tile);
+      tileBag.deleteTile(*tile);
+    }
+  }
 }

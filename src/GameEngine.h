@@ -8,6 +8,9 @@
 #include "Tile.h"
 #include "Player.h"
 #include "LinkedList.h"
+#include "TileCodes.h"
+
+#include "fstream"
 
 typedef Tile** Board;
 typedef Tile* BoardRow;
@@ -39,7 +42,8 @@ private:
     void drawTile();
     void endTurn();
     void printBoard();
-    void saveGame();
+    void dealTiles();
+    void saveGame(std::string fileName);
 };
 
 #endif //SRC_GAMEENGINE_H
