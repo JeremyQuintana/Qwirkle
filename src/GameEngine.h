@@ -41,7 +41,7 @@ private:
     bool replaceTile(Tile tile);
     void drawTile();
     void endTurn();
-    void printBoard();
+    std::string printBoard();
     void dealTiles();
     void saveGame(std::string fileName);
 };

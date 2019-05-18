@@ -16,17 +16,16 @@ GameEngine::GameEngine(std::string playerListNames[4]) {
     for (int i = 0; i < 4 && playerListNames[i] != ""; i++)
       playerList[i] = new Player(playerListNames[i], new LinkedList);
 
+    assembleBoard();
+    dealTiles();
     startGame();
 }
 
 
 //main function that runs the actual game
 void GameEngine::startGame() {
-    assembleBoard();
-    dealTiles();
-
-    inGame = true;
     //loops while there is no winner yet and game is still running
+    inGame = true;
     while(inGame){
       std::cout << std::endl
       << playerList[currentPlayer]->getName()
@@ -38,7 +37,7 @@ void GameEngine::startGame() {
         << ": " << playerList[i]->getScore() << std::endl;
 
       }
-      printBoard();
+      std::cout << printBoard() << std::endl;
       std::cout
       << "Your hand is:"                           << std::endl
       << playerList[currentPlayer]->handToString() << std::endl << std::endl;
@@ -46,8 +45,6 @@ void GameEngine::startGame() {
       takeTurn();
       endTurn();
     }
-
-
 }
 
 
@@ -115,9 +112,7 @@ void GameEngine::saveGame(std::string fileName){
       << playerList[i]->handToString() << endl;
   }
 
-  //TODO
-  //print board, possibly turn the printBoard function to return String
-
+  outFile << printBoard() << endl;
   outFile << tileBag.listToString() << endl;
   outFile << playerList[currentPlayer]->getName() << endl;
 
@@ -183,45 +178,45 @@ void GameEngine::endTurn() {
 }
 
 //prints the entire board to the system console including the tiles placed
-void GameEngine::printBoard() {
+std::string GameEngine::printBoard() {
+    std::string boardStr = "";
     String initial = "   ";
     if(boardLength>10){
         initial= "  ";
     }
-    cout << initial;
+    boardStr = initial;
     String prefix= " ";
     String postfix= " ";
     for(int k=0;k<BOARD_LENGTH;k++) {
         if(k>10){
             prefix= "";
         }
-        cout << prefix << k << postfix;
+        boardStr += prefix + std::to_string(k) + postfix;
     }
-    cout << endl;
     //for(int k=0;k<BOARD_LENGTH;k++) {
     //    cout << "----";
     //}
     //cout << "-" << endl;
     char alfa= 'A';
     for (int i = 0; i < BOARD_LENGTH; i++) {
-
-        cout << alfa;
-        cout << " |";
+        boardStr += "\n";
+        boardStr += alfa;
+        boardStr += " |";
         for (int j = 0; j < BOARD_LENGTH; j++) {
             String value = "  ";
             if (board[i][j]->getValue().compare("0")>0) {
               value = board[i][j]->getValue();
             }
-            cout << value << "|";
+            boardStr += value + "|";
         }
         alfa+=1;
-        cout << endl;
 
     }
     //for(int k=0;k<BOARD_LENGTH;k++) {
     //    cout << "---";
     //}
-    cout << endl;
+
+    return boardStr;
 }
 
 void GameEngine::dealTiles(){
