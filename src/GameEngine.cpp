@@ -8,9 +8,14 @@
 
 using std::cin;
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine(std::string playerListNames[4]) {
     turn= 0;
     inGame= true;
+    playerList = new Player*[4];
+
+    for (int i = 0; i < 4 && playerListNames[i] != ""; i++)
+      playerList[i] = new Player(playerListNames[i], new LinkedList);
+
     startGame();
 }
 
@@ -18,11 +23,8 @@ GameEngine::GameEngine() {
 //main function that runs the actual game
 void GameEngine::startGame() {
     assembleBoard();
-    playerList = new Player*[4];
-    //should have a constructor to initialise the player names from qwirkle class
-    playerList[0] = new Player("1", new LinkedList);
-    playerList[1] = new Player("2", new LinkedList);
     dealTiles();
+
     inGame = true;
     //loops while there is no winner yet and game is still running
     while(inGame){
@@ -44,6 +46,8 @@ void GameEngine::startGame() {
       takeTurn();
       endTurn();
     }
+
+
 }
 
 
@@ -89,7 +93,6 @@ void GameEngine::takeTurn() {
           if (replaceTile(tile)) validated = true;;
         } else if(option == 3) {
           saveGame(playerCommand.substr(5, playerCommand.length()-5));
-          validated= true;
         }
         option = 0;
     }
@@ -152,7 +155,29 @@ void GameEngine::endTurn() {
     if (playerList[currentPlayer] == nullptr) currentPlayer = 0;
 
     //end game if tileBag is empty
-    if (tileBag.size() == 0) inGame = false;
+    if (tileBag.size() == 0){
+      inGame = false;
+
+      //loops through all players printing their deets and finding the winner
+      std::string winner = "";
+      int winningScore = 0;
+      for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+        //prints player deets
+        std::cout << "Score for " << playerList[i]->getName() << std::endl;
+        std::cout << ": " << playerList[i]->getScore() << std::endl;
+
+        //calcs if the player is a winner
+        if (playerList[i]->getScore() > winningScore){
+          winner = playerList[i]->getName();
+          winningScore = playerList[i]->getScore();
+        }
+        else if (playerList[i]->getScore() == winningScore){
+          if (winner != "") winner = winner + " & " + playerList[i]->getName();
+          else winner = playerList[i]->getName();
+        }
+      }
+      std::cout << "Player " << winner << " won!" << std::endl << std::endl;
+    }
 
     //TODO check if theres valid moves
 }
@@ -206,8 +231,11 @@ void GameEngine::dealTiles(){
 
   for (Colour colour : tileColours){
     for (Shape shape : tileShapes){
-      Tile* tile = new Tile(colour, shape);
-      tileBag.addFront(tile);
+      int copies = 2;
+      for (int i = 0; i < copies; i++){
+        Tile* tile = new Tile(colour, shape);
+        tileBag.addFront(tile);
+      }
     }
   }
 
@@ -221,4 +249,5 @@ void GameEngine::dealTiles(){
       tileBag.deleteTile(*tile);
     }
   }
+  // std::cout << playerList[0]->handToString() << std::endl;
 }

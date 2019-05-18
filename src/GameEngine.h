@@ -21,7 +21,7 @@ using std::endl;
 class GameEngine {
 public:
 
-    GameEngine();
+    GameEngine(std::string playerList[4]);
     ~GameEngine();
 
 private:

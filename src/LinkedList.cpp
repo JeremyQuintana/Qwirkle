@@ -89,7 +89,7 @@ void LinkedList::addBack(Tile* data)
     }
     else
     {
-        temp = tail->next;
+        tail->next = temp;
         tail = temp;
     }
 

@@ -7,7 +7,7 @@
 #include <iostream>
 
 #define EXIT_SUCCESS      0
-#define NUMBER_OF_PLAYERS 2
+#define NUMBER_OF_PLAYERS 4
 
 void newGame();
 void loadGame();
@@ -39,20 +39,35 @@ int main(void) {
 
 //starts a new game
 void newGame(){
-  // std::cout << "Starting a New Game" << std::endl;
-  //
-  // //array for all player names
-  // std::string playerList[NUMBER_OF_PLAYERS];
-  //
-  // //loop to prompt for players to however many players are playing
-  // for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
-  //   playerList[i] = promptForPlayer(i+1);
-  // }
-  //
-  // //TODO implement the creation of the game using the array of players
-  //
-  // std::cout << std::endl;
-  new GameEngine();
+  std::cout << "Starting a New Game" << std::endl;
+
+  bool validate = false;
+  int amountOfPlayers = 0;
+  while (validate == false){
+    std::cout << std::endl
+    << "Enter amount of players:" << std::endl
+    << "> ";
+    std::cin >> amountOfPlayers;
+
+    if (amountOfPlayers > 1 && amountOfPlayers < 5) validate = true;
+  }
+
+  //array for all player names
+  std::string playerList[NUMBER_OF_PLAYERS];
+
+  //loop to prompt for players to however many players are playing
+  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+    playerList[i] = "";
+  }
+
+  for (int i = 0; i < amountOfPlayers; i++){
+    playerList[i] = promptForPlayer(i+1);
+  }
+
+  //TODO implement the creation of the game using the array of players
+
+  std::cout << std::endl;
+  new GameEngine(playerList);
 }
 
 //loads game from a given file name

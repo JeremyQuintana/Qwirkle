@@ -23,7 +23,7 @@ Tile* Player::getTilePtr(Tile tileToUse){
 }
 
 void Player::addTile(Tile* tileToAdd){
-  hand->addFront(tileToAdd);
+  hand->addBack(tileToAdd);
 }
 void Player::removeTile(Tile tileToRemove){
   hand->deleteTile(tileToRemove);
