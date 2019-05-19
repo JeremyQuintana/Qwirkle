@@ -19,6 +19,7 @@ bool checkValidTile(std::string tile);
 
 int main(void) {
   std::cout
+
   << "Welcome to Qwirkle!"           << std::endl
   << "-------------------"           << std::endl;
   int option = 0;
@@ -32,30 +33,25 @@ int main(void) {
   }
 
   std::cout << "Goodbye" << std::endl;
-  //previous code starter code, not sure what its for
-  // LinkedList* list = new LinkedList();
-  // delete list;
-  //
-  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 //starts a new game
 void newGame(){
-  std::cout << "Starting a New Game" << std::endl;
-
-  //array for all player names
-  std::string playerList[NUMBER_OF_PLAYERS];
-
-  //loop to prompt for players to however many players are playing
-  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
-    playerList[i] = promptForPlayer(i+1);
-  }
-
-  //TODO implement the creation of the game using the array of players
-
-  std::cout << std::endl;
+  // std::cout << "Starting a New Game" << std::endl;
+  //
+  // //array for all player names
+  // std::string playerList[NUMBER_OF_PLAYERS];
+  //
+  // //loop to prompt for players to however many players are playing
+  // for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+  //   playerList[i] = promptForPlayer(i+1);
+  // }
+  //
+  // //TODO implement the creation of the game using the array of players
+  //
+  // std::cout << std::endl;
   new GameEngine();
 }
 
@@ -212,8 +208,7 @@ int menuOptions(){
 //prompts for player and returns a player name
 std::string promptForPlayer(int playerNumber){
   std::string player = "";
-  std::cout
-                                                              << std::endl
+  std::cout << std::endl
   << "Enter a name for player " << playerNumber
   <<                           " (uppercase characters only)" << std::endl
   << "> ";
