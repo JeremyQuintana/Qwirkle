@@ -22,8 +22,6 @@ public:
    Tile(Colour, Shape);
    String getValue();
    ~Tile();
-
-   String getValue();
 };
 
 #endif // ASSIGN2_TILE_H
