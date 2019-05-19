@@ -1,5 +1,6 @@
 
 #include "LinkedList.h"
+#include "Player.h"
 #include "TileCodes.h"
 #include "GameEngine.h"
 
@@ -47,9 +48,15 @@ void newGame(){
     std::cout << std::endl
     << "Enter amount of players:" << std::endl
     << "> ";
-    std::cin >> amountOfPlayers;
+    std::string input = "";
+    std::cin >> input;
 
-    if (amountOfPlayers > 1 && amountOfPlayers < 5) validate = true;
+    if (checkStringCharBetween(input, '1', '2') == true
+        && input.length() == 1) {
+          validate = true;
+          amountOfPlayers = input.at(0) - '0';
+    }
+    else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
   }
 
   //array for all player names

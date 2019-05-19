@@ -21,7 +21,6 @@ GameEngine::GameEngine(std::string playerListNames[4]) {
     startGame();
 }
 
-
 //main function that runs the actual game
 void GameEngine::startGame() {
     //loops while there is no winner yet and game is still running
@@ -46,7 +45,6 @@ void GameEngine::startGame() {
       endTurn();
     }
 }
-
 
 //assembles the board according to the size inputted in the console
 void GameEngine::assembleBoard(){
