@@ -28,8 +28,16 @@ int main(void) {
   while (option != 4){
     option = menuOptions();
 
-    if (option == 1) newGame();
-    if (option == 2) loadGame();
+    if (option == 1) {
+      newGame();
+      std::cout << std::endl;
+      option = 4;
+    }
+    if (option == 2) {
+      loadGame();
+      std::cout << std::endl;
+      option = 4;
+    }
     if (option == 3) showStudentInformation();
   }
 
@@ -44,19 +52,25 @@ void newGame(){
 
   bool validate = false;
   int amountOfPlayers = 0;
+  bool endGame = false;
   while (validate == false){
     std::cout << std::endl
     << "Enter amount of players:" << std::endl
     << "> ";
     std::string input = "";
     std::cin >> input;
-
-    if (checkStringCharBetween(input, '2', '4') == true
-        && input.length() == 1) {
-          validate = true;
-          amountOfPlayers = input.at(0) - '0';
+    if (input.find("^D") != std::string::npos){
+      endGame = true;
+      validate = true;
     }
-    else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
+    else{
+      if (checkStringCharBetween(input, '2', '4') == true
+          && input.length() == 1) {
+            validate = true;
+            amountOfPlayers = input.at(0) - '0';
+      }
+      else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
+    }
   }
 
   //array for all player names
@@ -67,14 +81,17 @@ void newGame(){
     playerList[i] = "";
   }
 
-  for (int i = 0; i < amountOfPlayers; i++){
-    playerList[i] = promptForPlayer(i+1);
+  for (int i = 0; i < amountOfPlayers && endGame == false; i++){
+    std::string player = promptForPlayer(i+1);
+    if (player == "^D") endGame = true;
+    else playerList[i] = player;
   }
 
   //TODO implement the creation of the game using the array of players
-
-  std::cout << std::endl;
-  new GameEngine(playerList);
+  if (endGame == false){
+    std::cout << std::endl;
+    new GameEngine(playerList);
+  }
 }
 
 //loads game from a given file name
@@ -215,7 +232,10 @@ int menuOptions(){
   int option = 0;
   bool validated = false;
   while (validated == false){
-    std::cin >> option;
+    std::string input = "";
+    std::cin >> input;
+    if (input == "^D") option = 4;
+    else option = input.at(0) - '0';
     if (option == 1 || option == 2 || option == 3 || option == 4)
       validated = true;
     else std::cout << "Error - Invalid option" << std::endl << "> ";
@@ -240,12 +260,18 @@ std::string promptForPlayer(int playerNumber){
   while (validate == false){
     std::cin >> player;
 
-    //check input is all upper case letters
-    validate = checkStringCharBetween(player, 'A', 'Z');
+    if (player.find("^D") == std::string::npos){
+      //check input is all upper case letters
+      validate = checkStringCharBetween(player, 'A', 'Z');
 
-    //prints error message if incorrect
-    if (validate == false)
-      std::cout << "Invalid input" << std::endl << "> ";
+      //prints error message if incorrect
+      if (validate == false)
+        std::cout << "Invalid input" << std::endl << "> ";
+    }
+    else{
+      validate = true;
+      player = "^D";
+    }
   }
 
   return player;

@@ -35,7 +35,7 @@ private:
     int currentPlayer;
     void startGame();
     void assembleBoard();
-    void takeTurn();
+    bool takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
     void calcScore();
     bool replaceTile(Tile tile);

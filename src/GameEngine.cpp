@@ -42,8 +42,9 @@ void GameEngine::startGame() {
       << "Your hand is:"                           << std::endl
       << playerList[currentPlayer]->handToString() << std::endl << std::endl;
 
-      takeTurn();
-      endTurn();
+      bool endGame = takeTurn();
+      if (endGame == false) endTurn();
+      else inGame = false;
     }
 }
 
@@ -62,7 +63,8 @@ void GameEngine::assembleBoard(){
     std::cin.ignore();
 }
 
-void GameEngine::takeTurn() {
+bool GameEngine::takeTurn() {
+    bool endGame = false;
     int option = 0;
     bool validated = false;
     std::string playerCommand = "";
@@ -77,7 +79,10 @@ void GameEngine::takeTurn() {
         else if(playerCommand.substr(0,8).compare("replace ") == 0)  option = 2;
         else if(playerCommand.substr(0,6).compare("place ") == 0
                 && playerCommand.substr(8,4).compare(" at ") == 0)   option = 1;
-
+        else if(playerCommand.find("^D") != std::string::npos) {
+          endGame = true;
+          validated = true;
+        }
         else std::cout << "Error - Invalid option" << std::endl;
 
         //calls relevant functions and if unsuccesful stays in loop
@@ -92,6 +97,8 @@ void GameEngine::takeTurn() {
         }
         option = 0;
     }
+
+    return endGame;
 }
 
 bool GameEngine::placeTile(Tile tile, std::string coordinate) {
