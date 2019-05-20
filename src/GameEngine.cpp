@@ -8,12 +8,13 @@
 
 using std::cin;
 
-GameEngine::GameEngine(std::string playerListNames[4]) {
+GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
     inGame= true;
-    playerList = new Player*[4];
+    playerList = new Player*[totalPlayers];
+    this->totalPlayers= totalPlayers;
 
-    for (int i = 0; i < 4 && playerListNames[i] != ""; i++)
+    for (int i = 0; i < totalPlayers; i++)
       playerList[i] = new Player(playerListNames[i], new LinkedList);
 
     assembleBoard();
@@ -30,7 +31,7 @@ void GameEngine::startGame() {
       << playerList[currentPlayer]->getName()
       << ", it's your turn" << std::endl;
 
-      for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+      for (int i = 0; i < totalPlayers; i++){
         std::cout
         << "Score for " << playerList[i]->getName()
         << ": " << playerList[i]->getScore() << std::endl;
@@ -100,7 +101,7 @@ void GameEngine::saveGame(std::string fileName){
 
   //loop to print players and deets to file
   //prints max 4 players but not necissarily needs to be 4
-  for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+  for (int i = 0; i < totalPlayers; i++){
     outFile
       << playerList[i]->getName()      << endl
       << playerList[i]->getScore()     << endl
@@ -138,11 +139,9 @@ void GameEngine::drawTile() {
 }
 
 void GameEngine::endTurn() {
-    turn= abs(turn-1);
-
     //increment to next player
     currentPlayer++;
-    if (playerList[currentPlayer] == nullptr) currentPlayer = 0;
+    if (currentPlayer==totalPlayers) currentPlayer = 0;
 
     //end game if tileBag is empty
     if (tileBag.size() == 0){
@@ -151,7 +150,7 @@ void GameEngine::endTurn() {
       //loops through all players printing their deets and finding the winner
       std::string winner = "";
       int winningScore = 0;
-      for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+      for (int i = 0; i < totalPlayers; i++){
         //prints player deets
         std::cout << "Score for " << playerList[i]->getName() << std::endl;
         std::cout << ": " << playerList[i]->getScore() << std::endl;
@@ -232,7 +231,7 @@ void GameEngine::dealTiles(){
   //TODO need a shuffle function for the linked list here
 
   //draw from tileBag into each players hand;
-  for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+  for (int i = 0; i < totalPlayers; i++){
     for (int x = 0; x < 6; x++){
       Tile* tile = tileBag.get(0);
       playerList[i]->addTile(tile);

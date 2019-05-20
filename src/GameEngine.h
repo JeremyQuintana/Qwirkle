@@ -21,7 +21,7 @@ using std::endl;
 class GameEngine {
 public:
 
-    GameEngine(std::string playerList[4]);
+    GameEngine(std::string playerList[], int totalPlayers);
     ~GameEngine();
 
 private:
@@ -32,6 +32,7 @@ private:
     std::string playerCommand;
     LinkedList tileBag;
     Player* *playerList;
+    int totalPlayers;
     int currentPlayer;
     void startGame();
     void assembleBoard();
