@@ -6,13 +6,7 @@ Player::Player(std::string name, LinkedList* hand){
 }
 
 String Player::handToString(){
-  std::string handStr = "";
-  for (int i = 0; i < hand->size(); i++){
-    Tile tile = *(hand->get(i));
-    if (handStr != "") handStr.append(",");
-    handStr.append(tile.getValue());
-  }
-  return handStr;
+  return hand->listToString();
 }
 
 Tile* Player::getTilePtr(Tile tileToUse){
@@ -29,7 +23,7 @@ Tile* Player::getTilePtr(Tile tileToUse){
 }
 
 void Player::addTile(Tile* tileToAdd){
-  hand->addFront(tileToAdd);
+  hand->addBack(tileToAdd);
 }
 void Player::removeTile(Tile tileToRemove){
   hand->deleteTile(tileToRemove);
@@ -41,4 +35,8 @@ void Player::addScore(int award){
 
 int Player::getScore(){
   return score;
+}
+
+std::string Player::getName(){
+  return name;
 }

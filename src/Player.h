@@ -10,6 +10,7 @@ public:
   Player(std::string name, LinkedList* hand);
   ~Player();
   int getScore();
+  std::string getName();
   String handToString();
   Tile* getTilePtr(Tile tileToUse);
   void addTile(Tile* tileToAdd);

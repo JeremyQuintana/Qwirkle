@@ -89,7 +89,7 @@ void LinkedList::addBack(Tile* data)
     }
     else
     {
-        temp = tail->next;
+        tail->next = temp;
         tail = temp;
     }
 
@@ -152,7 +152,7 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
                 prev->next = temp->next;
                 delete temp;
             }
-
+            count--;
             return;
         }
 
@@ -177,4 +177,14 @@ bool LinkedList::inList(Tile data) //Returns true if tile is in list
     }
 
     return result;
+}
+
+std::string LinkedList::listToString(){
+  std::string listStr = "";
+  for (int i = 0; i < size(); i++){
+    Tile tile = *(get(i));
+    if (listStr != "") listStr.append(",");
+    listStr.append(tile.getValue());
+  }
+  return listStr;
 }

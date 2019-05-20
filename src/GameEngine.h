@@ -8,6 +8,9 @@
 #include "Tile.h"
 #include "Player.h"
 #include "LinkedList.h"
+#include "TileCodes.h"
+
+#include "fstream"
 
 typedef Tile** Board;
 typedef Tile* BoardRow;
@@ -18,7 +21,7 @@ using std::endl;
 class GameEngine {
 public:
 
-    GameEngine();
+    GameEngine(std::string playerList[4]);
     ~GameEngine();
 
 private:
@@ -38,8 +41,9 @@ private:
     bool replaceTile(Tile tile);
     void drawTile();
     void endTurn();
-    void printBoard();
-    void saveGame();
+    std::string printBoard();
+    void dealTiles();
+    void saveGame(std::string fileName);
 };
 
 #endif //SRC_GAMEENGINE_H
