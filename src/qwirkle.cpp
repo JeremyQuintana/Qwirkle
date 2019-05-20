@@ -51,7 +51,7 @@ void newGame(){
     std::string input = "";
     std::cin >> input;
 
-    if (checkStringCharBetween(input, '1', '2') == true
+    if (checkStringCharBetween(input, '2', '4') == true
         && input.length() == 1) {
           validate = true;
           amountOfPlayers = input.at(0) - '0';
