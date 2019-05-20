@@ -3,14 +3,19 @@
 
 #include "LinkedList.h"
 
+using std::cin;
+
 class Player {
 public:
   Player(std::string name, LinkedList* hand);
   ~Player();
   int getScore();
-  LinkedList* getHand();
-  bool useTile(Tile tileToUse);
-  bool replaceTile(Tile bagTile, Tile toReplace);
+  std::string getName();
+  String handToString();
+  Tile* getTilePtr(Tile tileToUse);
+  void addTile(Tile* tileToAdd);
+  void removeTile(Tile tileToRemove);
+  void addScore(int award);
 
 private:
   std::string name;

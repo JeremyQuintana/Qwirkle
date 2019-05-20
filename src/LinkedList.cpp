@@ -16,7 +16,7 @@ LinkedList::~LinkedList()
 }
 
 int LinkedList::size()
-{ 
+{
     return this->count;
 }
 
@@ -36,16 +36,22 @@ void LinkedList::clear()
     count = 0;
 }
 
-Tile LinkedList::get(int i)
+Tile* LinkedList::get(int i)
 {
     int listCount = 0;
     Node* temp = head;
+<<<<<<< HEAD
 
     Tile result; //In case value is invalid returns 0 for both components
     result.colour = 0;
     result.shape = 0;
+=======
+>>>>>>> e4dfb62e853f547b77d7a07bcea5d90260d05c06
 
-    if (i <= this->count)
+    // Tile result; //In case value is invalid returns 0 for both components
+    // result.colour = 0;
+    // result.shape = 0;
+    if (i < this->count)
     {
         while (listCount < i) //Indexing starts at 0
         {
@@ -54,15 +60,19 @@ Tile LinkedList::get(int i)
             listCount++;
         }
 
-        result = *(temp->tile);
+        // result = *(temp->tile);
     }
+<<<<<<< HEAD
 
     return result; //Dereferences tile pointer
+=======
+    return temp->tile; //Dereferences tile pointer
+>>>>>>> e4dfb62e853f547b77d7a07bcea5d90260d05c06
 }
 
-void LinkedList::addFront(Tile data)
+void LinkedList::addFront(Tile* data)
 {
-    Node* temp = new Node(&data, nullptr);
+    Node* temp = new Node(data, nullptr);
 
     if (head == nullptr)
     {
@@ -82,9 +92,13 @@ void LinkedList::addFront(Tile data)
     count++; //Update size counter
 }
 
-void LinkedList::addBack(Tile data)
+void LinkedList::addBack(Tile* data)
 {
+<<<<<<< HEAD
     Node* temp = new Node(&data, nullptr);
+=======
+    Node* temp = new Node(data, nullptr);
+>>>>>>> e4dfb62e853f547b77d7a07bcea5d90260d05c06
 
     if (tail == nullptr)
     {
@@ -92,7 +106,7 @@ void LinkedList::addBack(Tile data)
     }
     else
     {
-        temp = tail->next;
+        tail->next = temp;
         tail = temp;
     }
 
@@ -155,7 +169,7 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
                 prev->next = temp->next;
                 delete temp;
             }
-
+            count--;
             return;
         }
 
@@ -182,6 +196,7 @@ bool LinkedList::inList(Tile data) //Returns true if tile is in list
     return result;
 }
 
+<<<<<<< HEAD
 //Shuffles contents of list
 void LinkedList::shuffle()
 {
@@ -239,3 +254,14 @@ void LinkedList::shuffle()
 
 }
 
+=======
+std::string LinkedList::listToString(){
+  std::string listStr = "";
+  for (int i = 0; i < size(); i++){
+    Tile tile = *(get(i));
+    if (listStr != "") listStr.append(",");
+    listStr.append(tile.getValue());
+  }
+  return listStr;
+}
+>>>>>>> e4dfb62e853f547b77d7a07bcea5d90260d05c06

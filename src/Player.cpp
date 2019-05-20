@@ -5,31 +5,38 @@ Player::Player(std::string name, LinkedList* hand){
   this->hand = hand;
 }
 
-bool Player::useTile(Tile tileToUse){
-  bool validTile = false;
-  if (hand->inList(tileToUse) == true){
-    hand->deleteTile(tileToUse);
-    validTile = true;
-  }
-
-  return validTile;
+String Player::handToString(){
+  return hand->listToString();
 }
 
-bool Player::replaceTile(Tile bagTile, Tile toReplace){
-  bool validReplace = false;
-  if (hand->inList(toReplace) == true){
-    hand->deleteTile(toReplace);
-    hand->addFront(bagTile);
-    validReplace = true;
+Tile* Player::getTilePtr(Tile tileToUse){
+  Tile* tile = nullptr;
+  bool found = false;
+  for (int i = 0; found == false && i < hand->size(); i++){
+    Tile* tempTile = hand->get(i);
+    if (tempTile->getValue() == tileToUse.getValue()){
+      tile = tempTile;
+      found = true;
+    }
   }
-
-  return validReplace;
+  return tile;
 }
 
-LinkedList* Player::getHand(){
-  return hand;
+void Player::addTile(Tile* tileToAdd){
+  hand->addBack(tileToAdd);
+}
+void Player::removeTile(Tile tileToRemove){
+  hand->deleteTile(tileToRemove);
+}
+
+void Player::addScore(int award){
+  score = score + award;
 }
 
 int Player::getScore(){
   return score;
+}
+
+std::string Player::getName(){
+  return name;
 }

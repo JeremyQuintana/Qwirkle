@@ -1,5 +1,6 @@
 
 #include "LinkedList.h"
+#include "Player.h"
 #include "TileCodes.h"
 #include "GameEngine.h"
 
@@ -7,7 +8,7 @@
 #include <iostream>
 
 #define EXIT_SUCCESS      0
-#define NUMBER_OF_PLAYERS 2
+#define NUMBER_OF_PLAYERS 4
 
 void newGame();
 void loadGame();
@@ -19,6 +20,7 @@ bool checkValidTile(std::string tile);
 
 int main(void) {
   std::cout
+
   << "Welcome to Qwirkle!"           << std::endl
   << "-------------------"           << std::endl;
   int option = 0;
@@ -32,31 +34,43 @@ int main(void) {
   }
 
   std::cout << "Goodbye" << std::endl;
-  //previous code starter code, not sure what its for
-  // LinkedList* list = new LinkedList();
-  // delete list;
-  //
-  // std::cout << "TODO: Implement Qwirkle!" << std::endl;
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 //starts a new game
 void newGame(){
   std::cout << "Starting a New Game" << std::endl;
 
+  bool validate = false;
+  int amountOfPlayers = 0;
+  while (validate == false){
+    std::cout << std::endl
+    << "Enter amount of players:" << std::endl
+    << "> ";
+    std::string input = "";
+    std::cin >> input;
+
+    if (checkStringCharBetween(input, '2', '4') == true
+        && input.length() == 1) {
+          validate = true;
+          amountOfPlayers = input.at(0) - '0';
+    }
+    else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
+  }
+
   //array for all player names
-  std::string playerList[NUMBER_OF_PLAYERS];
+  std::string playerList[amountOfPlayers];
 
   //loop to prompt for players to however many players are playing
-  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+  for (int i = 0; i < amountOfPlayers; i++){
     playerList[i] = promptForPlayer(i+1);
   }
 
   //TODO implement the creation of the game using the array of players
 
   std::cout << std::endl;
-  new GameEngine();
+  new GameEngine(playerList, amountOfPlayers);
 }
 
 //loads game from a given file name
@@ -212,8 +226,7 @@ int menuOptions(){
 //prompts for player and returns a player name
 std::string promptForPlayer(int playerNumber){
   std::string player = "";
-  std::cout
-                                                              << std::endl
+  std::cout << std::endl
   << "Enter a name for player " << playerNumber
   <<                           " (uppercase characters only)" << std::endl
   << "> ";
