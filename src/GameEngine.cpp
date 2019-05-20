@@ -5,6 +5,7 @@
 #include "GameEngine.h"
 
 #define BOARD_LENGTH boardLength
+#define DEFAULT_BOARD_LENGTH 3
 
 using std::cin;
 
@@ -17,7 +18,7 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     for (int i = 0; i < totalPlayers; i++)
       playerList[i] = new Player(playerListNames[i], new LinkedList);
 
-    assembleBoard();
+    assembleDynamicBoard();
     dealTiles();
     startGame();
 }
@@ -57,6 +58,15 @@ void GameEngine::assembleBoard(){
     }
     std::cin.clear();
     std::cin.ignore();
+}
+
+void GameEngine::assembleDynamicBoard(){
+    rowLength= DEFAULT_BOARD_LENGTH;
+    colLength= DEFAULT_BOARD_LENGTH;
+    dynamicBoard= new Board[rowLength];
+    for (int i=0;i<rowLength;i++){
+        dynamicBoard[i]= new BoardRow[colLength];
+    }
 }
 
 void GameEngine::takeTurn() {
@@ -239,4 +249,58 @@ void GameEngine::dealTiles(){
     }
   }
   // std::cout << playerList[0]->handToString() << std::endl;
+}
+
+void GameEngine::updateDynamicBoard(int row, int col) {
+    bool rowExpand= false;
+    bool colExpand= false;
+    int newRowLength= rowLength;
+    int newColLength= colLength;
+    bool colShift= false;
+    bool rowShift= false;
+
+    if (row==0) {
+        rowExpand= true;
+        rowShift= true;
+        newRowLength++;
+    }
+    else if(row==rowLength-1) {
+        rowExpand = true;
+        newRowLength++;
+    }
+    if(col==0) {
+        colExpand = true;
+        colShift = true;
+        newColLength++;
+    }
+    else if(col==colLength-1) {
+        colExpand = true;
+        newColLength++;
+    }
+
+    if(rowExpand || colExpand) {
+        Board *newBoard = new Board[newRowLength];
+        for (int i = 0; i < newRowLength; i++) {
+            newBoard[i] = new BoardRow[newColLength];
+        }
+
+        for (int i = 0; i < rowLength; i++) {
+            int newRow = i;
+            if (rowShift) {
+                newRow++;
+                for (int j = 0; j < colLength; j++) {
+                    if (dynamicBoard[i][j] != nullptr) {
+                        int newCol = j;
+                        if (colShift) {
+                            newCol++;
+                        }
+                        newBoard[newRow][newCol] = dynamicBoard[i][j];
+                    }
+                }
+            }
+            delete dynamicBoard[i];
+        }
+        delete dynamicBoard;
+        dynamicBoard= newBoard;
+    }
 }

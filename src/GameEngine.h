@@ -26,7 +26,10 @@ public:
 
 private:
     Board* board;
+    Board* dynamicBoard;
     int boardLength;
+    int rowLength;
+    int colLength;
     int turn;
     bool inGame;
     std::string playerCommand;
@@ -36,6 +39,7 @@ private:
     int currentPlayer;
     void startGame();
     void assembleBoard();
+    void assembleDynamicBoard();
     void takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
     void calcScore();
@@ -45,6 +49,7 @@ private:
     std::string printBoard();
     void dealTiles();
     void saveGame(std::string fileName);
+    void updateDynamicBoard(int, int);
 };
 
 #endif //SRC_GAMEENGINE_H
