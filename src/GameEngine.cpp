@@ -100,7 +100,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     char row = coordinate.at(0);
     int destinationRow = row - 65;
     // column player asked for
-    std::string column = coordinate.substring(1);
+    std::string column = coordinate.substr(1);
     int destinationColumn = std::stoi(column);
     // copies of these to use as counters
     int currentRow = destinationRow;
@@ -109,7 +109,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     int comparatorColumn = destinationColumn;
     Tile currentTile = tile;
     Tile comparatorTile = tile;
-    // bool values used for checksm and rule variable -> -1 is colour, 1 is shape
+    // bool values used for checks and rule variables -> -1 is colour, 1 is shape
     bool emptyNorth = false, emptySouth = false, emptyEast = false, emptyWest = false;
     int ruleNorth = 0, ruleSouth = 0, ruleEast = 0, ruleWest = 0;
     // required colour and/or shape
