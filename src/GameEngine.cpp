@@ -102,7 +102,6 @@ bool GameEngine::takeTurn() {
 }
 
 bool GameEngine::placeTile(Tile tile, std::string coordinate) {
-
     // row player asked for
     char row = coordinate.at(0);
     int destinationRow = row - 65;
@@ -361,7 +360,7 @@ void GameEngine::dealTiles(){
     }
   }
 
-  //TODO need a shuffle function for the linked list here
+  tileBag.shuffle();
 
   //draw from tileBag into each players hand;
   for (int i = 0; i < 4 && playerList[i] != nullptr; i++){

@@ -179,6 +179,63 @@ bool LinkedList::inList(Tile data) //Returns true if tile is in list
     return result;
 }
 
+//Shuffles contents of list
+void LinkedList::shuffle()
+{
+    int tempCounter = count;
+    int listCount = 0; // Just for iterating through list
+    int tempIndex;
+
+    Node* temp;
+    Node* prev;
+
+    std::random_device engine;
+
+    while (tempCounter > 0)
+    {
+        listCount = 0; // Reset variable
+        temp = head;
+        prev = head;
+
+        std::uniform_int_distribution<int> uniform_int(0, tempCounter);
+
+        tempIndex = uniform_int(engine);
+
+        // Finds the generated index
+        while (listCount < tempIndex) //Indexing starts at 0
+        {
+            prev = temp;
+            temp = temp->next;
+
+            listCount++;
+        }
+
+        if (temp == head)
+        {
+            head = temp->next;
+            tail->next = temp;
+            temp->next = nullptr;
+
+            tail = temp;
+        }
+        else if (temp == tail)
+        {
+            // No operations need to be done
+        }
+        else
+        {
+            tail->next = temp;
+            prev->next = temp->next;
+            temp->next = nullptr;
+
+            tail = temp;
+        }
+
+        tempCounter--;
+    }
+
+}
+
 std::string LinkedList::listToString(){
   std::string listStr = "";
   for (int i = 0; i < size(); i++){
