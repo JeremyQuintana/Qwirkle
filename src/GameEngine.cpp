@@ -124,6 +124,8 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     // required colour and/or shape
     char reqColour = tile.getValue().at(0);
     char reqShape = tile.getValue().at(1);
+    // counter for points earned
+    int score = 0;
 
     bool isValid = true;
     // check coordinate exists - needs to be changed for dynamic boards in future
@@ -145,11 +147,14 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(0) == reqColour) ruleNorth--;
         if(currentTile->getValue().at(1) == reqShape)  ruleNorth++;
         if(ruleNorth == 0) isValid = false;
+        score++;
     }
     while(currentTile != NULL && (currentRow-1) >= 0) {
         currentTile = board[currentRow-1][destinationColumn];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        else score++;
         currentRow--;
+
     }
     // check south
     if(!emptySouth) {
@@ -158,10 +163,12 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(0) == reqColour) ruleSouth--;
         if(currentTile->getValue().at(1) == reqShape)  ruleSouth++;
         if(ruleSouth == 0) isValid = false;
+        score++;;
     }
     while(currentTile != NULL && (currentRow+1) <= (BOARD_LENGTH-1)) {
         currentTile = board[currentRow+1][destinationColumn];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        else score++;
         currentRow++;
     }
     // if both exist, determine if the same rule
@@ -188,10 +195,12 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(0) == reqColour) ruleEast--;
         if(currentTile->getValue().at(1) == reqShape)  ruleEast++;
         if(ruleEast == 0) isValid = false;
+        score++;
     }
     while(currentTile != NULL && (currentColumn+1) <= BOARD_LENGTH) {
         currentTile = board[destinationRow][currentColumn+1];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        else score++;
         currentColumn++;
     }
     // check west
@@ -201,10 +210,12 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(0) == reqColour) ruleWest--;
         if(currentTile->getValue().at(1) == reqShape)  ruleWest++;
         if(ruleWest == 0) isValid = false;
+        score++;
     }
     while(currentTile != NULL && (currentColumn-1) >= 0) {
         currentTile = board[destinationRow][currentColumn-1];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        else score++;
         currentColumn--;
     }
     // if both exist, determine if the same rule
@@ -226,6 +237,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
 
     if(isValid) board[destinationRow][destinationColumn] = tile;
     if(isValid) updateDynamicBoard(destinationRow, destinationColumn);
+    if(isValid) playerList[currentPlayer]->addScore(score);
     return isValid;
 }
 
@@ -248,10 +260,6 @@ void GameEngine::saveGame(std::string fileName){
 
   outFile.close();
   std::cout << std::endl << "Game successfully saved" << std::endl;
-}
-
-void GameEngine::calcScore() {
-
 }
 
 bool GameEngine::replaceTile(Tile tile) {

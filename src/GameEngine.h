@@ -42,7 +42,6 @@ private:
     void assembleDynamicBoard();
     void takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
-    void calcScore();
     bool replaceTile(Tile tile);
     void drawTile();
     void endTurn();
