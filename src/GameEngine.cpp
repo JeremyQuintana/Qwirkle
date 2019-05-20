@@ -7,6 +7,7 @@
 #define BOARD_LENGTH boardLength
 
 using std::cin;
+using std::stoi;
 
 GameEngine::GameEngine(std::string playerListNames[4]) {
     turn= 0;
@@ -94,7 +95,128 @@ void GameEngine::takeTurn() {
 }
 
 bool GameEngine::placeTile(Tile tile, std::string coordinate) {
-  return false;
+
+    // row player asked for
+    char row = coordinate.at(0);
+    int destinationRow = row - 65;
+    // column player asked for
+    std::string column = coordinate.substring(1);
+    int destinationColumn = std::stoi(column);
+    // copies of these to use as counters
+    int currentRow = destinationRow;
+    int currentColumn = destinationColumn;
+    int comparatorRow = destinationRow;
+    int comparatorColumn = destinationColumn;
+    Tile currentTile = tile;
+    Tile comparatorTile = tile;
+    // bool values used for checksm and rule variable -> -1 is colour, 1 is shape
+    bool emptyNorth = false, emptySouth = false, emptyEast = false, emptyWest = false;
+    int ruleNorth = 0, ruleSouth = 0, ruleEast = 0, ruleWest = 0;
+    // required colour and/or shape
+    std::string reqColour = tile->getValue().at(0); // eg. "R"
+    std::string reqShape = tile->getValue().at(1); // eg. "3"
+
+    bool isValid = true;
+    // check coordinate exists - needs to be changed for dynamic boards in future
+    if(destinationRow < 65 || destinationRow > 65 + BOARD_LENGTH || destinationColumn < 0 || destinationColumn > BOARD_LENGTH) isValid = false;
+    // check coordinate is not currently occupied
+    if(board[destinationRow][destinationColumn]!= NULL) isValid = false;
+    // check tile is placed adjacent to an existing tile after turn 1
+    // assuming turn denotes turns passed
+    emptyNorth = (board[destinationRow-1][destinationColumn] == NULL || destinationRow == 0) ? true : false;
+    emptySouth = (board[destinationRow+1][destinationColumn] == NULL || destinationRow == (BOARD_LENGTH - 1)) ? true : false;
+    emptyEast = (board[destinationRow][destinationColumn+1] == NULL || destinationColumn == (BOARD_LENGTH - 1)) ? true : false;
+    emptyWest = (board[destinationRow][destinationColumn-1] == NULL || destinationColumn == 0) ? true : false;
+    if(turn > 1 && emptyN && emptyS && emptyE && emptyW) isValid = false;
+
+    // check north
+    if(!emptyNorth) {
+        currentRow = destinationRow;
+        currentTile = board[currentRow-1][destinationColumn];
+        if(currentTile->getValue().at(0).compare(reqColour)) ruleNorth--;
+        if(currentTile->getValue().at(1).compare(reqShape))  ruleNorth++;
+        if(ruleNorth == 0) isValid = false;
+    }
+    while(currentTile != NULL && (currentRow-1) >= 0) {
+        currentTile = board[currentRow-1][destinationColumn];
+        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        currentRow--;
+    }
+    // check south
+    if(!emptySouth) {
+        currentRow = destinationRow;
+        currentTile = board[currentRow+1][destinationColumn];
+        if(currentTile->getValue().at(0).compare(reqColour)) ruleSouth--;
+        if(currentTile->getValue().at(1).compare(reqShape))  ruleSouth++;
+        if(ruleSouth == 0) isValid = false;
+    }
+    while(currentTile != NULL && (currentRow+1) <= (BOARD_LENGTH-1)) {
+        currentTile = board[currentRow+1][destinationColumn];
+        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        currentRow++;
+    }
+    // if both exist, determine if the same rule
+    if(!emptyNorth && !emptySouth) {
+        currentRow = destinationRow;
+        comparatorRow = destinationRow;
+        if(ruleNorth != ruleSouth) isValid = false;
+        // determine if any tiles in south exist in north
+        while(comparatorTile != NULL && (comparatorRow-1) >= 0) {
+            comparatorTile = board[comparatorRow-1][destinationColumn];
+            while(currentTile != NULL && (currentRow+1) <= (BOARD_LENGTH-1)) {
+                currentTile = board[currentRow+1][destinationColumn];
+                if(comparatorTile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+                currentRow++;
+            }
+            comparatorRow--;
+        }
+    }
+
+    // check east
+    if(!emptyEast) {
+        currentColumn = destinationColumn;
+        currentTile = board[destinationRow][currentColumn+1];
+        if(currentTile->getValue().at(0).compare(reqColour)) ruleEast--;
+        if(currentTile->getValue().at(1).compare(reqShape))  ruleEast++;
+        if(ruleEast == 0) isValid = false;
+    }
+    while(currentTile != NULL && (currentColumn+1) <= BOARD_LENGTH) {
+        currentTile = board[destinationRow][currentColumn+1];
+        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        currentColumn++;
+    }
+    // check west
+    if(!emptyWest) {
+        currentColumn = destinationColumn;
+        currentTile = board[destinationRow][currentColumn-1];
+        if(currentTile->getValue().at(0).compare(reqColour)) ruleWest--;
+        if(currentTile->getValue().at(1).compare(reqShape))  ruleWest++;
+        if(ruleWest == 0) isValid = false;
+    }
+    while(currentTile != NULL && (currentColumn-1) >= 0) {
+        currentTile = board[destinationRow][currentColumn-1];
+        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        currentColumn--;
+    }
+    // if both exist, determine if the same rule
+    if(!emptyEast && !emptyWest) {
+        currentColumn = destinationColumn;
+        comparatorColumn = destinationColumn;
+        if(ruleEast != ruleWest) isValid = false;
+        // determine if any tiles in east exist in west
+        while(comparatorTile != NULL && (comparatorColumn+1) <= (BOARD_LENGTH-1)) {
+            comparatorTile = board[destinationRow][comparatorColumn+1];
+            while(currentTile != NULL && (currentColumn-1) >= 0 ) {
+                currentTile = board[destinationRow][currentColumn-1];
+                if(comparatorTile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+                currentColumn--;
+            }
+            comparatorColumn++;
+        }
+    }
+
+    if(isValid) board[destinationRow][destinationColumn] = tile;
+    return isValid;
 }
 
 void GameEngine::saveGame(std::string fileName){

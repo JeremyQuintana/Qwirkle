@@ -6,8 +6,8 @@ for valid move:
 - satisfies horizontal colour/symbol
 - doesn't already exist in vertical/horizontal 6
 - when connecting two verticals or two horizontals, the row/column rules must be satisfied after conjoining
-   -no doubling symbols
-   -overarching rule satisfied for whole row (colour or symbol)
+    -no doubling symbols
+    -overarching rule satisfied for whole row (colour or symbol)
 
 invalid moves will also include:
 - attempting to place piece that isn't in hand
@@ -66,29 +66,27 @@ as soon as invalid is called; logic should break and simply return invalid
 
 place 'tile' at 'index' validity check
 if (!exist in hand)
-   invalid
+    invalid
 if(!'index' exist on board)
-   invalid
+    invalid
 if('index' currently occupied)
-   invalid
-
-update variables existsN, existsE, existsS, existsW
-if(existsN, existsE, existsS, existsW all == false)
-      invalid
+    invalid
+if(not adjacent to existing tile && after turn 1)
+    invalid
 
 for(N, E, S, W)
-      if(existsCurrentDirection == true)
-         discover rule for current direction
-      if('tile' !satisfy rule)
-         invalid
-      if ('tile' already exists in current direction)
-         invalid
+    if(existsCurrentDirection == true)
+        discover rule for current direction
+    if('tile' !satisfy rule)
+        invalid
+    if ('tile' already exists in current direction)
+        invalid
 
 for(N and E)
-   if(existsCurrentDirection == true && existsOppositeDirection == true)
-      discover rule for current direction
-      discover rule for opposite direction
-      if(ruleCurrent != ruleOpposite)
-         invalid
-      if(any tile in current direction exists in opposite direction)
-         invalid
+    if(existsCurrentDirection == true && existsOppositeDirection == true)
+        discover rule for current direction
+        discover rule for opposite direction
+        if(ruleCurrent != ruleOpposite)
+            invalid
+        if(any tile in current direction exists in opposite direction)
+            invalid
