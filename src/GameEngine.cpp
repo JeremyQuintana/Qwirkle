@@ -13,6 +13,7 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
     inGame= true;
     playerList = new Player*[totalPlayers];
+    currentPlayer= 0;
     this->totalPlayers= totalPlayers;
 
     for (int i = 0; i < totalPlayers; i++)
@@ -183,15 +184,16 @@ void GameEngine::endTurn() {
 
 //prints the entire board to the system console including the tiles placed
 std::string GameEngine::printBoard() {
+    board= dynamicBoard;
     std::string boardStr = "";
     String initial = "   ";
-    if(boardLength>10){
+    if(colLength>10){
         initial= "  ";
     }
     boardStr = initial;
     String prefix= " ";
     String postfix= " ";
-    for(int k=0;k<BOARD_LENGTH;k++) {
+    for(int k=0;k<colLength;k++) {
         if(k>10){
             prefix= "";
         }
@@ -202,11 +204,11 @@ std::string GameEngine::printBoard() {
     //}
     //cout << "-" << endl;
     char alfa= 'A';
-    for (int i = 0; i < BOARD_LENGTH; i++) {
+    for (int i = 0; i < rowLength; i++) {
         boardStr += "\n";
         boardStr += alfa;
         boardStr += " |";
-        for (int j = 0; j < BOARD_LENGTH; j++) {
+        for (int j = 0; j < colLength; j++) {
             String value = "  ";
             if (board[i][j]!=nullptr) {
               value = board[i][j]->getValue();
