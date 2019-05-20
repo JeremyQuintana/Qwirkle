@@ -1,17 +1,18 @@
 
 #include "LinkedList.h"
 
-
 LinkedList::LinkedList()
 {
-   head = nullptr;
-   tail = nullptr;
-   count = 0;
+    head = nullptr;
+    tail = nullptr;
+    count = 0;
 }
 
 LinkedList::~LinkedList()
 {
     clear();
+    delete head;
+    delete tail;
 }
 
 int LinkedList::size()
@@ -39,7 +40,7 @@ Tile LinkedList::get(int i)
 {
     int listCount = 0;
     Node* temp = head;
-    
+
     Tile result; //In case value is invalid returns 0 for both components
     result.colour = 0;
     result.shape = 0;
@@ -55,7 +56,7 @@ Tile LinkedList::get(int i)
 
         result = *(temp->tile);
     }
-    
+
     return result; //Dereferences tile pointer
 }
 
@@ -84,7 +85,7 @@ void LinkedList::addFront(Tile data)
 void LinkedList::addBack(Tile data)
 {
     Node* temp = new Node(&data, nullptr);
-    
+
     if (tail == nullptr)
     {
         tail = temp;
@@ -180,3 +181,61 @@ bool LinkedList::inList(Tile data) //Returns true if tile is in list
 
     return result;
 }
+
+//Shuffles contents of list
+void LinkedList::shuffle()
+{
+    int tempCounter = count;
+    int listCount = 0; // Just for iterating through list
+    int tempIndex;
+    
+    Node* temp;
+    Node* prev;
+
+    std::random_device engine;
+
+    while (tempCounter > 0)
+    {   
+        listCount = 0; // Reset variable
+        temp = head;
+        prev = head;
+
+        std::uniform_int_distribution<int> uniform_int(0, tempCounter);
+
+        tempIndex = uniform_int(engine);
+
+        // Finds the generated index
+        while (listCount < tempIndex) //Indexing starts at 0
+        {
+            prev = temp;
+            temp = temp->next;
+
+            listCount++;
+        }
+
+        if (temp == head)
+        {
+            head = temp->next;
+            tail->next = temp;
+            temp->next = nullptr;
+
+            tail = temp;
+        }
+        else if (temp == tail)
+        {
+            // No operations need to be done
+        }
+        else
+        {
+            tail->next = temp;
+            prev->next = temp->next;
+            temp->next = nullptr;
+
+            tail = temp;
+        }
+
+        tempCounter--;
+    }
+
+}
+

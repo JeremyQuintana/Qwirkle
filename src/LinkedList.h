@@ -3,6 +3,7 @@
 #define ASSIGN2_LINKEDLIST_H
 
 #include "Node.h"
+#include <random>
 
 class LinkedList {
 public:
@@ -12,7 +13,7 @@ public:
 
    int size();
    void clear();
-   Tile get(int i); //Find
+   Tile get(int i); //Find and return tile at index
 
    void addFront(Tile data);
    void addBack(Tile data);
@@ -23,7 +24,10 @@ public:
 
    bool inList(Tile data); //Check if tile is in list
 
+   void shuffle(); // Shuffles list
+
 private:
+ 
    Node* head;
    Node* tail;
    int count;
@@ -31,3 +35,4 @@ private:
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
+
