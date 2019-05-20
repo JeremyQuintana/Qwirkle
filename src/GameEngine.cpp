@@ -110,6 +110,10 @@ void GameEngine::saveGame(std::string fileName){
   std::ofstream outFile;
   outFile.open(fileName);
 
+  outFile << totalPlayers << endl;
+  outFile << rowLength << endl;
+  outFile << colLength << endl;
+
   //loop to print players and deets to file
   //prints max 4 players but not necissarily needs to be 4
   for (int i = 0; i < totalPlayers; i++){

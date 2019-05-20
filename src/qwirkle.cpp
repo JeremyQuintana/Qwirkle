@@ -10,6 +10,8 @@
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 4
 
+typedef std::string String;
+
 void newGame();
 void loadGame();
 void showStudentInformation();
@@ -101,6 +103,13 @@ void loadGame(){
 
   // check all player deets
   int currentLine = 0;
+  int playerNum= std::stoi(lines[currentLine]);
+  currentLine++;
+  int initRowLength= std::stoi(lines[currentLine]);
+  currentLine++;
+  int initColLength= std::stoi(lines[currentLine]);
+  currentLine++;
+
   std::string line = lines[currentLine];
   bool validate = true;
   bool playersRead = false;
