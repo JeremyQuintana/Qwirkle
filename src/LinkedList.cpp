@@ -43,7 +43,7 @@ Tile* LinkedList::get(int i)
     // Tile result; //In case value is invalid returns 0 for both components
     // result.colour = 0;
     // result.shape = 0;
-    if (i < this->count)
+    if (i < count)
     {
         while (listCount < i) //Indexing starts at 0
         {
@@ -137,27 +137,30 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
 {
     Node* temp = head;
     Node* prev = nullptr; //Keeps track of last node
+    bool deleted = false;
 
-    while (temp != nullptr)
+    while (temp != nullptr && deleted == false)
     {
         if ((temp->tile->colour == data.colour) && (temp->tile->shape == data.shape))
         {
             if (temp == head)
             {
                 head = temp->next;
+                deleted = true;
                 delete temp;
             }
             else
             {
                 prev->next = temp->next;
+                deleted = true;
                 delete temp;
             }
             count--;
-            return;
         }
-
-        prev = temp;
-        temp = temp->next;
+        else{
+          prev = temp;
+          temp = temp->next;
+        }
     }
 }
 
@@ -200,9 +203,8 @@ void LinkedList::shuffle()
         std::uniform_int_distribution<int> uniform_int(0, tempCounter);
 
         tempIndex = uniform_int(engine);
-
         // Finds the generated index
-        while (listCount < tempIndex) //Indexing starts at 0
+        while (listCount < tempIndex-1) //Indexing starts at 0
         {
             prev = temp;
             temp = temp->next;
@@ -210,17 +212,17 @@ void LinkedList::shuffle()
             listCount++;
         }
 
-        if (temp == head)
+        if (temp == tail)
+        {
+            // No operations need to be done
+        }
+        else if (temp == head)
         {
             head = temp->next;
             tail->next = temp;
             temp->next = nullptr;
 
             tail = temp;
-        }
-        else if (temp == tail)
-        {
-            // No operations need to be done
         }
         else
         {
@@ -238,7 +240,7 @@ void LinkedList::shuffle()
 
 std::string LinkedList::listToString(){
   std::string listStr = "";
-  for (int i = 0; i < size(); i++){
+  for (int i = 0; i < count; i++){
     Tile tile = *(get(i));
     if (listStr != "") listStr.append(",");
     listStr.append(tile.getValue());
