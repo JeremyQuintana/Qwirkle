@@ -5,19 +5,22 @@
 #include "GameEngine.h"
 
 #define BOARD_LENGTH boardLength
+#define DEFAULT_BOARD_LENGTH 3
 
 using std::cin;
 using std::stoi;
 
-GameEngine::GameEngine(std::string playerListNames[4]) {
+GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
     inGame= true;
-    playerList = new Player*[4];
+    playerList = new Player*[totalPlayers];
+    currentPlayer= 0;
+    this->totalPlayers= totalPlayers;
 
-    for (int i = 0; i < 4 && playerListNames[i] != ""; i++)
+    for (int i = 0; i < totalPlayers; i++)
       playerList[i] = new Player(playerListNames[i], new LinkedList);
 
-    assembleBoard();
+    assembleDynamicBoard();
     dealTiles();
     startGame();
 }
@@ -31,7 +34,7 @@ void GameEngine::startGame() {
       << playerList[currentPlayer]->getName()
       << ", it's your turn" << std::endl;
 
-      for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+      for (int i = 0; i < totalPlayers; i++){
         std::cout
         << "Score for " << playerList[i]->getName()
         << ": " << playerList[i]->getScore() << std::endl;
@@ -54,12 +57,18 @@ void GameEngine::assembleBoard(){
     board= new Board[BOARD_LENGTH];
     for (int i=0;i<BOARD_LENGTH;i++){
         board[i]= new BoardRow[BOARD_LENGTH];
-        for(int j=0; j<BOARD_LENGTH; j++){
-            board[i][j]= new Tile;
-        }
     }
     std::cin.clear();
     std::cin.ignore();
+}
+
+void GameEngine::assembleDynamicBoard(){
+    rowLength= DEFAULT_BOARD_LENGTH;
+    colLength= DEFAULT_BOARD_LENGTH;
+    dynamicBoard= new Board[rowLength];
+    for (int i=0;i<rowLength;i++){
+        dynamicBoard[i]= new BoardRow[colLength];
+    }
 }
 
 void GameEngine::takeTurn() {
@@ -225,7 +234,7 @@ void GameEngine::saveGame(std::string fileName){
 
   //loop to print players and deets to file
   //prints max 4 players but not necissarily needs to be 4
-  for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+  for (int i = 0; i < totalPlayers; i++){
     outFile
       << playerList[i]->getName()      << endl
       << playerList[i]->getScore()     << endl
@@ -263,11 +272,9 @@ void GameEngine::drawTile() {
 }
 
 void GameEngine::endTurn() {
-    turn= abs(turn-1);
-
     //increment to next player
     currentPlayer++;
-    if (playerList[currentPlayer] == nullptr) currentPlayer = 0;
+    if (currentPlayer==totalPlayers) currentPlayer = 0;
 
     //end game if tileBag is empty
     if (tileBag.size() == 0){
@@ -276,7 +283,7 @@ void GameEngine::endTurn() {
       //loops through all players printing their deets and finding the winner
       std::string winner = "";
       int winningScore = 0;
-      for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+      for (int i = 0; i < totalPlayers; i++){
         //prints player deets
         std::cout << "Score for " << playerList[i]->getName() << std::endl;
         std::cout << ": " << playerList[i]->getScore() << std::endl;
@@ -299,15 +306,16 @@ void GameEngine::endTurn() {
 
 //prints the entire board to the system console including the tiles placed
 std::string GameEngine::printBoard() {
+    board= dynamicBoard;
     std::string boardStr = "";
     String initial = "   ";
-    if(boardLength>10){
+    if(colLength>10){
         initial= "  ";
     }
     boardStr = initial;
     String prefix= " ";
     String postfix= " ";
-    for(int k=0;k<BOARD_LENGTH;k++) {
+    for(int k=0;k<colLength;k++) {
         if(k>10){
             prefix= "";
         }
@@ -318,13 +326,13 @@ std::string GameEngine::printBoard() {
     //}
     //cout << "-" << endl;
     char alfa= 'A';
-    for (int i = 0; i < BOARD_LENGTH; i++) {
+    for (int i = 0; i < rowLength; i++) {
         boardStr += "\n";
         boardStr += alfa;
         boardStr += " |";
-        for (int j = 0; j < BOARD_LENGTH; j++) {
+        for (int j = 0; j < colLength; j++) {
             String value = "  ";
-            if (board[i][j]->getValue().compare("0")>0) {
+            if (board[i][j]!=nullptr) {
               value = board[i][j]->getValue();
             }
             boardStr += value + "|";
@@ -357,7 +365,7 @@ void GameEngine::dealTiles(){
   //TODO need a shuffle function for the linked list here
 
   //draw from tileBag into each players hand;
-  for (int i = 0; i < 4 && playerList[i] != nullptr; i++){
+  for (int i = 0; i < totalPlayers; i++){
     for (int x = 0; x < 6; x++){
       Tile* tile = tileBag.get(0);
       playerList[i]->addTile(tile);
@@ -365,4 +373,58 @@ void GameEngine::dealTiles(){
     }
   }
   // std::cout << playerList[0]->handToString() << std::endl;
+}
+
+void GameEngine::updateDynamicBoard(int row, int col) {
+    bool rowExpand= false;
+    bool colExpand= false;
+    int newRowLength= rowLength;
+    int newColLength= colLength;
+    bool colShift= false;
+    bool rowShift= false;
+
+    if (row==0) {
+        rowExpand= true;
+        rowShift= true;
+        newRowLength++;
+    }
+    else if(row==rowLength-1) {
+        rowExpand = true;
+        newRowLength++;
+    }
+    if(col==0) {
+        colExpand = true;
+        colShift = true;
+        newColLength++;
+    }
+    else if(col==colLength-1) {
+        colExpand = true;
+        newColLength++;
+    }
+
+    if(rowExpand || colExpand) {
+        Board *newBoard = new Board[newRowLength];
+        for (int i = 0; i < newRowLength; i++) {
+            newBoard[i] = new BoardRow[newColLength];
+        }
+
+        for (int i = 0; i < rowLength; i++) {
+            int newRow = i;
+            if (rowShift) {
+                newRow++;
+                for (int j = 0; j < colLength; j++) {
+                    if (dynamicBoard[i][j] != nullptr) {
+                        int newCol = j;
+                        if (colShift) {
+                            newCol++;
+                        }
+                        newBoard[newRow][newCol] = dynamicBoard[i][j];
+                    }
+                }
+            }
+            delete dynamicBoard[i];
+        }
+        delete dynamicBoard;
+        dynamicBoard= newBoard;
+    }
 }
