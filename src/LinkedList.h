@@ -22,6 +22,7 @@ public:
    void deleteTile(Tile data); //Delete a specific tile
 
    bool inList(Tile data); //Check if tile is in list
+   std::string listToString();
 
 private:
    Node* head;
