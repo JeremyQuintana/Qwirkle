@@ -350,12 +350,12 @@ std::string GameEngine::printBoard() {
 
 void GameEngine::dealTiles(){
   //create tileBag
-  Colour tileColours[] = {RED, ORANGE, YELLOW, GREEN, BLUE};
+  Colour tileColours[] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
   Shape tileShapes[] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
 
   for (Colour colour : tileColours){
     for (Shape shape : tileShapes){
-      int copies = 1;
+      int copies = 2;
       for (int i = 0; i < copies; i++){
         Tile* tile = new Tile(colour, shape);
         tileBag.addFront(tile);
