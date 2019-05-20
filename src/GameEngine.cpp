@@ -116,14 +116,14 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     int currentColumn = destinationColumn;
     int comparatorRow = destinationRow;
     int comparatorColumn = destinationColumn;
-    Tile currentTile = tile;
-    Tile comparatorTile = tile;
+    Tile* currentTile = board[destinationRow][destinationColumn];
+    Tile* comparatorTile = board[destinationRow][destinationColumn];
     // bool values used for checks and rule variables -> -1 is colour, 1 is shape
     bool emptyNorth = false, emptySouth = false, emptyEast = false, emptyWest = false;
     int ruleNorth = 0, ruleSouth = 0, ruleEast = 0, ruleWest = 0;
     // required colour and/or shape
-    std::string reqColour = tile->getValue().at(0); // eg. "R"
-    std::string reqShape = tile->getValue().at(1); // eg. "3"
+    char reqColour = tile.getValue().at(0);
+    char reqShape = tile.getValue().at(1);
 
     bool isValid = true;
     // check coordinate exists - needs to be changed for dynamic boards in future
@@ -136,32 +136,32 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     emptySouth = (board[destinationRow+1][destinationColumn] == NULL || destinationRow == (BOARD_LENGTH - 1)) ? true : false;
     emptyEast = (board[destinationRow][destinationColumn+1] == NULL || destinationColumn == (BOARD_LENGTH - 1)) ? true : false;
     emptyWest = (board[destinationRow][destinationColumn-1] == NULL || destinationColumn == 0) ? true : false;
-    if(turn > 1 && emptyN && emptyS && emptyE && emptyW) isValid = false;
+    if(turn > 1 && emptyNorth && emptySouth && emptyEast && emptyWest) isValid = false;
 
     // check north
     if(!emptyNorth) {
         currentRow = destinationRow;
         currentTile = board[currentRow-1][destinationColumn];
-        if(currentTile->getValue().at(0).compare(reqColour)) ruleNorth--;
-        if(currentTile->getValue().at(1).compare(reqShape))  ruleNorth++;
+        if(currentTile->getValue().at(0) == reqColour) ruleNorth--;
+        if(currentTile->getValue().at(1) == reqShape)  ruleNorth++;
         if(ruleNorth == 0) isValid = false;
     }
     while(currentTile != NULL && (currentRow-1) >= 0) {
         currentTile = board[currentRow-1][destinationColumn];
-        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
         currentRow--;
     }
     // check south
     if(!emptySouth) {
         currentRow = destinationRow;
         currentTile = board[currentRow+1][destinationColumn];
-        if(currentTile->getValue().at(0).compare(reqColour)) ruleSouth--;
-        if(currentTile->getValue().at(1).compare(reqShape))  ruleSouth++;
+        if(currentTile->getValue().at(0) == reqColour) ruleSouth--;
+        if(currentTile->getValue().at(1) == reqShape)  ruleSouth++;
         if(ruleSouth == 0) isValid = false;
     }
     while(currentTile != NULL && (currentRow+1) <= (BOARD_LENGTH-1)) {
         currentTile = board[currentRow+1][destinationColumn];
-        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
         currentRow++;
     }
     // if both exist, determine if the same rule
@@ -185,26 +185,26 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     if(!emptyEast) {
         currentColumn = destinationColumn;
         currentTile = board[destinationRow][currentColumn+1];
-        if(currentTile->getValue().at(0).compare(reqColour)) ruleEast--;
-        if(currentTile->getValue().at(1).compare(reqShape))  ruleEast++;
+        if(currentTile->getValue().at(0) == reqColour) ruleEast--;
+        if(currentTile->getValue().at(1) == reqShape)  ruleEast++;
         if(ruleEast == 0) isValid = false;
     }
     while(currentTile != NULL && (currentColumn+1) <= BOARD_LENGTH) {
         currentTile = board[destinationRow][currentColumn+1];
-        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
         currentColumn++;
     }
     // check west
     if(!emptyWest) {
         currentColumn = destinationColumn;
         currentTile = board[destinationRow][currentColumn-1];
-        if(currentTile->getValue().at(0).compare(reqColour)) ruleWest--;
-        if(currentTile->getValue().at(1).compare(reqShape))  ruleWest++;
+        if(currentTile->getValue().at(0) == reqColour) ruleWest--;
+        if(currentTile->getValue().at(1) == reqShape)  ruleWest++;
         if(ruleWest == 0) isValid = false;
     }
     while(currentTile != NULL && (currentColumn-1) >= 0) {
         currentTile = board[destinationRow][currentColumn-1];
-        if(tile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+        if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
         currentColumn--;
     }
     // if both exist, determine if the same rule
@@ -225,6 +225,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     }
 
     if(isValid) board[destinationRow][destinationColumn] = tile;
+    if(isValid) updateDynamicBoard(destinationRow, destinationColumn);
     return isValid;
 }
 
