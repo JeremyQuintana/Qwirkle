@@ -252,7 +252,10 @@ void GameEngine::calcScore() {
 
 bool GameEngine::replaceTile(Tile tile) {
     bool successful = false;
-    if (playerList[currentPlayer]->getTilePtr(tile) != nullptr){
+    Tile* toReplace = playerList[currentPlayer]->getTilePtr(tile);
+    if (toReplace != nullptr){
+      tileBag.addFront(toReplace);
+      tileBag.shuffle();
       playerList[currentPlayer]->removeTile(tile);
       Tile* tile = tileBag.get(0);
       playerList[currentPlayer]->addTile(tile);
