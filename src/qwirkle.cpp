@@ -82,12 +82,11 @@ void loadGame(){
   << "> ";
 
   //gets filename from input
-  std::string fileName = "";
+  std::string fileName;
   std::cin >> fileName;
 
   //attempts to open file
-  std::ifstream inFile;
-  inFile.open(fileName);
+  std::ifstream inFile(fileName);
 
   //reads from file if it can and stores it line by line, in lines array
   std::string lines[500];
@@ -101,7 +100,6 @@ void loadGame(){
     }
   }
 
-  // check all player deets
   int currentLine = 0;
   int playerNum= std::stoi(lines[currentLine]);
   currentLine++;
@@ -110,74 +108,92 @@ void loadGame(){
   int initColLength= std::stoi(lines[currentLine]);
   currentLine++;
 
-  std::string line = lines[currentLine];
-  bool validate = true;
-  bool playersRead = false;
-  while (playersRead == false){
-    if (checkStringCharBetween(line, 'A', 'Z') == false)
-      validate = false;
-    currentLine++;
-    line = lines[currentLine];
+  // check all player deets
+  std::string line;
+  bool isWrongFormat = false;
+  String tempName;
+  String tempScore;
+  String tempHand;
+  String playerNames[playerNum];
+  int playerScores[playerNum];
+  String playerHands[playerNum];
 
-    if (checkStringCharBetween(line, '1', '9') == false)
-      validate = false;
-    currentLine++;
-    line = lines[currentLine];
-
-    bool handRead = false;
-    int handLength = line.length();
-    int c = 0;
-    while (handRead == false){
-      std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false) validate = false;
-      c += 2;
-      if (c >= handLength) handRead = true;
-      c++;
+  for(int i=0;i<playerNum;i++){
+      tempName= lines[currentLine];
+      currentLine++;
+      tempScore= lines[currentLine];
+    if (checkStringCharBetween(tempName, 'A', 'Z') == false ||
+    checkStringCharBetween(line, '1', '9') == false) {
+        isWrongFormat = true;
     }
     currentLine++;
-    line = lines[currentLine];
+    tempHand = lines[currentLine];
 
-    if (line.at(0) == ' ') playersRead = true;
+    int handLength = tempHand.length();
+    int index = 0;
+    while (index < handLength){
+      String tile = line.substr(index, 2);
+      if (checkValidTile(tile) == false) {
+          isWrongFormat = true;
+      }
+      index += 3;
+    }
+    playerNames[i]= tempName;
+    playerScores[i]= std::stoi(tempScore);
+    playerHands[i]= tempHand;
+    currentLine++;
   }
 
+  String board;
+
   //check board
-  currentLine += 2;
-  line = lines[currentLine];
-  bool boardRead = false;
-  while (boardRead == false){
-    bool rowRead = false;
+  for(int i=0;i<initRowLength;i++){
+      line = lines[currentLine];
+      board+=line + "\n";
+      currentLine++;
+      /*bool rowRead = false;
     int c = 3;
     int rowLength = line.length();
     while (rowRead == false && c < rowLength){
       std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false && tile != "  ") validate = false;
+      if (checkValidTile(tile) == false && tile != "  "){
+          isValidated = false;
+      }
       c += 3;
       if (c >= rowLength) rowRead = true;
     }
 
     currentLine++;
     line = lines[currentLine];
-    if (line.at(1) != ' ') boardRead = true;
+    if (line.at(1) != ' ') boardRead = true;*/
   }
 
   //check bag
-  bool bagRead = false;
+  String bag= lines[currentLine];
   int c = 0;
-  int bagLength = line.length();
-  while (bagRead == false){
+  int bagLength = bag.length();
+  while (c<bagLength){
     std::string tile = line.substr(c, 2);
-    if (checkValidTile(tile) == false) validate = false;
-    c += 2;
-    if (c >= bagLength) bagRead = true;
-    c++;
+    if (checkValidTile(tile) == false) {
+        isWrongFormat = true;
+    }
+    c += 3;
   }
   currentLine++;
-  line = lines[currentLine];
+  String turnString = lines[currentLine];
 
-  if (checkStringCharBetween(line, 'A', 'Z') == false)
-    validate = false;
+  if (checkStringCharBetween(turnString, '1', '9') == false) {
+      isWrongFormat = true;
+  }
+  int turn= std::stoi(turnString);
   //check all pieces in hand and bag is correct amount
-  std::cout << validate << std::endl;
+
+  if(isWrongFormat){
+      std::cout << "Save Data Format Corrupted." << std::endl;
+  }
+  else{
+
+  }
   std::cout << std::endl;
 }
 

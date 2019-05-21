@@ -24,6 +24,22 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     startGame();
 }
 
+GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String playerNames[],
+                       int playerScores[], String playerHands[], String board, String bag, int turn){
+    turn= 0;
+    inGame= true;
+    playerList = new Player*[totalPlayers];
+    currentPlayer= 0;
+    this->totalPlayers= totalPlayers;
+
+    for (int i = 0; i < totalPlayers; i++)
+        playerList[i] = new Player(playerListNames[i], new LinkedList);
+
+    assembleDynamicBoard();
+    dealTiles();
+    startGame();
+}
+
 //main function that runs the actual game
 void GameEngine::startGame() {
     //loops while there is no winner yet and game is still running
@@ -107,8 +123,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
 }
 
 void GameEngine::saveGame(std::string fileName){
-  std::ofstream outFile;
-  outFile.open(fileName);
+  std::ofstream outFile (fileName);
 
   outFile << totalPlayers << endl;
   outFile << rowLength << endl;
@@ -123,9 +138,9 @@ void GameEngine::saveGame(std::string fileName){
       << playerList[i]->handToString() << endl;
   }
 
-  outFile << printBoard() << endl;
+  outFile << boardToString() << endl;
   outFile << tileBag.listToString() << endl;
-  outFile << playerList[currentPlayer]->getName() << endl;
+  outFile << currentPlayer << endl;
 
   outFile.close();
   std::cout << std::endl << "Game successfully saved" << std::endl;
@@ -203,10 +218,6 @@ std::string GameEngine::printBoard() {
         }
         boardStr += prefix + std::to_string(k) + postfix;
     }
-    //for(int k=0;k<BOARD_LENGTH;k++) {
-    //    cout << "----";
-    //}
-    //cout << "-" << endl;
     char alfa= 'A';
     for (int i = 0; i < rowLength; i++) {
         boardStr += "\n";
@@ -222,11 +233,25 @@ std::string GameEngine::printBoard() {
         alfa+=1;
 
     }
-    //for(int k=0;k<BOARD_LENGTH;k++) {
-    //    cout << "---";
-    //}
-
     return boardStr;
+}
+
+String GameEngine::boardToString() {
+    String stringBoard;
+    String tile;
+    for(int i=0;i<rowLength;i++){
+        for(int j=0;j<colLength;j++){
+            if(dynamicBoard[i][j]==nullptr){
+                tile= " ";
+            }
+            else {
+                tile= dynamicBoard[i][j]->getValue();
+            }
+            stringBoard+=tile+"|";
+        }
+        stringBoard += "\n";
+    }
+    return stringBoard;
 }
 
 void GameEngine::dealTiles(){
