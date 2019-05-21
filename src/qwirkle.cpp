@@ -82,118 +82,120 @@ void loadGame(){
   << "> ";
 
   //gets filename from input
-  std::string fileName;
-  std::cin >> fileName;
+  String input;
+  std::cin >> input;
 
   //attempts to open file
-  std::ifstream inFile(fileName);
+  std::ifstream inFile(input);
 
   //reads from file if it can and stores it line by line, in lines array
   std::string lines[500];
   int lineNumber = 0;
-  if(!inFile){
+  if(inFile){
     std::cout << "Error - Can not open or find file" << std::endl;
   } else{
     while (!inFile.eof()){
       std::getline(inFile, lines[lineNumber]);
       lineNumber++;
     }
-  }
-
-  int currentLine = 0;
-  int playerNum= std::stoi(lines[currentLine]);
-  currentLine++;
-  int initRowLength= std::stoi(lines[currentLine]);
-  currentLine++;
-  int initColLength= std::stoi(lines[currentLine]);
-  currentLine++;
-
-  // check all player deets
-  std::string line;
-  bool isWrongFormat = false;
-  String tempName;
-  String tempScore;
-  String tempHand;
-  String playerNames[playerNum];
-  int playerScores[playerNum];
-  String playerHands[playerNum];
-
-  for(int i=0;i<playerNum;i++){
-      tempName= lines[currentLine];
+      int currentLine = 0;
+      int playerNum= std::stoi(lines[currentLine]);
       currentLine++;
-      tempScore= lines[currentLine];
-    if (checkStringCharBetween(tempName, 'A', 'Z') == false ||
-    checkStringCharBetween(line, '1', '9') == false) {
-        isWrongFormat = true;
-    }
-    currentLine++;
-    tempHand = lines[currentLine];
+      int initRowLength= std::stoi(lines[currentLine]);
+      currentLine++;
+      int initColLength= std::stoi(lines[currentLine]);
+      currentLine++;
 
-    int handLength = tempHand.length();
-    int index = 0;
-    while (index < handLength){
-      String tile = line.substr(index, 2);
-      if (checkValidTile(tile) == false) {
+      // check all player deets
+      std::string line;
+      bool isWrongFormat = false;
+      String tempName;
+      String tempScore;
+      String tempHand;
+      String playerNames[playerNum];
+      int playerScores[playerNum];
+      String playerHands[playerNum];
+
+      for(int i=0;i<playerNum;i++){
+          tempName= lines[currentLine];
+          currentLine++;
+          tempScore= lines[currentLine];
+          if (checkStringCharBetween(tempName, 'A', 'Z') == false ||
+              checkStringCharBetween(line, '1', '9') == false) {
+              isWrongFormat = true;
+          }
+          currentLine++;
+          tempHand = lines[currentLine];
+
+          int handLength = tempHand.length();
+          int index = 0;
+          while (index-1 < handLength){
+              String tile = line.substr(index, 2);
+              if (checkValidTile(tile) == false) {
+                  isWrongFormat = true;
+              }
+              index += 3;
+          }
+          playerNames[i]= tempName;
+          playerScores[i]= std::stoi(tempScore);
+          playerHands[i]= tempHand;
+          currentLine++;
+      }
+
+      String board[initRowLength];
+
+      //check board
+      for(int i=0;i<initRowLength;i++){
+          line = lines[currentLine];
+          board[i]= line;
+          currentLine++;
+          /*bool rowRead = false;
+        int c = 3;
+        int rowLength = line.length();
+        while (rowRead == false && c < rowLength){
+          std::string tile = line.substr(c, 2);
+          if (checkValidTile(tile) == false && tile != "  "){
+              isValidated = false;
+          }
+          c += 3;
+          if (c >= rowLength) rowRead = true;
+        }
+
+        currentLine++;
+        line = lines[currentLine];
+        if (line.at(1) != ' ') boardRead = true;*/
+      }
+
+      //check bag
+      String bag= lines[currentLine];
+      int c = 0;
+      int bagLength = bag.length();
+      while (c-1<bagLength){
+          std::string tile = line.substr(c, 2);
+          if (checkValidTile(tile) == false) {
+              isWrongFormat = true;
+          }
+          c += 3;
+      }
+      currentLine++;
+      String turnString = lines[currentLine];
+
+      if (checkStringCharBetween(turnString, '1', '9') == false) {
           isWrongFormat = true;
       }
-      index += 3;
-    }
-    playerNames[i]= tempName;
-    playerScores[i]= std::stoi(tempScore);
-    playerHands[i]= tempHand;
-    currentLine++;
-  }
+      int turn= std::stoi(turnString);
+      //check all pieces in hand and bag is correct amount
 
-  String board;
-
-  //check board
-  for(int i=0;i<initRowLength;i++){
-      line = lines[currentLine];
-      board+=line + "\n";
-      currentLine++;
-      /*bool rowRead = false;
-    int c = 3;
-    int rowLength = line.length();
-    while (rowRead == false && c < rowLength){
-      std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false && tile != "  "){
-          isValidated = false;
+      if(isWrongFormat){
+          std::cout << "Save Data Invalid Format." << std::endl;
       }
-      c += 3;
-      if (c >= rowLength) rowRead = true;
-    }
-
-    currentLine++;
-    line = lines[currentLine];
-    if (line.at(1) != ' ') boardRead = true;*/
+      else{
+          new GameEngine(playerNum, initRowLength, initColLength, playerNames,
+                         playerScores, playerHands, board, bag, turn);
+      }
   }
 
-  //check bag
-  String bag= lines[currentLine];
-  int c = 0;
-  int bagLength = bag.length();
-  while (c<bagLength){
-    std::string tile = line.substr(c, 2);
-    if (checkValidTile(tile) == false) {
-        isWrongFormat = true;
-    }
-    c += 3;
-  }
-  currentLine++;
-  String turnString = lines[currentLine];
 
-  if (checkStringCharBetween(turnString, '1', '9') == false) {
-      isWrongFormat = true;
-  }
-  int turn= std::stoi(turnString);
-  //check all pieces in hand and bag is correct amount
-
-  if(isWrongFormat){
-      std::cout << "Save Data Format Corrupted." << std::endl;
-  }
-  else{
-
-  }
   std::cout << std::endl;
 }
 
