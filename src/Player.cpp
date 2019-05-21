@@ -30,7 +30,7 @@ void Player::removeTile(Tile tileToRemove){
 }
 
 void Player::addScore(int award){
-  score = score + award;
+  score += award;
 }
 
 int Player::getScore(){
