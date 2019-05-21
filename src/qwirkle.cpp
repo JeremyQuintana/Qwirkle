@@ -91,7 +91,7 @@ void loadGame(){
   //reads from file if it can and stores it line by line, in lines array
   std::string lines[500];
   int lineNumber = 0;
-  if(inFile){
+  if(!inFile){
     std::cout << "Error - Can not open or find file" << std::endl;
   } else{
     while (!inFile.eof()){

@@ -38,7 +38,7 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
         int index= 0;
         playerList[i] = new Player(playerNames[i], new LinkedList);
         playerList[i]->addScore(playerScores[i]);
-        for(int j=0;j<playerHands[i].length();j+=3){
+        for(unsigned int j=0;j<playerHands[i].length();j+=3){
             hands[index]= playerHands[i].substr(j,2);
             index++;
         }
@@ -49,7 +49,7 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
 
     String bags[(bag.length()+1)/3];
     int index= 0;
-    for(int i=0;i<bag.length();i+=3){
+    for(unsigned int i=0;i<bag.length();i+=3){
         bags[index]= bag.substr(i,2);
         index++;
     }
@@ -63,7 +63,7 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
         std::cout << board[i];
         String row[colLength];
         index= 0;
-        for(int j=0;j<board[i].length();j+=3){
+        for(unsigned int j=0;j<board[i].length();j+=3){
             row[index]= board[i].substr(j,2);
             index++;
         }
