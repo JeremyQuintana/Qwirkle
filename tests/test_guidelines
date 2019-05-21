@@ -46,8 +46,11 @@ Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 
 
 place R1 at L12  - valid // satisfies vertical colour
-place R2 at L12  - invalid // can't double up in the same 6
-place B4 at J10  - invalid // can't double up in the same 6
+        other               satisfies vertical shape
+        other               satisfies horizontal colour
+        other               satisfies horizontal shape
+place R2 at L12  - invalid // can't double up in the same 6 vertical
+place B4 at J10  - invalid // can't double up in the same 6 horizontal
 place G5 at I13  - valid // satisfies vertical and horizontal and rules maintained upon conjoining
 place G3 at I13  - invalid // satisfies vertical but not horizontal
 place Y5 at I13  - invalid // satisfies horizontal but not vertical

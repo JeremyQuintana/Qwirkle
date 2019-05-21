@@ -125,7 +125,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     char reqColour = tile.getValue().at(0);
     char reqShape = tile.getValue().at(1);
     // counter for points earned
-    int score = 0;
+    int score = 0, qwirkleCounterNS = 0, qwirkleCounterEW = 0;
 
     bool isValid = true;
     // check coordinate exists - needs to be changed for dynamic boards in future
@@ -152,7 +152,10 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     while(currentTile != NULL && (currentRow-1) >= 0) {
         currentTile = board[currentRow-1][destinationColumn];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
-        else score++;
+        else {
+            score++;
+            qwirkleCounterNS++;
+        }
         currentRow--;
 
     }
@@ -168,7 +171,10 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     while(currentTile != NULL && (currentRow+1) <= (BOARD_LENGTH-1)) {
         currentTile = board[currentRow+1][destinationColumn];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
-        else score++;
+        else {
+            score++;
+            qwirkleCounterNS++;
+        }
         currentRow++;
     }
     // if both exist, determine if the same rule
@@ -200,7 +206,10 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     while(currentTile != NULL && (currentColumn+1) <= BOARD_LENGTH) {
         currentTile = board[destinationRow][currentColumn+1];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
-        else score++;
+        else {
+            score++;
+            qwirkleCounterEW++;
+        }
         currentColumn++;
     }
     // check west
@@ -215,7 +224,10 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     while(currentTile != NULL && (currentColumn-1) >= 0) {
         currentTile = board[destinationRow][currentColumn-1];
         if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
-        else score++;
+        else {
+            score++;
+            qwirkleCounterEW++;
+        }
         currentColumn--;
     }
     // if both exist, determine if the same rule
@@ -235,9 +247,13 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         }
     }
 
-    if(isValid) board[destinationRow][destinationColumn] = tile;
-    if(isValid) updateDynamicBoard(destinationRow, destinationColumn);
-    if(isValid) playerList[currentPlayer]->addScore(score);
+    if(isValid) {
+        board[destinationRow][destinationColumn] = tile;
+        updateDynamicBoard(destinationRow, destinationColumn);
+        if(qwirkleCounterEW = 5) score +=6;
+        if(qwirkleCounterNS = 5) score +=6;
+        playerList[currentPlayer]->addScore(score);
+    }
     return isValid;
 }
 
