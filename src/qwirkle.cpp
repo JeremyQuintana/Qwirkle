@@ -74,17 +74,25 @@ void newGame(){
   }
 
   //array for all player names
-  std::string playerList[amountOfPlayers];
+  std::string playerList[NUMBER_OF_PLAYERS];
 
   //loop to prompt for players to however many players are playing
-  for (int i = 0; i < amountOfPlayers; i++){
-    playerList[i] = promptForPlayer(i+1);
+  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+    playerList[i] = "";
+  }
+
+  for (int i = 0; i < amountOfPlayers && endGame == false; i++){
+    std::string player = promptForPlayer(i+1);
+    if (player == "^D") endGame = true;
+    else playerList[i] = player;
   }
 
   //TODO implement the creation of the game using the array of players
+  if (endGame == false){
+    std::cout << std::endl;
+    GameEngine(playerList, amountOfPlayers);
 
-  std::cout << std::endl;
-  new GameEngine(playerList, amountOfPlayers);
+  }
 }
 
 //loads game from a given file name

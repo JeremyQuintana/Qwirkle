@@ -81,24 +81,17 @@ void LinkedList::addFront(Tile* data)
 
 void LinkedList::addBack(Tile* data)
 {
-    Node* temp = new Node(data, nullptr);
+  Node* temp = new Node(data, nullptr);
 
-    if (tail == nullptr)
-    {
-        tail = temp;
-    }
-    else
-    {
-        tail->next = temp;
-        tail = temp;
-    }
+  if (count == 0){
+    head = temp;
+    tail = temp;
+  } else {
+    tail->next = temp;
+    tail = temp;
+  }
 
-    if (head == nullptr)
-    {
-        head = tail;
-    }
-
-    count++; //Update size counter
+  count++; //Update size counter
 }
 
 void LinkedList::deleteFront()
@@ -141,23 +134,13 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
 
     while (temp != nullptr && deleted == false)
     {
-        if ((temp->tile->colour == data.colour) && (temp->tile->shape == data.shape))
-        {
-            if (temp == head)
-            {
-                head = temp->next;
-                deleted = true;
-                delete temp;
-            }
-            else
-            {
-                prev->next = temp->next;
-                deleted = true;
-                delete temp;
-            }
-            count--;
-        }
-        else{
+        if (((temp->tile)->colour == data.colour) && ((temp->tile)->shape == data.shape)){
+          if (temp == head) head = head->next;
+          else prev->next = temp->next;
+          deleted = true;
+          delete temp;
+          count--;
+        } else {
           prev = temp;
           temp = temp->next;
         }
@@ -235,15 +218,17 @@ void LinkedList::shuffle()
 
         tempCounter--;
     }
-
 }
 
 std::string LinkedList::listToString(){
-  std::string listStr = "";
-  for (int i = 0; i < count; i++){
-    Tile tile = *(get(i));
-    if (listStr != "") listStr.append(",");
-    listStr.append(tile.getValue());
+  Node* temp = head;
+  std::string listStr = (temp->tile)->getValue();
+  // std::cout << "hi" << std::endl;
+  for (int i = 0; i < (this->count)-1; i++){
+    temp = temp->next;
+    listStr.append(",");
+    listStr.append((temp->tile)->getValue());
   }
+  // std::cout << "bye" << std::endl;
   return listStr;
 }
