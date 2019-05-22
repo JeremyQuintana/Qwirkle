@@ -12,6 +12,7 @@
 #define PLACE_COMMAND_LENGTH 6
 #define PLACE_AT_COMMAND_START_LENGTH 8
 #define PLACE_AT_COMMAND_END_LENGTH 4
+#define HELP_COMMAND_LENGTH 4
 #define OPTION_SAVE 3
 #define OPTION_REPLACE 2
 #define OPTION_PLACE 1
@@ -183,6 +184,24 @@ bool GameEngine::takeTurn() {
         else if(std::cin.eof()) {
           endGame = true;
           validated = true;
+        }
+        else if(playerCommand.substr(0,HELP_COMMAND_LENGTH).compare("help") == 0) {
+            std::cout << "Commands" << std::endl;
+            std::cout << "=========" << std::endl;
+
+            std::cout << "To place tile from hand to location on board, type:"
+                << std::endl;
+            std::cout << "place <tile code> at <location code>" << std::endl;
+            std::cout << "\teg. place R1 at B2" << std::endl << std::endl;
+
+            std::cout << "To replace a tile in hand with new one, type: "
+                << std::endl;
+            std::cout << "replace <tile code>" << std::endl;
+            std::cout << "\teg. replace Y3" << std::endl << std::endl;
+
+            std::cout << "To save the current game, type: " << std::endl;
+            std::cout << "save <name of file>" << std::endl;
+            std::cout << "\teg. save examplefile" << std::endl;
         }
         else std::cout << "Error - Invalid option" << std::endl;
 
