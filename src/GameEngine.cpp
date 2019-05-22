@@ -117,7 +117,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     int destinationRow = 0;
     if (row >= 'A' && row <= 'Z') destinationRow = row - 65;
     else {
-      std::cout << "Error - Invalid Row Coordinate" << std::endl;
+      std::cout << "Error - Invalid row coordinate" << std::endl;
       isValid = false;
     }
     // column player asked for
@@ -126,7 +126,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     for (int i = 0; i < columnLength && isValid == true; i++){
       if (column.at(i) < '0' || column.at(i) > '9'){
         isValid = false;
-        std::cout << "Error - Invalid Column Coordinate" << std::endl;
+        std::cout << "Error - Invalid column coordinate" << std::endl;
       }
     }
     int destinationColumn = 0;
@@ -185,7 +185,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     }
 
     // check south
-    if(!emptySouth && isValid == true) {
+    else if(!emptySouth && isValid == true) {
         currentRow = destinationRow;
         currentTile = board[currentRow+1][destinationColumn];
         if(currentTile->getValue().at(0) == reqColour) ruleSouth--;
@@ -202,7 +202,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
-    if(!emptyNorth && !emptySouth && isValid == true) {
+    else if(!emptyNorth && !emptySouth && isValid == true) {
         currentRow = destinationRow;
         comparatorRow = destinationRow;
         if(ruleNorth != ruleSouth) isValid = false;
@@ -237,7 +237,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // check west
-    if(!emptyWest && isValid == true) {
+    else if(!emptyWest && isValid == true) {
         currentColumn = destinationColumn;
         currentTile = board[destinationRow][currentColumn-1];
         if(currentTile->getValue().at(0) == reqColour) ruleWest--;
@@ -254,7 +254,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
-    if(!emptyEast && !emptyWest && isValid == true) {
+    else if(!emptyEast && !emptyWest && isValid == true) {
         currentColumn = destinationColumn;
         comparatorColumn = destinationColumn;
         if(ruleEast != ruleWest) isValid = false;

@@ -261,17 +261,16 @@ std::string promptForPlayer(int playerNumber){
   while (validate == false){
     std::cin >> player;
 
-    if (std::cin.eof()){
+    if (!std::cin.eof()){
       //check input is all upper case letters
       validate = checkStringCharBetween(player, 'A', 'Z');
 
       //prints error message if incorrect
       if (validate == false)
-        std::cout << "Invalid input" << std::endl << "> ";
+        std::cout << "Error - Must be uppercase" << std::endl << "> ";
     }
     else{
       validate = true;
-      player = "^D";
     }
   }
 
