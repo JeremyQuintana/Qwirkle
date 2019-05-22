@@ -643,6 +643,11 @@ void GameEngine::updateDynamicBoard(int row, int col) {
             newBoard[row+rowShift][col+colShift] = dynamicBoard[row][col];
           }
         }
+        for(int i=0;i<rowLength;i++){
+            if(dynamicBoard[i]!= nullptr){
+                delete[] dynamicBoard[i];
+            }
+        }
         delete[] dynamicBoard;
         dynamicBoard= newBoard;
         rowLength = newRowLength;
@@ -651,10 +656,19 @@ void GameEngine::updateDynamicBoard(int row, int col) {
 }
 
 GameEngine::~GameEngine(){
-  for (int i = 0; i < colLength; i++){
-    delete[] dynamicBoard[i];
+  for (int i = 0; i < rowLength; i++){
+      if(dynamicBoard[i]!=nullptr) {
+          for(int j=0; j<colLength;j++){
+              if(dynamicBoard[i][j]!= nullptr) {
+                  delete[] dynamicBoard[i][j];
+              }
+          }
+          delete[] dynamicBoard[i];
+      }
   }
-  delete[] dynamicBoard;
+  if(dynamicBoard!= nullptr) {
+      delete[] dynamicBoard;
+  }
   for(int i=0;i<totalPlayers;i++){
       delete[] playerList[i];
   }
