@@ -247,7 +247,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
       std::cout << "Error - Tile not found" << std::endl;
       isValid = false;
     }
-    // check coordinate exists - needs to be changed for dynamic boards in future
+    //check coordinate exists - needs to be changed for dynamic boards in future
     if(destinationRow < 0 || destinationRow > rowLength
     || destinationColumn < 0 || destinationColumn > colLength) isValid = false;
     // check coordinate is not currently occupied
@@ -262,7 +262,8 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
       || board[destinationRow][destinationColumn+1] == NULL) ? true : false;
     emptyWest = (destinationColumn <= 0
       || board[destinationRow][destinationColumn-1] == NULL) ? true : false;
-    if(turn >= 1 && emptyNorth && emptySouth && emptyEast && emptyWest){
+    if(isValid == true && turn >= 1
+       && emptyNorth && emptySouth && emptyEast && emptyWest){
       isValid = false;
       std::cout << "Error - No surrounding tiles" << std::endl;
     }
