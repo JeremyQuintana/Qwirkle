@@ -46,7 +46,6 @@ private:
     bool takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
     bool replaceTile(Tile tile);
-    void drawTile();
     void endTurn();
     std::string printBoard();
     void dealTiles();
