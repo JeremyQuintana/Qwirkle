@@ -44,8 +44,10 @@ int main(void) {
       if(loadGame()){
          option= QUIT_OPTION;
       }
+      else {
+          option = 0;
+      }
       std::cout << std::endl;
-      option = 0;
     }
     if (option == SHOWINFO_OPTION) showStudentInformation();
   }
