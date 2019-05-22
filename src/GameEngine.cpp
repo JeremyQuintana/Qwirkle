@@ -6,6 +6,8 @@
 
 #define BOARD_LENGTH boardLength
 #define DEFAULT_BOARD_LENGTH 3
+#define COPY_OF_TILES 2
+#define SAVE_COMMAND_LENGTH
 
 using std::cin;
 using std::stoi;
@@ -179,7 +181,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     // row player asked for
     char row = coordinate.at(0);
     int destinationRow = 0;
-    //check for 
+    //check for
     if (row >= 'A' && row <= 'Z') destinationRow = row - 65;
     else {
       std::cout << "Error - Invalid row coordinate" << std::endl;
@@ -246,7 +248,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
             else rowScore++;
             currentRow--;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false) std::cout << "Error - Invalid tile placement" << std::endl;
     }
 
     // check south
@@ -264,7 +266,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
             else rowScore++;
             currentRow++;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false) std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
     if(!emptyNorth && !emptySouth && isValid == true) {
@@ -299,7 +301,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
             else colScore++;
             currentColumn++;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false) std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // check west
     if(!emptyWest && isValid == true) {
@@ -316,7 +318,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
             else colScore++;
             currentColumn--;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false) std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
     if(!emptyEast && !emptyWest && isValid == true) {
@@ -488,7 +490,7 @@ void GameEngine::dealTiles(){
 
   for (Colour colour : tileColours){
     for (Shape shape : tileShapes){
-      int copies = 1;
+      int copies = COPY_OF_TILES;
       for (int i = 0; i < copies; i++){
         Tile* tile = new Tile(colour, shape);
         tileBag.addFront(tile);
