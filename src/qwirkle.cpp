@@ -222,21 +222,6 @@ std::string promptForPlayer(int playerNumber){
   return player;
 }
 
-//source: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
-/*String* splitByDelimiter(String s, String delimiter){
-    String splitted[50];
-    size_t pos = 0;
-    std::string token;
-    int i= 0;
-    while ((pos = s.find(delimiter)) != std::string::npos) {
-        token = s.substr(0, pos);
-        splitted[i];
-        s.erase(0, pos + delimiter.length());
-        i++;
-    }
-    return splitted;
-}*/
-
 bool checkStringCharBetween(std::string str, char min, char max){
     bool validate = true;
     for (int i = 0; str[i] != '\0'; i++){
