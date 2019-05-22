@@ -546,6 +546,7 @@ std::string GameEngine::printBoard() {
         for (int j = 0; j < colLength; j++) {
             String value = "  ";
             if (dynamicBoard[i][j]) {
+                cout << dynamicBoard[i][j] << std::endl;
               value = dynamicBoard[i][j]->getValue();
             }
             boardStr += value + "|";
