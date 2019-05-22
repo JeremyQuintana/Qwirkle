@@ -13,7 +13,6 @@ using std::stoi;
 //constructor for a new game
 GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
-    inGame= true;
     playerList = new Player*[totalPlayers];
     currentPlayer= 0;
     this->totalPlayers= totalPlayers;
@@ -33,7 +32,6 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
                        int playerScores[], String playerHands[], String board[], String bag, int turn){
     std::cout << "Game  successfully loaded" << std::endl;
     this->currentPlayer= turn;
-    inGame= true;
     playerList = new Player*[totalPlayers];
     this->totalPlayers= totalPlayers;
     this->colLength= colLength;
@@ -86,8 +84,6 @@ void GameEngine::startGame() {
     std::cin.clear();
     std::cin.ignore();
     //loops while there is no winner yet and game is still running
-    std::cin.clear();
-    std::cin.ignore();
     inGame = true;
     //loops while the game is not ended
     while(inGame){
