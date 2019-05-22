@@ -651,10 +651,12 @@ void GameEngine::updateDynamicBoard(int row, int col) {
 }
 
 GameEngine::~GameEngine(){
-  /*delete[] dynamicBoard;
   for (int i = 0; i < colLength; i++){
     delete[] dynamicBoard[i];
   }
   delete[] dynamicBoard;
-  delete[] playerList;*/
+  for(int i=0;i<totalPlayers;i++){
+      delete[] playerList[i];
+  }
+  delete[] playerList;
 }
