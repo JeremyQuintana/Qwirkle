@@ -643,7 +643,7 @@ void GameEngine::updateDynamicBoard(int row, int col) {
             newBoard[row+rowShift][col+colShift] = dynamicBoard[row][col];
           }
         }
-        delete[] dynamicBoard;
+        //delete[] dynamicBoard;
         dynamicBoard= newBoard;
         rowLength = newRowLength;
         colLength = newColLength;
