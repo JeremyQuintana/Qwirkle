@@ -120,7 +120,7 @@ bool loadGame(){
   std::cin >> input;
 
   //attempts to open file
-  std::ifstream inFile("../src/"+input);
+  std::ifstream inFile(input);
 
 
   std::string lines[STRING_LENGTH];
