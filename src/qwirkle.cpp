@@ -43,7 +43,7 @@ int main(void) {
     if (option == 3) showStudentInformation();
   }
 
-  std::cout << std::endl << "Goodbye" << std::endl;
+  std::cout << "Goodbye" << std::endl;
 
   return EXIT_SUCCESS;
 }
