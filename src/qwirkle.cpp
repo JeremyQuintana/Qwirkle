@@ -86,7 +86,7 @@ void loadGame(){
   std::cin >> input;
 
   //attempts to open file
-  std::ifstream inFile(input);
+  std::ifstream inFile("../src/"+input);
 
   //reads from file if it can and stores it line by line, in lines array
   std::string lines[500];
@@ -108,7 +108,6 @@ void loadGame(){
 
       // check all player deets
       std::string line;
-      bool isWrongFormat = false;
       String tempName;
       String tempScore;
       String tempHand;
@@ -120,22 +119,9 @@ void loadGame(){
           tempName= lines[currentLine];
           currentLine++;
           tempScore= lines[currentLine];
-          if (checkStringCharBetween(tempName, 'A', 'Z') == false ||
-              checkStringCharBetween(line, '1', '9') == false) {
-              isWrongFormat = true;
-          }
           currentLine++;
           tempHand = lines[currentLine];
 
-          int handLength = tempHand.length();
-          int index = 0;
-          while (index-1 < handLength){
-              String tile = line.substr(index, 2);
-              if (checkValidTile(tile) == false) {
-                  isWrongFormat = true;
-              }
-              index += 3;
-          }
           playerNames[i]= tempName;
           playerScores[i]= std::stoi(tempScore);
           playerHands[i]= tempHand;
@@ -149,55 +135,17 @@ void loadGame(){
           line = lines[currentLine];
           board[i]= line;
           currentLine++;
-          /*bool rowRead = false;
-        int c = 3;
-        int rowLength = line.length();
-        while (rowRead == false && c < rowLength){
-          std::string tile = line.substr(c, 2);
-          if (checkValidTile(tile) == false && tile != "  "){
-              isValidated = false;
-          }
-          c += 3;
-          if (c >= rowLength) rowRead = true;
-        }
-
-        currentLine++;
-        line = lines[currentLine];
-        if (line.at(1) != ' ') boardRead = true;*/
-      }
-
-      //check bag
-      String bag= lines[currentLine];
-      int c = 0;
-      int bagLength = bag.length();
-      while (c-1<bagLength){
-          std::string tile = line.substr(c, 2);
-          if (checkValidTile(tile) == false) {
-              isWrongFormat = true;
-          }
-          c += 3;
       }
       currentLine++;
+      //check bag
+      String bag= lines[currentLine];
+      currentLine++;
       String turnString = lines[currentLine];
-
-      if (checkStringCharBetween(turnString, '1', '9') == false) {
-          isWrongFormat = true;
-      }
       int turn= std::stoi(turnString);
-      //check all pieces in hand and bag is correct amount
-
-      if(isWrongFormat){
-          std::cout << "Save Data Invalid Format." << std::endl;
-      }
-      else{
-          new GameEngine(playerNum, initRowLength, initColLength, playerNames,
+      new GameEngine(playerNum, initRowLength, initColLength, playerNames,
                          playerScores, playerHands, board, bag, turn);
       }
   }
-
-
-  std::cout << std::endl;
-}
 
 //shows student student information for team
 void showStudentInformation(){
@@ -274,40 +222,25 @@ std::string promptForPlayer(int playerNumber){
   return player;
 }
 
+//source: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+/*String* splitByDelimiter(String s, String delimiter){
+    String splitted[50];
+    size_t pos = 0;
+    std::string token;
+    int i= 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos);
+        splitted[i];
+        s.erase(0, pos + delimiter.length());
+        i++;
+    }
+    return splitted;
+}*/
+
 bool checkStringCharBetween(std::string str, char min, char max){
-  bool validate = true;
-  for (int i = 0; str[i] != '\0'; i++){
-    if (str.at(i) < min || str.at(i) > max) validate = false;
-  }
-  return validate;
-}
-
-bool checkValidTile(std::string tile){
-  bool validColour = false;
-  bool validShape = false;
-  if (tile.length() == 2){
-    char colour = tile.at(0);
-    int shape = tile.at(1) - '0';
-    if (
-      colour == RED     ||
-      colour == ORANGE  ||
-      colour == YELLOW  ||
-      colour == GREEN   ||
-      colour == BLUE    ||
-      colour == PURPLE
-    ) validColour = true;
-    if (
-      shape == CIRCLE   ||
-      shape == STAR_4   ||
-      shape == DIAMOND  ||
-      shape == SQUARE   ||
-      shape == STAR_6   ||
-      shape == CLOVER
-    ) validShape = true;
-  }
-
-  bool valid = false;
-  if (validColour == true && validShape == true) valid = true;
-
-  return valid;
+    bool validate = true;
+    for (int i = 0; str[i] != '\0'; i++){
+        if (str.at(i) < min || str.at(i) > max) validate = false;
+    }
+    return validate;
 }

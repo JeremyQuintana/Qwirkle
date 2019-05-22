@@ -18,6 +18,8 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
 
     for (int i = 0; i < totalPlayers; i++)
       playerList[i] = new Player(playerListNames[i], new LinkedList);
+    rowLength= DEFAULT_BOARD_LENGTH;
+    colLength= DEFAULT_BOARD_LENGTH;
 
     assembleDynamicBoard();
     dealTiles();
@@ -26,6 +28,7 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
 
 GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String playerNames[],
                        int playerScores[], String playerHands[], String board[], String bag, int turn){
+    std::cout << "Game  successfully loaded" << std::endl;
     this->currentPlayer= turn;
     inGame= true;
     playerList = new Player*[totalPlayers];
@@ -54,13 +57,12 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
         index++;
     }
     for(String bagTile:bags){
-        tileBag.addFront(new Tile(bagTile));
+        tileBag.addBack(new Tile(bagTile));
     }
 
     assembleDynamicBoard();
 
     for(int i=0;i<rowLength;i++){
-        std::cout << board[i];
         String row[colLength];
         index= 0;
         for(unsigned int j=0;j<board[i].length();j+=3){
@@ -78,6 +80,8 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
 
 //main function that runs the actual game
 void GameEngine::startGame() {
+    std::cin.clear();
+    std::cin.ignore();
     //loops while there is no winner yet and game is still running
     inGame = true;
     while(inGame){
@@ -114,8 +118,6 @@ void GameEngine::assembleBoard(){
 }
 
 void GameEngine::assembleDynamicBoard(){
-    rowLength= DEFAULT_BOARD_LENGTH;
-    colLength= DEFAULT_BOARD_LENGTH;
     dynamicBoard= new Board[rowLength];
     for (int i=0;i<rowLength;i++){
         dynamicBoard[i]= new BoardRow[colLength];
@@ -159,7 +161,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
 }
 
 void GameEngine::saveGame(std::string fileName){
-  std::ofstream outFile (fileName);
+  std::ofstream outFile ("../src/"+fileName);
 
   outFile << totalPlayers << endl;
   outFile << rowLength << endl;
