@@ -28,7 +28,6 @@ public:
     ~GameEngine();
 
 private:
-    Board* board;
     Board* dynamicBoard;
     int boardLength;
     int rowLength;
@@ -41,7 +40,6 @@ private:
     int totalPlayers;
     int currentPlayer;
     void startGame();
-    void assembleBoard();
     void assembleDynamicBoard();
     bool takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
@@ -52,7 +50,6 @@ private:
     void saveGame(std::string fileName);
     void updateDynamicBoard(int, int);
     String boardToString();
-    void stringToBoard();
 };
 
 #endif //SRC_GAMEENGINE_H
