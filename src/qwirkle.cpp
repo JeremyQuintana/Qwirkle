@@ -53,17 +53,21 @@ void newGame(){
   bool validate = false;
   int amountOfPlayers = 0;
   bool endGame = false;
+
+  //takes input of how many players and loops until valid or ^D
   while (validate == false){
     std::cout << std::endl
     << "Enter amount of players:" << std::endl
     << "> ";
     std::string input = "";
     std::cin >> input;
+    //if input is eof then it exits
     if (std::cin.eof()){
       endGame = true;
       validate = true;
     }
     else{
+      //checks that the input is between 2 and 4
       if (checkStringCharBetween(input, '2', '4') == true
           && input.length() == 1) {
             validate = true;
@@ -81,6 +85,7 @@ void newGame(){
     playerList[i] = "";
   }
 
+  //for each numper of players it prompts the user for a player name
   for (int i = 0; i < amountOfPlayers && endGame == false; i++){
     std::string player = promptForPlayer(i+1);
     if (std::cin.eof()) endGame = true;
@@ -232,11 +237,14 @@ int menuOptions(){
   //validate input from user
   int option = 0;
   bool validated = false;
+  //loop until the input is correct
   while (validated == false){
     std::string input = "";
     std::cin >> input;
+    //if input is ^D then it exits else is becomes an int
     if (std::cin.eof()) option = 4;
     else option = input.at(0) - '0';
+    //if it is one of the options then it is valid
     if (option == 1 || option == 2 || option == 3 || option == 4)
       validated = true;
     else std::cout << "Error - Invalid option" << std::endl << "> ";
@@ -267,7 +275,7 @@ std::string promptForPlayer(int playerNumber){
 
       //prints error message if incorrect
       if (validate == false)
-        std::cout << "Error - Must be uppercase" << std::endl << "> ";
+        std::cout << "Error - Must be uppercase characters" << std::endl << "> ";
     }
     else{
       validate = true;
@@ -277,20 +285,26 @@ std::string promptForPlayer(int playerNumber){
   return player;
 }
 
+//checks a given string that each character is between a min and max chars
 bool checkStringCharBetween(std::string str, char min, char max){
   bool validate = true;
+  //for loop to iterate through each character in the string
   for (int i = 0; str[i] != '\0'; i++){
+    //if the character is not within the range it becomes invalid
     if (str.at(i) < min || str.at(i) > max) validate = false;
   }
   return validate;
 }
 
+//function to check if the string given is a valid tile
 bool checkValidTile(std::string tile){
   bool validColour = false;
   bool validShape = false;
+  //checks if the length is correct
   if (tile.length() == 2){
     char colour = tile.at(0);
     int shape = tile.at(1) - '0';
+    //checks if one of the valid colours
     if (
       colour == RED     ||
       colour == ORANGE  ||
@@ -299,6 +313,7 @@ bool checkValidTile(std::string tile){
       colour == BLUE    ||
       colour == PURPLE
     ) validColour = true;
+    //checks if one of the valid shapes
     if (
       shape == CIRCLE   ||
       shape == STAR_4   ||
@@ -309,6 +324,7 @@ bool checkValidTile(std::string tile){
     ) validShape = true;
   }
 
+  //if both colour and shape is valid it is a valid tile
   bool valid = false;
   if (validColour == true && validShape == true) valid = true;
 

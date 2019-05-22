@@ -10,6 +10,7 @@
 using std::cin;
 using std::stoi;
 
+//constructor for a new game
 GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
     inGame= true;
@@ -17,6 +18,7 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     currentPlayer= 0;
     this->totalPlayers= totalPlayers;
 
+    //creates new players which are added to the playerlist
     for (int i = 0; i < totalPlayers; i++)
       playerList[i] = new Player(playerListNames[i], new LinkedList);
 
@@ -31,23 +33,29 @@ void GameEngine::startGame() {
     std::cin.clear();
     std::cin.ignore();
     inGame = true;
+    //loops while the game is not ended
     while(inGame){
+      //prints current players name
       std::cout << std::endl
       << playerList[currentPlayer]->getName()
       << ", it's your turn" << std::endl;
-
+      //loops through each player and prints their scores
       for (int i = 0; i < totalPlayers; i++){
         std::cout
         << "Score for " << playerList[i]->getName()
         << ": " << playerList[i]->getScore() << std::endl;
 
       }
+      //prints the board
       std::cout << printBoard() << std::endl;
+      //prints the hand of the current player
       std::cout
       << "Your hand is:"                           << std::endl
       << playerList[currentPlayer]->handToString() << std::endl << std::endl;
-      // std::cout << tileBag.listToString() << std::endl;
+
+      //takes the turn
       bool endGame = takeTurn();
+      //if the ^D was not used then endGame stays true and the endTurn runs
       if (endGame == false) endTurn();
       else inGame = false;
       // inGame = false;
@@ -64,6 +72,7 @@ void GameEngine::assembleBoard(){
     }
 }
 
+//creates a board of default size
 void GameEngine::assembleDynamicBoard(){
     rowLength= DEFAULT_BOARD_LENGTH;
     colLength= DEFAULT_BOARD_LENGTH;
@@ -72,6 +81,8 @@ void GameEngine::assembleDynamicBoard(){
         dynamicBoard[i]= new BoardRow[colLength];
     }
 }
+
+//take turn function that decides what the player wants to do with their turn
 bool GameEngine::takeTurn() {
     bool endGame = false;
     int option = 0;
@@ -88,6 +99,7 @@ bool GameEngine::takeTurn() {
         else if(playerCommand.substr(0,8).compare("replace ") == 0)  option = 2;
         else if(playerCommand.substr(0,6).compare("place ") == 0
                 && playerCommand.substr(8,4).compare(" at ") == 0)   option = 1;
+        //if ^D then it exits the turn and the game
         else if(std::cin.eof()) {
           endGame = true;
           validated = true;
@@ -97,7 +109,8 @@ bool GameEngine::takeTurn() {
         //calls relevant functions and if unsuccesful stays in loop
         if(option == 1) {
           Tile tile = Tile(playerCommand.at(6), playerCommand.at(7) - '0');
-          if (placeTile(tile, playerCommand.substr(12, playerCommand.length()-12))) validated = true;
+          if (placeTile(tile, playerCommand.substr(12,
+            playerCommand.length()-12))) validated = true;
         } else if(option == 2) {
           Tile tile = Tile(playerCommand.at(8), playerCommand.at(9) - '0');
           if (replaceTile(tile)) validated = true;;
@@ -110,11 +123,13 @@ bool GameEngine::takeTurn() {
     return endGame;
 }
 
+//function if the player decides to place a tile for their turns
 bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     bool isValid = true;
     // row player asked for
     char row = coordinate.at(0);
     int destinationRow = 0;
+    //check for 
     if (row >= 'A' && row <= 'Z') destinationRow = row - 65;
     else {
       std::cout << "Error - Invalid row coordinate" << std::endl;
@@ -185,7 +200,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     }
 
     // check south
-    else if(!emptySouth && isValid == true) {
+    if(!emptySouth && isValid == true) {
         currentRow = destinationRow;
         currentTile = board[currentRow+1][destinationColumn];
         if(currentTile->getValue().at(0) == reqColour) ruleSouth--;
@@ -202,7 +217,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
-    else if(!emptyNorth && !emptySouth && isValid == true) {
+    if(!emptyNorth && !emptySouth && isValid == true) {
         currentRow = destinationRow;
         comparatorRow = destinationRow;
         if(ruleNorth != ruleSouth) isValid = false;
@@ -237,7 +252,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // check west
-    else if(!emptyWest && isValid == true) {
+    if(!emptyWest && isValid == true) {
         currentColumn = destinationColumn;
         currentTile = board[destinationRow][currentColumn-1];
         if(currentTile->getValue().at(0) == reqColour) ruleWest--;
@@ -254,7 +269,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
-    else if(!emptyEast && !emptyWest && isValid == true) {
+    if(!emptyEast && !emptyWest && isValid == true) {
         currentColumn = destinationColumn;
         comparatorColumn = destinationColumn;
         if(ruleEast != ruleWest) isValid = false;
