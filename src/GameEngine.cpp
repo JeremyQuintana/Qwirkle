@@ -144,7 +144,7 @@ void GameEngine::assembleDynamicBoard(){
     for (int i=0;i<rowLength;i++){
         dynamicBoard[i]= new BoardRow[colLength];
         for(int j=0;j<colLength;j++){
-            dynamicBoard[i][j]==nullptr;
+            dynamicBoard[i][j]=nullptr;
         }
     }
 }
