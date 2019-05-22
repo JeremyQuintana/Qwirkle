@@ -18,7 +18,6 @@ A, it's your turn
 Score for A: 3
 Score for B: 5
    0  1  2  3
-  -------------
 A |  |  |  |  |
 B |  |Y2|  |  |
 C |  |O2|  |  |
@@ -29,16 +28,15 @@ Your hand is
 B5, G5, O3, Y2, P3, O4
 
 >
-Error - Invalid Input
+Error - Invalid tile placement
 >
-Error - Invalid Input
+Error - Invalid tile placement
 >
 
 B, it's your turn
 Score for A: 7
 Score for B: 5
    0  1  2  3
-  -------------
 A |  |  |  |  |
 B |  |Y2|  |  |
 C |  |O2|O3|  |

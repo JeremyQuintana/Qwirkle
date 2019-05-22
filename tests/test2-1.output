@@ -18,7 +18,6 @@ B, it's your turn
 Score for A: 5
 Score for B: 5
    0  1  2  3  4
-  ----------------
 A |  |  |  |  |  |
 B |  |B1|  |Y2|  |
 C |  |B2|O2|G2|  |
@@ -33,7 +32,6 @@ A, it's your turn
 Score for A: 5
 Score for B: 8
    0  1  2  3  4
-  ----------------
 A |  |  |  |  |  |
 B |  |B1|  |Y2|  |
 C |  |B2|O2|G2|  |
@@ -49,7 +47,6 @@ B, it's your turn
 Score for A: 8
 Score for B: 8
    0  1  2  3  4
-  ----------------
 A |  |  |  |  |  |
 B |  |B1|  |Y2|  |
 C |  |B2|O2|G2|  |
