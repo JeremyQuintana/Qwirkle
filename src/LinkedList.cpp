@@ -134,7 +134,8 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
 
     while (temp != nullptr && deleted == false)
     {
-        if (((temp->tile)->colour == data.colour) && ((temp->tile)->shape == data.shape)){
+        if (((temp->tile)->colour == data.colour)
+              && ((temp->tile)->shape == data.shape)){
           if (temp == head) head = head->next;
           else prev->next = temp->next;
           deleted = true;
@@ -154,7 +155,8 @@ bool LinkedList::inList(Tile data) //Returns true if tile is in list
 
     while (temp != nullptr)
     {
-        if ((temp->tile->colour == data.colour) && (temp->tile->shape == data.shape))
+        if ((temp->tile->colour == data.colour)
+              && (temp->tile->shape == data.shape))
         {
             result = true;
         }

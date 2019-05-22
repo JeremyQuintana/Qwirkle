@@ -256,7 +256,7 @@ std::string promptForPlayer(int playerNumber){
 
       //prints error message if incorrect
       if (validate == false)
-        std::cout << "Error - Must be uppercase characters" << std::endl << "> ";
+        std::cout<< "Error - Must be uppercase characters" << std::endl << "> ";
     }
     else{
       validate = true;
