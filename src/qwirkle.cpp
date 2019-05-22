@@ -18,7 +18,7 @@
 #define MAX_PLAYER_NUM '4'
 
 void newGame();
-void loadGame();
+bool loadGame();
 void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
@@ -41,9 +41,11 @@ int main(void) {
       option = QUIT_OPTION;
     }
     if (option == LOADGAME_OPTION) {
-      loadGame();
+      if(loadGame()){
+         option= QUIT_OPTION;
+      }
       std::cout << std::endl;
-      option = QUIT_OPTION;
+      option = 0;
     }
     if (option == SHOWINFO_OPTION) showStudentInformation();
   }
@@ -108,7 +110,7 @@ void newGame(){
 }
 
 //loads game from a given file name
-void loadGame(){
+bool loadGame(){
   std::cout
   << "Enter the filename from which to load the game" << std::endl
   << "> ";
@@ -123,6 +125,7 @@ void loadGame(){
 
   std::string lines[STRING_LENGTH];
   int lineNumber = 0;
+  bool isGameLoaded= false;
   //if the file doesn't exist
   if(!inFile){
     std::cout << "Error - Can not open or find file" << std::endl;
@@ -182,7 +185,9 @@ void loadGame(){
       //creates a new game using the existing data
       new GameEngine(playerNum, initRowLength, initColLength, playerNames,
                          playerScores, playerHands, board, bag, turn);
+      isGameLoaded= true;
       }
+  return isGameLoaded;
   }
 
 //shows student student information for team
