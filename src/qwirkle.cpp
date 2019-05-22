@@ -80,7 +80,7 @@ void newGame(){
             validate = true;
             amountOfPlayers = input.at(0) - '0';
       }
-      else std::cout << "Error - Amount must be between 2 to 4" << std::endl;
+      else std::cout << "Error - must choose only 2-4 players" << std::endl;
     }
   }
 
@@ -261,7 +261,7 @@ std::string promptForPlayer(int playerNumber){
 
       //prints error message if incorrect
       if (validate == false)
-        std::cout << "Error - Must be uppercase characters" << std::endl << "> ";
+        std::cout<< "Error - Must be uppercase characters" << std::endl << "> ";
     }
     else{
       validate = true;

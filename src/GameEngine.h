@@ -22,8 +22,9 @@ class GameEngine {
 public:
 
     GameEngine(std::string playerList[], int totalPlayers);
-    GameEngine(int totalPlayers, int rowLength, int colLength, String playerNames[],
-            int playerScores[], String playerHands[], String board[], String bag, int turn);
+    GameEngine(int totalPlayers, int rowLength, int colLength,
+                String playerNames[], int playerScores[], String playerHands[],
+                String board[], String bag, int turn);
     ~GameEngine();
 
 private:
@@ -45,7 +46,6 @@ private:
     bool takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
     bool replaceTile(Tile tile);
-    void drawTile();
     void endTurn();
     std::string printBoard();
     void dealTiles();
