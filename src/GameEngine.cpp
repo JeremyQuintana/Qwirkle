@@ -111,6 +111,7 @@ void GameEngine::startGame() {
     inGame = true;
     //loops while the game is not ended
     while(inGame){
+      std::cout << std::endl <<"Type 'help' to display help menu" << std::endl;
       //prints current players name
       std::cout << std::endl
       << playerList[currentPlayer]->getName()
