@@ -41,9 +41,10 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
 GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength,
                         String playerNames[], int playerScores[],
                         String playerHands[], String board[],
-                        String bag, int turn){
+                        String bag, int turnCount, int currentPlayer){
     std::cout << "Game  successfully loaded" << std::endl;
-    this->currentPlayer= turn;
+    this->currentPlayer= currentPlayer;
+    this->turn= turnCount;
     playerList = new Player*[totalPlayers];
     this->totalPlayers= totalPlayers;
     this->colLength= colLength;
@@ -465,6 +466,7 @@ void GameEngine::saveGame(std::string fileName){
 
   outFile << boardToString() << endl;
   outFile << tileBag.listToString() << endl;
+  outFile << turn << endl;
   outFile << currentPlayer << endl;
 
   outFile.close();

@@ -180,11 +180,12 @@ bool loadGame(){
       //check bag
       String bag= lines[currentLine];
       currentLine++;
-      String turnString = lines[currentLine];
-      int turn= std::stoi(turnString);
+      int turnCount= std::stoi(lines[currentLine]);
+      currentLine++;
+      int currentPlayer= std::stoi(lines[currentLine]);
       //creates a new game using the existing data
       new GameEngine(playerNum, initRowLength, initColLength, playerNames,
-                         playerScores, playerHands, board, bag, turn);
+                         playerScores, playerHands, board, bag, turnCount, currentPlayer);
       isGameLoaded= true;
       }
   return isGameLoaded;
