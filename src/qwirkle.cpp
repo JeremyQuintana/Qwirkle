@@ -9,8 +9,13 @@
 
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 4
-
-typedef std::string String;
+#define STRING_LENGTH 500
+#define NEWGAME_OPTION 1
+#define LOADGAME_OPTION 2
+#define SHOWINFO_OPTION 3
+#define QUIT_OPTION 4
+#define MIN_PLAYER_NUM '2'
+#define MAX_PLAYER_NUM '4'
 
 void newGame();
 void loadGame();
@@ -27,20 +32,20 @@ int main(void) {
   << "-------------------"           << std::endl;
   int option = 0;
 
-  while (option != 4){
+  while (option != QUIT_OPTION){
     option = menuOptions();
 
-    if (option == 1) {
+    if (option == NEWGAME_OPTION) {
       newGame();
       std::cout << std::endl;
-      option = 4;
+      option = QUIT_OPTION;
     }
-    if (option == 2) {
+    if (option == LOADGAME_OPTION) {
       loadGame();
       std::cout << std::endl;
-      option = 4;
+      option = QUIT_OPTION;
     }
-    if (option == 3) showStudentInformation();
+    if (option == SHOWINFO_OPTION) showStudentInformation();
   }
 
   std::cout << "Goodbye" << std::endl;
@@ -70,12 +75,12 @@ void newGame(){
     }
     else{
       //checks that the input is between 2 and 4
-      if (checkStringCharBetween(input, '2', '4') == true
+      if (checkStringCharBetween(input, MIN_PLAYER_NUM, MAX_PLAYER_NUM) == true
           && input.length() == 1) {
             validate = true;
             amountOfPlayers = input.at(0) - '0';
       }
-      else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
+      else std::cout << "Error - Amount must be between 2 to 4" << std::endl;
     }
   }
 
@@ -116,7 +121,7 @@ void loadGame(){
   std::ifstream inFile("../src/"+input);
 
 
-  std::string lines[500];
+  std::string lines[STRING_LENGTH];
   int lineNumber = 0;
   //if the file doesn't exist
   if(!inFile){
@@ -223,10 +228,10 @@ int menuOptions(){
     std::string input = "";
     std::cin >> input;
     //if input is ^D then it exits else is becomes an int
-    if (std::cin.eof()) option = 4;
+    if (std::cin.eof()) option = QUIT_OPTION;
     else option = input.at(0) - '0';
     //if it is one of the options then it is valid
-    if (option == 1 || option == 2 || option == 3 || option == 4)
+    if (option == NEWGAME_OPTION || option == LOADGAME_OPTION || option == SHOWINFO_OPTION || option == QUIT_OPTION)
       validated = true;
     else std::cout << "Error - Invalid option" << std::endl << "> ";
     std::cin.clear();
