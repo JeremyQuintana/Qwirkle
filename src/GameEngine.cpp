@@ -88,7 +88,7 @@ bool GameEngine::takeTurn() {
         else if(playerCommand.substr(0,8).compare("replace ") == 0)  option = 2;
         else if(playerCommand.substr(0,6).compare("place ") == 0
                 && playerCommand.substr(8,4).compare(" at ") == 0)   option = 1;
-        else if(playerCommand.find("^D") != std::string::npos) {
+        else if(std::cin.eof()) {
           endGame = true;
           validated = true;
         }

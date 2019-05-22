@@ -41,7 +41,7 @@ int main(void) {
     if (option == 3) showStudentInformation();
   }
 
-  std::cout << "Goodbye" << std::endl;
+  std::cout << std::endl << "Goodbye" << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -59,7 +59,7 @@ void newGame(){
     << "> ";
     std::string input = "";
     std::cin >> input;
-    if (input.find("^D") != std::string::npos){
+    if (std::cin.eof()){
       endGame = true;
       validate = true;
     }
@@ -83,7 +83,7 @@ void newGame(){
 
   for (int i = 0; i < amountOfPlayers && endGame == false; i++){
     std::string player = promptForPlayer(i+1);
-    if (player == "^D") endGame = true;
+    if (std::cin.eof()) endGame = true;
     else playerList[i] = player;
   }
 
@@ -235,7 +235,7 @@ int menuOptions(){
   while (validated == false){
     std::string input = "";
     std::cin >> input;
-    if (input == "^D") option = 4;
+    if (std::cin.eof()) option = 4;
     else option = input.at(0) - '0';
     if (option == 1 || option == 2 || option == 3 || option == 4)
       validated = true;
@@ -261,7 +261,7 @@ std::string promptForPlayer(int playerNumber){
   while (validate == false){
     std::cin >> player;
 
-    if (player.find("^D") == std::string::npos){
+    if (std::cin.eof()){
       //check input is all upper case letters
       validate = checkStringCharBetween(player, 'A', 'Z');
 
