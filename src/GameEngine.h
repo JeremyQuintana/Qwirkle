@@ -24,7 +24,7 @@ public:
     GameEngine(std::string playerList[], int totalPlayers);
     GameEngine(int totalPlayers, int rowLength, int colLength,
                 String playerNames[], int playerScores[], String playerHands[],
-                String board[], String bag, int turn);
+                String board[], String bag, int turnCount, int currentPlayer);
     ~GameEngine();
 
 private:
