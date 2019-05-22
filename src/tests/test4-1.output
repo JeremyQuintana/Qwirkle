@@ -8,10 +8,8 @@ Menu
 4. Quit
 
 >
-
 Enter the filename from which to load the game
 >
-
 Game Loaded Successfully
 
 B, it's your turn
@@ -26,18 +24,13 @@ D |  |G2|G3|G1|  |
 E |  |  |  |  |  |
 
 Your hand is
-P2, R4, P1, G5, Y1, Y4
+P2,R4,P1,G5,Y1,Y4
 
+>Error - Invalid tile placement
+>Error - Invalid tile placement
+>Error - Invalid tile placement
+>Error - Invalid tile placement
 >
-Error - Invalid Input
->
-Error - Invalid Input
->
-Error - Invalid Input
->
-Error - Invalid Input
->
-
 A, it's your turn
 Score for A: 9
 Score for B: 10
@@ -50,7 +43,7 @@ D |  |G2|G3|G1|  |
 E |  |  |  |  |  |
 
 Your hand is
-B5, G5, O3, Y2, P3, O4
+B5,G5,O3,Y2,P3,O4
 
 >
 Goodbye

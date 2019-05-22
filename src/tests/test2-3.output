@@ -8,10 +8,8 @@ Menu
 4. Quit
 
 >
-
 Enter the filename from which to load the game
 >
-
 Game Loaded Successfully
 
 B, it's your turn
@@ -25,11 +23,9 @@ D |  |G2|Y2|  |
 E |  |  |  |  |
 
 Your hand is
-B5, B2, G4, Y2, P3, O6
+B5,B2,G4,Y2,P3,O6
 
->
-Error - Invalid tile placement
->
-Error - Invalid tile placement
+>Error - Invalid tile placement
+>Error - Invalid tile placement
 >
 Goodbye
