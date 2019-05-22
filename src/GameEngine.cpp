@@ -165,10 +165,10 @@ bool GameEngine::takeTurn() {
         std::getline(std::cin, playerCommand);
 
         //checks input for valid keywords
-        if(playerCommand.substr(0,SAVE_COMMAND_LENGTH).compare("save ") == 0)          option = 3;
-        else if(playerCommand.substr(0,REPLACE_COMMAND_LENGTH).compare("replace ") == 0)  option = 2;
+        if(playerCommand.substr(0,SAVE_COMMAND_LENGTH).compare("save ") == 0)          option = OPTION_SAVE;
+        else if(playerCommand.substr(0,REPLACE_COMMAND_LENGTH).compare("replace ") == 0)  option = OPTION_REPLACE;
         else if(playerCommand.substr(0,PLACE_COMMAND_LENGTH).compare("place ") == 0
-                && playerCommand.substr(PLACE_AT_COMMAND_START_LENGTH,PLACE_AT_COMMAND_END_LENGTH).compare(" at ") == 0)   option = 1;
+                && playerCommand.substr(PLACE_AT_COMMAND_START_LENGTH,PLACE_AT_COMMAND_END_LENGTH).compare(" at ") == 0)   option = OPTION_PLACE;
         //if ^D then it exits the turn and the game
         else if(std::cin.eof()) {
           endGame = true;
