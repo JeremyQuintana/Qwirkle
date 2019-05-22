@@ -10,7 +10,6 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
-    clear();
 }
 
 // Returns size of linked list
