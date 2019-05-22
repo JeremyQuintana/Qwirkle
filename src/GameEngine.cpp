@@ -7,7 +7,13 @@
 #define BOARD_LENGTH boardLength
 #define DEFAULT_BOARD_LENGTH 3
 #define COPY_OF_TILES 2
-#define SAVE_COMMAND_LENGTH
+#define SAVE_COMMAND_LENGTH 5
+#define REPLACE_COMMAND_LENGTH 8
+#define PLACE_COMMAND_LENGTH 6
+#define PLACE_AT_COMMAND_LENGTH 4
+#define OPTION_SAVE 3
+#define OPTION_REPLACE 2
+#define OPTION_PLACE 1
 
 using std::cin;
 using std::stoi;
@@ -156,10 +162,10 @@ bool GameEngine::takeTurn() {
         std::getline(std::cin, playerCommand);
 
         //checks input for valid keywords
-        if(playerCommand.substr(0,5).compare("save ") == 0)          option = 3;
-        else if(playerCommand.substr(0,8).compare("replace ") == 0)  option = 2;
-        else if(playerCommand.substr(0,6).compare("place ") == 0
-                && playerCommand.substr(8,4).compare(" at ") == 0)   option = 1;
+        if(playerCommand.substr(0,SAVE_COMMAND_LENGTH).compare("save ") == 0)          option = 3;
+        else if(playerCommand.substr(0,REPLACE_COMMAND_LENGTH).compare("replace ") == 0)  option = 2;
+        else if(playerCommand.substr(0,PLACE_COMMAND_LENGTH).compare("place ") == 0
+                && playerCommand.substr(PLACE_COMMAND_LENGTH,PLACE_AT_COMMAND_LENGTH).compare(" at ") == 0)   option = 1;
         //if ^D then it exits the turn and the game
         else if(std::cin.eof()) {
           endGame = true;
@@ -252,6 +258,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         rowScore++;
         while((currentRow-1) >= 0 && board[currentRow-1][destinationColumn] != NULL) {
             currentTile = board[currentRow-1][destinationColumn];
+            if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
             if(ruleNorth == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
             if(ruleNorth == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
             else rowScore++;
@@ -270,6 +277,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         rowScore++;;
         while((currentRow+1) <= rowLength && board[currentRow+1][destinationColumn] != NULL) {
             currentTile = board[currentRow+1][destinationColumn];
+            if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
             if(ruleSouth == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
             if(ruleSouth == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
             else rowScore++;
@@ -305,6 +313,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         colScore++;
         while((currentColumn+1) <= colLength && board[destinationRow][currentColumn+1] != NULL) {
             currentTile = board[destinationRow][currentColumn+1];
+            if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
             if(ruleEast == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
             if(ruleEast == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
             else colScore++;
@@ -322,6 +331,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         colScore++;
         while((currentColumn-1) >= 0 && board[destinationRow][currentColumn-1] != NULL) {
             currentTile = board[destinationRow][currentColumn-1];
+            if(tile.getValue().compare(currentTile->getValue()) == 0) isValid = false;
             if(ruleWest == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
             if(ruleWest == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
             else colScore++;
