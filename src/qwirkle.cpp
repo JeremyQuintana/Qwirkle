@@ -9,11 +9,16 @@
 
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 4
-
-typedef std::string String;
+#define STRING_LENGTH 500
+#define NEWGAME_OPTION 1
+#define LOADGAME_OPTION 2
+#define SHOWINFO_OPTION 3
+#define QUIT_OPTION 4
+#define MIN_PLAYER_NUM '2'
+#define MAX_PLAYER_NUM '4'
 
 void newGame();
-void loadGame();
+bool loadGame();
 void showStudentInformation();
 int menuOptions();
 std::string promptForPlayer(int playerNumber);
@@ -27,23 +32,25 @@ int main(void) {
   << "-------------------"           << std::endl;
   int option = 0;
 
-  while (option != 4){
+  while (option != QUIT_OPTION){
     option = menuOptions();
 
-    if (option == 1) {
+    if (option == NEWGAME_OPTION) {
       newGame();
       std::cout << std::endl;
-      option = 4;
+      option = QUIT_OPTION;
     }
-    if (option == 2) {
-      loadGame();
+    if (option == LOADGAME_OPTION) {
+      if(loadGame()){
+         option= QUIT_OPTION;
+      }
       std::cout << std::endl;
-      option = 4;
+      option = 0;
     }
-    if (option == 3) showStudentInformation();
+    if (option == SHOWINFO_OPTION) showStudentInformation();
   }
 
-  std::cout << std::endl << "Goodbye" << std::endl;
+  std::cout << "Goodbye" << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -70,12 +77,12 @@ void newGame(){
     }
     else{
       //checks that the input is between 2 and 4
-      if (checkStringCharBetween(input, '2', '4') == true
+      if (checkStringCharBetween(input, MIN_PLAYER_NUM, MAX_PLAYER_NUM) == true
           && input.length() == 1) {
             validate = true;
             amountOfPlayers = input.at(0) - '0';
       }
-      else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
+      else std::cout << "Error - Amount must be between 2 to 4" << std::endl;
     }
   }
 
@@ -103,7 +110,7 @@ void newGame(){
 }
 
 //loads game from a given file name
-void loadGame(){
+bool loadGame(){
   std::cout
   << "Enter the filename from which to load the game" << std::endl
   << "> ";
@@ -115,13 +122,16 @@ void loadGame(){
   //attempts to open file
   std::ifstream inFile("../src/"+input);
 
-  //reads from file if it can and stores it line by line, in lines array
-  std::string lines[500];
+
+  std::string lines[STRING_LENGTH];
   int lineNumber = 0;
+  bool isGameLoaded= false;
+  //if the file doesn't exist
   if(!inFile){
     std::cout << "Error - Can not open or find file" << std::endl;
   } else{
-    while (!inFile.eof()){
+      //reads from file if it can and stores it line by line, in lines array
+      while (!inFile.eof()){
       std::getline(inFile, lines[lineNumber]);
       lineNumber++;
     }
@@ -133,7 +143,7 @@ void loadGame(){
       int initColLength= std::stoi(lines[currentLine]);
       currentLine++;
 
-      // check all player deets
+
       std::string line;
       String tempName;
       String tempScore;
@@ -142,6 +152,7 @@ void loadGame(){
       int playerScores[playerNum];
       String playerHands[playerNum];
 
+      // check all player deets
       for(int i=0;i<playerNum;i++){
           tempName= lines[currentLine];
           currentLine++;
@@ -157,21 +168,26 @@ void loadGame(){
 
       String board[initRowLength];
 
-      //check board
+      //loads board into a string array
       for(int i=0;i<initRowLength;i++){
           line = lines[currentLine];
           board[i]= line;
           currentLine++;
       }
+      //gets over an empty line
       currentLine++;
+
       //check bag
       String bag= lines[currentLine];
       currentLine++;
       String turnString = lines[currentLine];
       int turn= std::stoi(turnString);
+      //creates a new game using the existing data
       new GameEngine(playerNum, initRowLength, initColLength, playerNames,
                          playerScores, playerHands, board, bag, turn);
+      isGameLoaded= true;
       }
+  return isGameLoaded;
   }
 
 //shows student student information for team
@@ -217,10 +233,10 @@ int menuOptions(){
     std::string input = "";
     std::cin >> input;
     //if input is ^D then it exits else is becomes an int
-    if (std::cin.eof()) option = 4;
+    if (std::cin.eof()) option = QUIT_OPTION;
     else option = input.at(0) - '0';
     //if it is one of the options then it is valid
-    if (option == 1 || option == 2 || option == 3 || option == 4)
+    if (option == NEWGAME_OPTION || option == LOADGAME_OPTION || option == SHOWINFO_OPTION || option == QUIT_OPTION)
       validated = true;
     else std::cout << "Error - Invalid option" << std::endl << "> ";
     std::cin.clear();
@@ -250,7 +266,7 @@ std::string promptForPlayer(int playerNumber){
 
       //prints error message if incorrect
       if (validate == false)
-        std::cout << "Error - Must be uppercase characters" << std::endl << "> ";
+        std::cout<< "Error - Must be uppercase characters" << std::endl << "> ";
     }
     else{
       validate = true;

@@ -21,6 +21,7 @@ String Tile::getValue() {
 }
 
 Tile::~Tile(){
-  
+
 }
-//gets the value of tile tile which includes the colour and the shape not separated by comma or space in string
+//gets the value of tile tile which includes the colour and the shape not
+//separated by comma or space in string

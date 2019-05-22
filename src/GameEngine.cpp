@@ -1,16 +1,25 @@
-//
-// Created by ariacelesta on 08/05/19.
-//
 
 #include "GameEngine.h"
 
 #define BOARD_LENGTH boardLength
 #define DEFAULT_BOARD_LENGTH 3
+#define TILE_FORMAT_DISTANCE 3
+#define TILE_STRING_LENGTH 2
+#define COPY_OF_TILES 2
+#define SAVE_COMMAND_LENGTH 5
+#define REPLACE_COMMAND_LENGTH 8
+#define PLACE_COMMAND_LENGTH 6
+#define PLACE_AT_COMMAND_START_LENGTH 8
+#define PLACE_AT_COMMAND_END_LENGTH 4
+#define HELP_COMMAND_LENGTH 4
+#define OPTION_SAVE 3
+#define OPTION_REPLACE 2
+#define OPTION_PLACE 1
 
 using std::cin;
 using std::stoi;
 
-//constructor for a new game
+//a constructor for a new GameEngine for a new game
 GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
     playerList = new Player*[totalPlayers];
@@ -28,8 +37,11 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     startGame();
 }
 
-GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String playerNames[],
-                       int playerScores[], String playerHands[], String board[], String bag, int turn){
+//constructor for a new GameEngine based on a save file after a load
+GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength,
+                        String playerNames[], int playerScores[],
+                        String playerHands[], String board[],
+                        String bag, int turn){
     std::cout << "Game  successfully loaded" << std::endl;
     this->currentPlayer= turn;
     playerList = new Player*[totalPlayers];
@@ -37,37 +49,48 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
     this->colLength= colLength;
     this->rowLength= rowLength;
 
+    //loops through the players array and generate new players
     for (int i = 0; i < totalPlayers; i++) {
-        String hands[(playerHands[i].length()+1)/3];
+        //the total number of cards, after taking into account the formatting
+        //of each string line in the savefile
+        String hands[(playerHands[i].length()+1)/TILE_FORMAT_DISTANCE];
         int index= 0;
         playerList[i] = new Player(playerNames[i], new LinkedList);
         playerList[i]->addScore(playerScores[i]);
-        for(unsigned int j=0;j<playerHands[i].length();j+=3){
-            hands[index]= playerHands[i].substr(j,2);
+        //processes each tile in the string and puts into the hand array
+        for(unsigned int j=0;j<playerHands[i].length();j+=TILE_FORMAT_DISTANCE){
+            hands[index]= playerHands[i].substr(j,TILE_STRING_LENGTH);
             index++;
         }
+        //adds each hand in the hand array as Tiles into each player
         for(String hand:hands){
             playerList[i]->addTile(new Tile(hand));
         }
     }
 
-    String bags[(bag.length()+1)/3];
+    //the total number of tiles in the bag after taking into account the string
+    //formatting in the savefile
+    String bags[(bag.length()+1)/TILE_FORMAT_DISTANCE];
     int index= 0;
-    for(unsigned int i=0;i<bag.length();i+=3){
-        bags[index]= bag.substr(i,2);
+    //processes each tile in the string and put them inside the bag array
+    for(unsigned int i=0;i<bag.length();i+=TILE_FORMAT_DISTANCE){
+        bags[index]= bag.substr(i,TILE_STRING_LENGTH);
         index++;
     }
+    //adds each tile into the bag linkedlist as a new tile
     for(String bagTile:bags){
         tileBag.addBack(new Tile(bagTile));
     }
 
     assembleDynamicBoard();
 
+    //processes the tiles on the board from the board string array and puts them
+    //inside the dynamic board
     for(int i=0;i<rowLength;i++){
         String row[colLength];
         index= 0;
-        for(unsigned int j=0;j<board[i].length();j+=3){
-            row[index]= board[i].substr(j,2);
+        for(unsigned int j=0;j<board[i].length();j+=TILE_FORMAT_DISTANCE){
+            row[index]= board[i].substr(j,TILE_STRING_LENGTH);
             index++;
         }
         for(int k=0;k<colLength;k++){
@@ -124,7 +147,7 @@ void GameEngine::assembleBoard(){
     }
 }
 
-//creates a board of default size
+//creates a board of the size rowLength and colLength, with the default value of 3x3
 void GameEngine::assembleDynamicBoard(){
     dynamicBoard= new Board[rowLength];
     for (int i=0;i<rowLength;i++){
@@ -145,14 +168,39 @@ bool GameEngine::takeTurn() {
         std::getline(std::cin, playerCommand);
 
         //checks input for valid keywords
-        if(playerCommand.substr(0,5).compare("save ") == 0)          option = 3;
-        else if(playerCommand.substr(0,8).compare("replace ") == 0)  option = 2;
-        else if(playerCommand.substr(0,6).compare("place ") == 0
-                && playerCommand.substr(8,4).compare(" at ") == 0)   option = 1;
+        if(playerCommand.substr(0,SAVE_COMMAND_LENGTH).compare("save ") == 0)
+                                                        option = OPTION_SAVE;
+        else if(playerCommand.substr(0,REPLACE_COMMAND_LENGTH)
+                             .compare("replace ") == 0)
+                                                        option = OPTION_REPLACE;
+        else if(playerCommand.substr(0,PLACE_COMMAND_LENGTH)
+                             .compare("place ") == 0
+                && playerCommand.substr
+                   (PLACE_AT_COMMAND_START_LENGTH, PLACE_AT_COMMAND_END_LENGTH)
+                             .compare(" at ") == 0)
+                                                        option = OPTION_PLACE;
         //if ^D then it exits the turn and the game
         else if(std::cin.eof()) {
           endGame = true;
           validated = true;
+        }
+        else if(playerCommand.substr(0,HELP_COMMAND_LENGTH).compare("help") == 0) {
+            std::cout << "Commands" << std::endl;
+            std::cout << "=========" << std::endl;
+
+            std::cout << "To place tile from hand to location on board, type:"
+                << std::endl;
+            std::cout << "place <tile code> at <location code>" << std::endl;
+            std::cout << "\teg. place R1 at B2" << std::endl << std::endl;
+
+            std::cout << "To replace a tile in hand with new one, type: "
+                << std::endl;
+            std::cout << "replace <tile code>" << std::endl;
+            std::cout << "\teg. replace Y3" << std::endl << std::endl;
+
+            std::cout << "To save the current game, type: " << std::endl;
+            std::cout << "save <name of file>" << std::endl;
+            std::cout << "\teg. save examplefile" << std::endl;
         }
         else std::cout << "Error - Invalid option" << std::endl;
 
@@ -179,7 +227,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     // row player asked for
     char row = coordinate.at(0);
     int destinationRow = 0;
-    //check for 
+    //check for
     if (row >= 'A' && row <= 'Z') destinationRow = row - 65;
     else {
       std::cout << "Error - Invalid row coordinate" << std::endl;
@@ -203,8 +251,9 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     int comparatorColumn = destinationColumn;
     Tile* currentTile = nullptr;
     Tile* comparatorTile = nullptr;
-    // bool values used for checks and rule variables -> -1 is colour, 1 is shape
-    bool emptyNorth = false, emptySouth = false, emptyEast = false, emptyWest = false;
+    //bool values used for checks and rule variables -> -1 is colour, 1 is shape
+    bool emptyNorth = false, emptySouth = false,
+         emptyEast = false, emptyWest = false;
     int ruleNorth = 0, ruleSouth = 0, ruleEast = 0, ruleWest = 0;
     // required colour and/or shape
     char reqColour = tile.getValue().at(0);
@@ -216,17 +265,23 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
       std::cout << "Error - Tile not found" << std::endl;
       isValid = false;
     }
-    // check coordinate exists - needs to be changed for dynamic boards in future
-    if(destinationRow < 0 || destinationRow > rowLength || destinationColumn < 0 || destinationColumn > colLength) isValid = false;
+    //check coordinate exists - needs to be changed for dynamic boards in future
+    if(destinationRow < 0 || destinationRow > rowLength
+    || destinationColumn < 0 || destinationColumn > colLength) isValid = false;
     // check coordinate is not currently occupied
     if(board[destinationRow][destinationColumn]!= NULL) isValid = false;
     // check tile is placed adjacent to an existing tile after turn 1
     // assuming turn denotes turns passed
-    emptyNorth = (destinationRow <= 0 || board[destinationRow-1][destinationColumn] == NULL) ? true : false;
-    emptySouth = (destinationRow >= rowLength-1 || board[destinationRow+1][destinationColumn] == NULL) ? true : false;
-    emptyEast = (destinationColumn >= colLength-1 || board[destinationRow][destinationColumn+1] == NULL) ? true : false;
-    emptyWest = (destinationColumn <= 0 || board[destinationRow][destinationColumn-1] == NULL) ? true : false;
-    if(turn >= 1 && emptyNorth && emptySouth && emptyEast && emptyWest){
+    emptyNorth = (destinationRow <= 0
+      || board[destinationRow-1][destinationColumn] == NULL) ? true : false;
+    emptySouth = (destinationRow >= rowLength-1
+      || board[destinationRow+1][destinationColumn] == NULL) ? true : false;
+    emptyEast = (destinationColumn >= colLength-1
+      || board[destinationRow][destinationColumn+1] == NULL) ? true : false;
+    emptyWest = (destinationColumn <= 0
+      || board[destinationRow][destinationColumn-1] == NULL) ? true : false;
+    if(isValid == true && turn >= 1
+       && emptyNorth && emptySouth && emptyEast && emptyWest){
       isValid = false;
       std::cout << "Error - No surrounding tiles" << std::endl;
     }
@@ -239,14 +294,20 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(1) == reqShape)  ruleNorth++;
         if(ruleNorth == 0) isValid = false;
         rowScore++;
-        while((currentRow-1) >= 0 && board[currentRow-1][destinationColumn] != NULL) {
+        while((currentRow-1) >= 0
+        && board[currentRow-1][destinationColumn] != NULL) {
             currentTile = board[currentRow-1][destinationColumn];
-            if(ruleNorth == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
-            if(ruleNorth == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
+            if(tile.getValue().compare(currentTile->getValue()) == 0)
+              isValid = false;
+            if(ruleNorth == 1 && currentTile->getValue().at(1) != reqShape)
+              isValid = false;
+            if(ruleNorth == -1 && currentTile->getValue().at(0) != reqColour)
+              isValid = false;
             else rowScore++;
             currentRow--;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false)
+          std::cout << "Error - Invalid tile placement" << std::endl;
     }
 
     // check south
@@ -257,14 +318,20 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(1) == reqShape)  ruleSouth++;
         if(ruleSouth == 0) isValid = false;
         rowScore++;;
-        while((currentRow+1) <= rowLength && board[currentRow+1][destinationColumn] != NULL) {
+        while((currentRow+1) <= rowLength
+        && board[currentRow+1][destinationColumn] != NULL) {
             currentTile = board[currentRow+1][destinationColumn];
-            if(ruleSouth == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
-            if(ruleSouth == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
+            if(tile.getValue().compare(currentTile->getValue()) == 0)
+              isValid = false;
+            if(ruleSouth == 1 && currentTile->getValue().at(1) != reqShape)
+              isValid = false;
+            if(ruleSouth == -1 && currentTile->getValue().at(0) != reqColour)
+              isValid = false;
             else rowScore++;
             currentRow++;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false)
+          std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
     if(!emptyNorth && !emptySouth && isValid == true) {
@@ -276,13 +343,15 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
             comparatorTile = board[comparatorRow-1][destinationColumn];
             while(currentTile != NULL && (currentRow+1) <= (BOARD_LENGTH-1)) {
                 currentTile = board[currentRow+1][destinationColumn];
-                if(comparatorTile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+                if(comparatorTile->getValue()
+                .compare(currentTile->getValue()) == 0) isValid = false;
                 currentRow++;
             }
             comparatorRow--;
         }
     }
-    if (isValid == true && rowScore == 6) std::cout << std::endl << "QWIRKLE!!!" << std::endl;
+    if (isValid == true && rowScore == 6)
+      std::cout << std::endl << "QWIRKLE!!!" << std::endl;
 
     // check east
     if(!emptyEast && isValid == true) {
@@ -292,14 +361,20 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(1) == reqShape)  ruleEast++;
         if(ruleEast == 0) isValid = false;
         colScore++;
-        while((currentColumn+1) <= colLength && board[destinationRow][currentColumn+1] != NULL) {
+        while((currentColumn+1) <= colLength
+        && board[destinationRow][currentColumn+1] != NULL) {
             currentTile = board[destinationRow][currentColumn+1];
-            if(ruleEast == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
-            if(ruleEast == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
+            if(tile.getValue().compare(currentTile->getValue()) == 0)
+              isValid = false;
+            if(ruleEast == 1 && currentTile->getValue().at(1) != reqShape)
+              isValid = false;
+            if(ruleEast == -1 && currentTile->getValue().at(0) != reqColour)
+              isValid = false;
             else colScore++;
             currentColumn++;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false)
+          std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // check west
     if(!emptyWest && isValid == true) {
@@ -309,14 +384,20 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         if(currentTile->getValue().at(1) == reqShape)  ruleWest++;
         if(ruleWest == 0) isValid = false;
         colScore++;
-        while((currentColumn-1) >= 0 && board[destinationRow][currentColumn-1] != NULL) {
+        while((currentColumn-1) >= 0
+        && board[destinationRow][currentColumn-1] != NULL) {
             currentTile = board[destinationRow][currentColumn-1];
-            if(ruleWest == 1 && currentTile->getValue().at(1) != reqShape) isValid = false;
-            if(ruleWest == -1 && currentTile->getValue().at(0) != reqColour) isValid = false;
+            if(tile.getValue().compare(currentTile->getValue()) == 0)
+              isValid = false;
+            if(ruleWest == 1 && currentTile->getValue().at(1) != reqShape)
+              isValid = false;
+            if(ruleWest == -1 && currentTile->getValue().at(0) != reqColour)
+              isValid = false;
             else colScore++;
             currentColumn--;
         }
-        std::cout << "Error - Invalid tile placement" << std::endl;
+        if (isValid == false)
+          std::cout << "Error - Invalid tile placement" << std::endl;
     }
     // if both exist, determine if the same rule
     if(!emptyEast && !emptyWest && isValid == true) {
@@ -324,25 +405,30 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
         comparatorColumn = destinationColumn;
         if(ruleEast != ruleWest) isValid = false;
         // determine if any tiles in east exist in west
-        while(comparatorTile != NULL && (comparatorColumn+1) <= (BOARD_LENGTH-1)) {
+        while(comparatorTile != NULL
+          && (comparatorColumn+1) <= (BOARD_LENGTH-1)) {
             comparatorTile = board[destinationRow][comparatorColumn+1];
             while(currentTile != NULL && (currentColumn-1) >= 0 ) {
                 currentTile = board[destinationRow][currentColumn-1];
-                if(comparatorTile->getValue().compare(currentTile->getValue()) == 0) isValid = false;
+                if(comparatorTile->getValue()
+                .compare(currentTile->getValue()) == 0) isValid = false;
                 currentColumn--;
             }
             comparatorColumn++;
         }
     }
-    if (isValid == true && colScore == 6) std::cout << std::endl << "QWIRKLE!!!" << std::endl;
+    if (isValid == true && colScore == 6)
+      std::cout << std::endl << "QWIRKLE!!!" << std::endl;
 
+    //if isValid continue to place the tile and draw
     if(isValid){
-      board[destinationRow][destinationColumn] = playerList[currentPlayer]->getTilePtr(tile);
+      //place tile and update board
+      board[destinationRow][destinationColumn] =
+      playerList[currentPlayer]->getTilePtr(tile);
       updateDynamicBoard(destinationRow, destinationColumn);
+      //remove tile from hand and draw new tile
       playerList[currentPlayer]->addScore(colScore+rowScore);
-      // std::cout << playerList[currentPlayer]->handToString() << std::endl;
       Tile* tileToAdd = tileBag.get(0);
-            // std::cout << playerList[currentPlayer]->handToString() << std::endl;
       playerList[currentPlayer]->addTile(tileToAdd);
       tileBag.deleteTile(*tileToAdd);
       playerList[currentPlayer]->removeTile(tile);
@@ -351,6 +437,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     return isValid;
 }
 
+//saves the current game into a savefile
 void GameEngine::saveGame(std::string fileName){
   std::ofstream outFile ("../src/"+fileName);
 
@@ -390,10 +477,6 @@ bool GameEngine::replaceTile(Tile tile) {
     else std::cout << "Error - Tile Not Found" << std::endl;
 
     return successful;
-}
-
-void GameEngine::drawTile() {
-
 }
 
 void GameEngine::endTurn() {
@@ -463,6 +546,7 @@ std::string GameEngine::printBoard() {
     return boardStr;
 }
 
+//takes the state of the curent board and turns it into a simple string
 String GameEngine::boardToString() {
     String stringBoard;
     String tile;
@@ -488,7 +572,7 @@ void GameEngine::dealTiles(){
 
   for (Colour colour : tileColours){
     for (Shape shape : tileShapes){
-      int copies = 1;
+      int copies = COPY_OF_TILES;
       for (int i = 0; i < copies; i++){
         Tile* tile = new Tile(colour, shape);
         tileBag.addFront(tile);
