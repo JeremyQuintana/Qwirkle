@@ -10,6 +10,8 @@
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 4
 
+typedef std::string String;
+
 void newGame();
 void loadGame();
 void showStudentInformation();
@@ -107,12 +109,11 @@ void loadGame(){
   << "> ";
 
   //gets filename from input
-  std::string fileName = "";
-  std::cin >> fileName;
+  String input;
+  std::cin >> input;
 
   //attempts to open file
-  std::ifstream inFile;
-  inFile.open(fileName);
+  std::ifstream inFile("../src/"+input);
 
   //reads from file if it can and stores it line by line, in lines array
   std::string lines[500];
@@ -124,80 +125,54 @@ void loadGame(){
       std::getline(inFile, lines[lineNumber]);
       lineNumber++;
     }
+      int currentLine = 0;
+      int playerNum= std::stoi(lines[currentLine]);
+      currentLine++;
+      int initRowLength= std::stoi(lines[currentLine]);
+      currentLine++;
+      int initColLength= std::stoi(lines[currentLine]);
+      currentLine++;
+
+      // check all player deets
+      std::string line;
+      String tempName;
+      String tempScore;
+      String tempHand;
+      String playerNames[playerNum];
+      int playerScores[playerNum];
+      String playerHands[playerNum];
+
+      for(int i=0;i<playerNum;i++){
+          tempName= lines[currentLine];
+          currentLine++;
+          tempScore= lines[currentLine];
+          currentLine++;
+          tempHand = lines[currentLine];
+
+          playerNames[i]= tempName;
+          playerScores[i]= std::stoi(tempScore);
+          playerHands[i]= tempHand;
+          currentLine++;
+      }
+
+      String board[initRowLength];
+
+      //check board
+      for(int i=0;i<initRowLength;i++){
+          line = lines[currentLine];
+          board[i]= line;
+          currentLine++;
+      }
+      currentLine++;
+      //check bag
+      String bag= lines[currentLine];
+      currentLine++;
+      String turnString = lines[currentLine];
+      int turn= std::stoi(turnString);
+      new GameEngine(playerNum, initRowLength, initColLength, playerNames,
+                         playerScores, playerHands, board, bag, turn);
+      }
   }
-
-  // check all player deets
-  int currentLine = 0;
-  std::string line = lines[currentLine];
-  bool validate = true;
-  bool playersRead = false;
-  while (playersRead == false){
-    if (checkStringCharBetween(line, 'A', 'Z') == false)
-      validate = false;
-    currentLine++;
-    line = lines[currentLine];
-
-    if (checkStringCharBetween(line, '1', '9') == false)
-      validate = false;
-    currentLine++;
-    line = lines[currentLine];
-
-    bool handRead = false;
-    int handLength = line.length();
-    int c = 0;
-    while (handRead == false){
-      std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false) validate = false;
-      c += 2;
-      if (c >= handLength) handRead = true;
-      c++;
-    }
-    currentLine++;
-    line = lines[currentLine];
-
-    if (line.at(0) == ' ') playersRead = true;
-  }
-
-  //check board
-  currentLine += 2;
-  line = lines[currentLine];
-  bool boardRead = false;
-  while (boardRead == false){
-    bool rowRead = false;
-    int c = 3;
-    int rowLength = line.length();
-    while (rowRead == false && c < rowLength){
-      std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false && tile != "  ") validate = false;
-      c += 3;
-      if (c >= rowLength) rowRead = true;
-    }
-
-    currentLine++;
-    line = lines[currentLine];
-    if (line.at(1) != ' ') boardRead = true;
-  }
-
-  //check bag
-  bool bagRead = false;
-  int c = 0;
-  int bagLength = line.length();
-  while (bagRead == false){
-    std::string tile = line.substr(c, 2);
-    if (checkValidTile(tile) == false) validate = false;
-    c += 2;
-    if (c >= bagLength) bagRead = true;
-    c++;
-  }
-  currentLine++;
-  line = lines[currentLine];
-
-  if (checkStringCharBetween(line, 'A', 'Z') == false)
-    validate = false;
-  //check all pieces in hand and bag is correct amount
-  std::cout << validate << std::endl;
-  std::cout << std::endl;
-}
 
 //shows student student information for team
 void showStudentInformation(){
@@ -294,39 +269,4 @@ bool checkStringCharBetween(std::string str, char min, char max){
     if (str.at(i) < min || str.at(i) > max) validate = false;
   }
   return validate;
-}
-
-//function to check if the string given is a valid tile
-bool checkValidTile(std::string tile){
-  bool validColour = false;
-  bool validShape = false;
-  //checks if the length is correct
-  if (tile.length() == 2){
-    char colour = tile.at(0);
-    int shape = tile.at(1) - '0';
-    //checks if one of the valid colours
-    if (
-      colour == RED     ||
-      colour == ORANGE  ||
-      colour == YELLOW  ||
-      colour == GREEN   ||
-      colour == BLUE    ||
-      colour == PURPLE
-    ) validColour = true;
-    //checks if one of the valid shapes
-    if (
-      shape == CIRCLE   ||
-      shape == STAR_4   ||
-      shape == DIAMOND  ||
-      shape == SQUARE   ||
-      shape == STAR_6   ||
-      shape == CLOVER
-    ) validShape = true;
-  }
-
-  //if both colour and shape is valid it is a valid tile
-  bool valid = false;
-  if (validColour == true && validShape == true) valid = true;
-
-  return valid;
 }
