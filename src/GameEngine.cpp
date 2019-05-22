@@ -6,6 +6,8 @@
 
 #define BOARD_LENGTH boardLength
 #define DEFAULT_BOARD_LENGTH 3
+#define TILE_FORMAT_DISTANCE 3
+#define TILE_STRING_LENGTH 2
 #define COPY_OF_TILES 2
 #define SAVE_COMMAND_LENGTH 5
 #define REPLACE_COMMAND_LENGTH 8
@@ -50,13 +52,13 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
     //loops through the players array and generate new players
     for (int i = 0; i < totalPlayers; i++) {
         //the total number of cards, after taking into account the formatting of each string line in the savefile
-        String hands[(playerHands[i].length()+1)/3];
+        String hands[(playerHands[i].length()+1)/TILE_FORMAT_DISTANCE];
         int index= 0;
         playerList[i] = new Player(playerNames[i], new LinkedList);
         playerList[i]->addScore(playerScores[i]);
         //processes each tile in the string and puts into the hand array
-        for(unsigned int j=0;j<playerHands[i].length();j+=3){
-            hands[index]= playerHands[i].substr(j,2);
+        for(unsigned int j=0;j<playerHands[i].length();j+=TILE_FORMAT_DISTANCE){
+            hands[index]= playerHands[i].substr(j,TILE_STRING_LENGTH);
             index++;
         }
         //adds each hand in the hand array as Tiles into each player
@@ -66,11 +68,11 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
     }
 
     //the total number of tiles in the bag after taking into account the string formatting in the savefile
-    String bags[(bag.length()+1)/3];
+    String bags[(bag.length()+1)/TILE_FORMAT_DISTANCE];
     int index= 0;
     //processes each tile in the string and put them inside the bag array
-    for(unsigned int i=0;i<bag.length();i+=3){
-        bags[index]= bag.substr(i,2);
+    for(unsigned int i=0;i<bag.length();i+=TILE_FORMAT_DISTANCE){
+        bags[index]= bag.substr(i,TILE_STRING_LENGTH);
         index++;
     }
     //adds each tile into the bag linkedlist as a new tile
@@ -84,8 +86,8 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
     for(int i=0;i<rowLength;i++){
         String row[colLength];
         index= 0;
-        for(unsigned int j=0;j<board[i].length();j+=3){
-            row[index]= board[i].substr(j,2);
+        for(unsigned int j=0;j<board[i].length();j+=TILE_FORMAT_DISTANCE){
+            row[index]= board[i].substr(j,TILE_STRING_LENGTH);
             index++;
         }
         for(int k=0;k<colLength;k++){
