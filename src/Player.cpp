@@ -43,5 +43,4 @@ std::string Player::getName(){
 }
 
 Player::~Player(){
-  delete hand;
 }
