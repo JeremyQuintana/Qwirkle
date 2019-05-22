@@ -9,6 +9,13 @@
 
 #define EXIT_SUCCESS      0
 #define NUMBER_OF_PLAYERS 4
+#define STRING_LENGTH 500
+#define NEWGAME_OPTION 1
+#define LOADGAME_OPTION 2
+#define SHOWINFO_OPTION 3
+#define QUIT_OPTION 4
+#define MIN_PLAYER_NUM '2'
+#define MAX_PLAYER_NUM '4'
 
 void newGame();
 void loadGame();
@@ -25,12 +32,20 @@ int main(void) {
   << "-------------------"           << std::endl;
   int option = 0;
 
-  while (option != 4){
+  while (option != QUIT_OPTION){
     option = menuOptions();
 
-    if (option == 1) newGame();
-    if (option == 2) loadGame();
-    if (option == 3) showStudentInformation();
+    if (option == NEWGAME_OPTION) {
+      newGame();
+      std::cout << std::endl;
+      option = QUIT_OPTION;
+    }
+    if (option == LOADGAME_OPTION) {
+      loadGame();
+      std::cout << std::endl;
+      option = QUIT_OPTION;
+    }
+    if (option == SHOWINFO_OPTION) showStudentInformation();
   }
 
   std::cout << "Goodbye" << std::endl;
@@ -44,33 +59,52 @@ void newGame(){
 
   bool validate = false;
   int amountOfPlayers = 0;
+  bool endGame = false;
+
+  //takes input of how many players and loops until valid or ^D
   while (validate == false){
     std::cout << std::endl
     << "Enter amount of players:" << std::endl
     << "> ";
     std::string input = "";
     std::cin >> input;
-
-    if (checkStringCharBetween(input, '2', '4') == true
-        && input.length() == 1) {
-          validate = true;
-          amountOfPlayers = input.at(0) - '0';
+    //if input is eof then it exits
+    if (std::cin.eof()){
+      endGame = true;
+      validate = true;
     }
-    else std::cout << "Error - Amount must be between 1 and 5" << std::endl;
+    else{
+      //checks that the input is between 2 and 4
+      if (checkStringCharBetween(input, MIN_PLAYER_NUM, MAX_PLAYER_NUM) == true
+          && input.length() == 1) {
+            validate = true;
+            amountOfPlayers = input.at(0) - '0';
+      }
+      else std::cout << "Error - Amount must be between 2 to 4" << std::endl;
+    }
   }
 
   //array for all player names
-  std::string playerList[amountOfPlayers];
+  std::string playerList[NUMBER_OF_PLAYERS];
 
   //loop to prompt for players to however many players are playing
-  for (int i = 0; i < amountOfPlayers; i++){
-    playerList[i] = promptForPlayer(i+1);
+  for (int i = 0; i < NUMBER_OF_PLAYERS; i++){
+    playerList[i] = "";
+  }
+
+  //for each numper of players it prompts the user for a player name
+  for (int i = 0; i < amountOfPlayers && endGame == false; i++){
+    std::string player = promptForPlayer(i+1);
+    if (std::cin.eof()) endGame = true;
+    else playerList[i] = player;
   }
 
   //TODO implement the creation of the game using the array of players
+  if (endGame == false){
+    std::cout << std::endl;
+    GameEngine(playerList, amountOfPlayers);
 
-  std::cout << std::endl;
-  new GameEngine(playerList, amountOfPlayers);
+  }
 }
 
 //loads game from a given file name
@@ -80,97 +114,76 @@ void loadGame(){
   << "> ";
 
   //gets filename from input
-  std::string fileName = "";
-  std::cin >> fileName;
+  String input;
+  std::cin >> input;
 
   //attempts to open file
-  std::ifstream inFile;
-  inFile.open(fileName);
+  std::ifstream inFile("../src/"+input);
 
-  //reads from file if it can and stores it line by line, in lines array
-  std::string lines[500];
+
+  std::string lines[STRING_LENGTH];
   int lineNumber = 0;
+  //if the file doesn't exist
   if(!inFile){
     std::cout << "Error - Can not open or find file" << std::endl;
   } else{
-    while (!inFile.eof()){
+      //reads from file if it can and stores it line by line, in lines array
+      while (!inFile.eof()){
       std::getline(inFile, lines[lineNumber]);
       lineNumber++;
     }
+      int currentLine = 0;
+      int playerNum= std::stoi(lines[currentLine]);
+      currentLine++;
+      int initRowLength= std::stoi(lines[currentLine]);
+      currentLine++;
+      int initColLength= std::stoi(lines[currentLine]);
+      currentLine++;
+
+
+      std::string line;
+      String tempName;
+      String tempScore;
+      String tempHand;
+      String playerNames[playerNum];
+      int playerScores[playerNum];
+      String playerHands[playerNum];
+
+      // check all player deets
+      for(int i=0;i<playerNum;i++){
+          tempName= lines[currentLine];
+          currentLine++;
+          tempScore= lines[currentLine];
+          currentLine++;
+          tempHand = lines[currentLine];
+
+          playerNames[i]= tempName;
+          playerScores[i]= std::stoi(tempScore);
+          playerHands[i]= tempHand;
+          currentLine++;
+      }
+
+      String board[initRowLength];
+
+      //loads board into a string array
+      for(int i=0;i<initRowLength;i++){
+          line = lines[currentLine];
+          board[i]= line;
+          currentLine++;
+      }
+      //gets over an empty line
+      currentLine++;
+
+      //check bag
+      String bag= lines[currentLine];
+      currentLine++;
+      String turnString = lines[currentLine];
+      int turn= std::stoi(turnString);
+      //creates a new game using the existing data
+      new GameEngine(playerNum, initRowLength, initColLength, playerNames,
+                         playerScores, playerHands, board, bag, turn);
+      }
   }
-
-  // check all player deets
-  int currentLine = 0;
-  std::string line = lines[currentLine];
-  bool validate = true;
-  bool playersRead = false;
-  while (playersRead == false){
-    if (checkStringCharBetween(line, 'A', 'Z') == false)
-      validate = false;
-    currentLine++;
-    line = lines[currentLine];
-
-    if (checkStringCharBetween(line, '1', '9') == false)
-      validate = false;
-    currentLine++;
-    line = lines[currentLine];
-
-    bool handRead = false;
-    int handLength = line.length();
-    int c = 0;
-    while (handRead == false){
-      std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false) validate = false;
-      c += 2;
-      if (c >= handLength) handRead = true;
-      c++;
-    }
-    currentLine++;
-    line = lines[currentLine];
-
-    if (line.at(0) == ' ') playersRead = true;
-  }
-
-  //check board
-  currentLine += 2;
-  line = lines[currentLine];
-  bool boardRead = false;
-  while (boardRead == false){
-    bool rowRead = false;
-    int c = 3;
-    int rowLength = line.length();
-    while (rowRead == false && c < rowLength){
-      std::string tile = line.substr(c, 2);
-      if (checkValidTile(tile) == false && tile != "  ") validate = false;
-      c += 3;
-      if (c >= rowLength) rowRead = true;
-    }
-
-    currentLine++;
-    line = lines[currentLine];
-    if (line.at(1) != ' ') boardRead = true;
-  }
-
-  //check bag
-  bool bagRead = false;
-  int c = 0;
-  int bagLength = line.length();
-  while (bagRead == false){
-    std::string tile = line.substr(c, 2);
-    if (checkValidTile(tile) == false) validate = false;
-    c += 2;
-    if (c >= bagLength) bagRead = true;
-    c++;
-  }
-  currentLine++;
-  line = lines[currentLine];
-
-  if (checkStringCharBetween(line, 'A', 'Z') == false)
-    validate = false;
-  //check all pieces in hand and bag is correct amount
-  std::cout << validate << std::endl;
-  std::cout << std::endl;
-}
 
 //shows student student information for team
 void showStudentInformation(){
@@ -210,9 +223,15 @@ int menuOptions(){
   //validate input from user
   int option = 0;
   bool validated = false;
+  //loop until the input is correct
   while (validated == false){
-    std::cin >> option;
-    if (option == 1 || option == 2 || option == 3 || option == 4)
+    std::string input = "";
+    std::cin >> input;
+    //if input is ^D then it exits else is becomes an int
+    if (std::cin.eof()) option = QUIT_OPTION;
+    else option = input.at(0) - '0';
+    //if it is one of the options then it is valid
+    if (option == NEWGAME_OPTION || option == LOADGAME_OPTION || option == SHOWINFO_OPTION || option == QUIT_OPTION)
       validated = true;
     else std::cout << "Error - Invalid option" << std::endl << "> ";
     std::cin.clear();
@@ -236,51 +255,29 @@ std::string promptForPlayer(int playerNumber){
   while (validate == false){
     std::cin >> player;
 
-    //check input is all upper case letters
-    validate = checkStringCharBetween(player, 'A', 'Z');
+    if (!std::cin.eof()){
+      //check input is all upper case letters
+      validate = checkStringCharBetween(player, 'A', 'Z');
 
-    //prints error message if incorrect
-    if (validate == false)
-      std::cout << "Invalid input" << std::endl << "> ";
+      //prints error message if incorrect
+      if (validate == false)
+        std::cout << "Error - Must be uppercase characters" << std::endl << "> ";
+    }
+    else{
+      validate = true;
+    }
   }
 
   return player;
 }
 
+//checks a given string that each character is between a min and max chars
 bool checkStringCharBetween(std::string str, char min, char max){
   bool validate = true;
+  //for loop to iterate through each character in the string
   for (int i = 0; str[i] != '\0'; i++){
+    //if the character is not within the range it becomes invalid
     if (str.at(i) < min || str.at(i) > max) validate = false;
   }
   return validate;
-}
-
-bool checkValidTile(std::string tile){
-  bool validColour = false;
-  bool validShape = false;
-  if (tile.length() == 2){
-    char colour = tile.at(0);
-    int shape = tile.at(1) - '0';
-    if (
-      colour == RED     ||
-      colour == ORANGE  ||
-      colour == YELLOW  ||
-      colour == GREEN   ||
-      colour == BLUE    ||
-      colour == PURPLE
-    ) validColour = true;
-    if (
-      shape == CIRCLE   ||
-      shape == STAR_4   ||
-      shape == DIAMOND  ||
-      shape == SQUARE   ||
-      shape == STAR_6   ||
-      shape == CLOVER
-    ) validShape = true;
-  }
-
-  bool valid = false;
-  if (validColour == true && validShape == true) valid = true;
-
-  return valid;
 }

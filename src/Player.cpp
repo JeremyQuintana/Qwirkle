@@ -25,6 +25,7 @@ Tile* Player::getTilePtr(Tile tileToUse){
 void Player::addTile(Tile* tileToAdd){
   hand->addBack(tileToAdd);
 }
+
 void Player::removeTile(Tile tileToRemove){
   hand->deleteTile(tileToRemove);
 }
@@ -39,4 +40,8 @@ int Player::getScore(){
 
 std::string Player::getName(){
   return name;
+}
+
+Player::~Player(){
+  delete hand;
 }

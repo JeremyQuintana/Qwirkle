@@ -3,6 +3,7 @@
 #define ASSIGN2_LINKEDLIST_H
 
 #include "Node.h"
+#include <random>
 
 class LinkedList {
 public:
@@ -22,6 +23,7 @@ public:
    void deleteTile(Tile data); //Delete a specific tile
 
    bool inList(Tile data); //Check if tile is in list
+   void shuffle();
    std::string listToString();
 
 private:

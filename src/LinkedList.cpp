@@ -43,7 +43,7 @@ Tile* LinkedList::get(int i)
     // Tile result; //In case value is invalid returns 0 for both components
     // result.colour = 0;
     // result.shape = 0;
-    if (i < this->count)
+    if (i < count)
     {
         while (listCount < i) //Indexing starts at 0
         {
@@ -81,24 +81,17 @@ void LinkedList::addFront(Tile* data)
 
 void LinkedList::addBack(Tile* data)
 {
-    Node* temp = new Node(data, nullptr);
+  Node* temp = new Node(data, nullptr);
 
-    if (tail == nullptr)
-    {
-        tail = temp;
-    }
-    else
-    {
-        tail->next = temp;
-        tail = temp;
-    }
+  if (count == 0){
+    head = temp;
+    tail = temp;
+  } else {
+    tail->next = temp;
+    tail = temp;
+  }
 
-    if (head == nullptr)
-    {
-        head = tail;
-    }
-
-    count++; //Update size counter
+  count++; //Update size counter
 }
 
 void LinkedList::deleteFront()
@@ -137,27 +130,20 @@ void LinkedList::deleteTile(Tile data) //Doesn't check if Tile is in list
 {
     Node* temp = head;
     Node* prev = nullptr; //Keeps track of last node
+    bool deleted = false;
 
-    while (temp != nullptr)
+    while (temp != nullptr && deleted == false)
     {
-        if ((temp->tile->colour == data.colour) && (temp->tile->shape == data.shape))
-        {
-            if (temp == head)
-            {
-                head = temp->next;
-                delete temp;
-            }
-            else
-            {
-                prev->next = temp->next;
-                delete temp;
-            }
-            count--;
-            return;
+        if (((temp->tile)->colour == data.colour) && ((temp->tile)->shape == data.shape)){
+          if (temp == head) head = head->next;
+          else prev->next = temp->next;
+          deleted = true;
+          delete temp;
+          count--;
+        } else {
+          prev = temp;
+          temp = temp->next;
         }
-
-        prev = temp;
-        temp = temp->next;
     }
 }
 
@@ -179,12 +165,70 @@ bool LinkedList::inList(Tile data) //Returns true if tile is in list
     return result;
 }
 
+//Shuffles contents of list
+void LinkedList::shuffle()
+{
+    int tempCounter = count;
+    int listCount = 0; // Just for iterating through list
+    int tempIndex;
+
+    Node* temp;
+    Node* prev;
+
+    std::random_device engine;
+
+    while (tempCounter > 0)
+    {
+        listCount = 0; // Reset variable
+        temp = head;
+        prev = head;
+
+        std::uniform_int_distribution<int> uniform_int(0, tempCounter);
+
+        tempIndex = uniform_int(engine);
+        // Finds the generated index
+        while (listCount < tempIndex-1) //Indexing starts at 0
+        {
+            prev = temp;
+            temp = temp->next;
+
+            listCount++;
+        }
+
+        if (temp == tail)
+        {
+            // No operations need to be done
+        }
+        else if (temp == head)
+        {
+            head = temp->next;
+            tail->next = temp;
+            temp->next = nullptr;
+
+            tail = temp;
+        }
+        else
+        {
+            tail->next = temp;
+            prev->next = temp->next;
+            temp->next = nullptr;
+
+            tail = temp;
+        }
+
+        tempCounter--;
+    }
+}
+
 std::string LinkedList::listToString(){
-  std::string listStr = "";
-  for (int i = 0; i < size(); i++){
-    Tile tile = *(get(i));
-    if (listStr != "") listStr.append(",");
-    listStr.append(tile.getValue());
+  Node* temp = head;
+  std::string listStr = (temp->tile)->getValue();
+  // std::cout << "hi" << std::endl;
+  for (int i = 0; i < (this->count)-1; i++){
+    temp = temp->next;
+    listStr.append(",");
+    listStr.append((temp->tile)->getValue());
   }
+  // std::cout << "bye" << std::endl;
   return listStr;
 }

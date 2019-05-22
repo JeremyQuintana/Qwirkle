@@ -22,6 +22,8 @@ class GameEngine {
 public:
 
     GameEngine(std::string playerList[], int totalPlayers);
+    GameEngine(int totalPlayers, int rowLength, int colLength, String playerNames[],
+            int playerScores[], String playerHands[], String board[], String bag, int turn);
     ~GameEngine();
 
 private:
@@ -40,7 +42,7 @@ private:
     void startGame();
     void assembleBoard();
     void assembleDynamicBoard();
-    void takeTurn();
+    bool takeTurn();
     bool placeTile(Tile tile, std::string coordinate);
     bool replaceTile(Tile tile);
     void drawTile();
@@ -49,6 +51,8 @@ private:
     void dealTiles();
     void saveGame(std::string fileName);
     void updateDynamicBoard(int, int);
+    String boardToString();
+    void stringToBoard();
 };
 
 #endif //SRC_GAMEENGINE_H

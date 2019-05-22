@@ -9,6 +9,13 @@ Tile::Tile(Colour colour, Shape shape){
     this->shape= shape;
 }
 
+Tile::Tile(std::string attribute){
+    std::string colour= attribute.substr(0,1);
+    std::string shape= attribute.substr(1,1);
+    this->colour= colour[0];
+    this->shape= std::stoi(shape);
+}
+
 String Tile::getValue() {
     return colour + std::to_string(shape);
 }
