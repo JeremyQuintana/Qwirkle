@@ -10,7 +10,8 @@
 #define SAVE_COMMAND_LENGTH 5
 #define REPLACE_COMMAND_LENGTH 8
 #define PLACE_COMMAND_LENGTH 6
-#define PLACE_AT_COMMAND_LENGTH 4
+#define PLACE_AT_COMMAND_START_LENGTH 4
+#define PLACE_AT_COMMAND_END_LENGTH 4
 #define OPTION_SAVE 3
 #define OPTION_REPLACE 2
 #define OPTION_PLACE 1
@@ -165,7 +166,7 @@ bool GameEngine::takeTurn() {
         if(playerCommand.substr(0,SAVE_COMMAND_LENGTH).compare("save ") == 0)          option = 3;
         else if(playerCommand.substr(0,REPLACE_COMMAND_LENGTH).compare("replace ") == 0)  option = 2;
         else if(playerCommand.substr(0,PLACE_COMMAND_LENGTH).compare("place ") == 0
-                && playerCommand.substr(PLACE_COMMAND_LENGTH,PLACE_AT_COMMAND_LENGTH).compare(" at ") == 0)   option = 1;
+                && playerCommand.substr(PLACE_AT_COMMAND_START_LENGTH,PLACE_AT_COMMAND_END_LENGTH).compare(" at ") == 0)   option = 1;
         //if ^D then it exits the turn and the game
         else if(std::cin.eof()) {
           endGame = true;
