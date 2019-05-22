@@ -660,7 +660,7 @@ GameEngine::~GameEngine(){
       if(dynamicBoard[i]!=nullptr) {
           for(int j=0; j<colLength;j++){
               if(dynamicBoard[i][j]!= nullptr) {
-                  delete[] dynamicBoard[i][j];
+                  delete dynamicBoard[i][j];
               }
           }
           delete[] dynamicBoard[i];
@@ -670,7 +670,7 @@ GameEngine::~GameEngine(){
       delete[] dynamicBoard;
   }
   for(int i=0;i<totalPlayers;i++){
-      delete[] playerList[i];
+      delete playerList[i];
   }
   delete[] playerList;
 }
