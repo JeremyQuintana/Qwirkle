@@ -1,0 +1,30 @@
+Welcome to Qwirkle!
+-------------------
+Menu
+----
+1. New Game
+2. Load Game
+3. Show Student Information
+4. Quit
+
+>
+Enter the filename from which to load the game
+>
+Game Loaded Successfully
+
+B, it's your turn
+Score for A: 5
+Score for B: 5
+   0  1  2  3
+A |  |  |  |  |
+B |  |B2|B1|  |
+C |  |O2|  |  |
+D |  |G2|Y2|  |
+E |  |  |  |  |
+
+Your hand is
+B5,B2,G4,Y2,P3,O6
+
+>Error - Tile not found
+>
+Goodbye

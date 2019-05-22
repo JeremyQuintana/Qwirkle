@@ -95,3 +95,19 @@ for(N and E)
             invalid
         if(any tile in current direction exists in opposite direction)
             invalid
+
+test cases
+1-1     Student Information
+1-2     Player name input
+1-3     Bad load
+2-1     vertical colour + shape
+2-2     horizontal colour + shape
+2-3     vertical and horizontal tile already exists
+2-4     placing invalid tile
+2-5     placing in invalid coordinate
+3-1     colour mismatch two direction
+3-2     shape mismatch two direction
+4-1     conjoin east-west bad rule
+4-2     conjoin north-south bad rule
+4-3     conjoin east-west duplicate
+4-4     conjoin north-south duplicate
