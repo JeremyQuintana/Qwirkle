@@ -45,14 +45,19 @@ Y |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  
 Z |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 
 
-place R1 at L12  - valid // satisfies vertical colour
-place R2 at L12  - invalid // can't double up in the same 6
-place B4 at J10  - invalid // can't double up in the same 6
-place G5 at I13  - valid // satisfies vertical and horizontal and rules maintained upon conjoining
-place G3 at I13  - invalid // satisfies vertical but not horizontal
-place Y5 at I13  - invalid // satisfies horizontal but not vertical
-place B1 at N15  - invalid // satisfies left and right, but upon conjoining, rule for the 6 is broken - colour/symbol
-place B5 at P19  - invalid // satisfies up and down, but upon conjoining, rule for the 6 is broken - repetition
+place R1 at L12  - valid // satisfies vertical colour   ~test2-1
+        other               satisfies vertical shape    ~test2-1
+        other               satisfies horizontal colour     ~test2-2
+        other               satisfies horizontal shape      ~test2-2
+place R2 at L12  - invalid // can't double up in the same 6 vertical    ~test2-3
+place B4 at J10  - invalid // can't double up in the same 6 horizontal  ~test2-3
+place G5 at I13  - valid // satisfies vertical and horizontal and rules maintained upon conjoining  ~test3series
+place G3 at I13  - invalid // satisfies vertical but not horizontal                                 ~test3series
+place Y5 at I13  - invalid // satisfies horizontal but not vertical                                 ~test3series
+place B1 at N15  - invalid // satisfies left and right, but upon conjoining, rule for the 6 is broken - colour/symbol       ~test4series
+                                                    horizontal and vertical                                                 ~test4series
+place B5 at P19  - invalid // satisfies up and down, but upon conjoining, rule for the 6 is broken - repetition             ~test4series
+                                                    horizontal and vertical                                                 ~test4series
 
 
 logic >>

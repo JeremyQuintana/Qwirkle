@@ -1,0 +1,35 @@
+Welcome to Qwirkle!
+-------------------
+Menu
+----
+1. New Game
+2. Load Game
+3. Show Student Information
+4. Quit
+
+>
+
+Enter the filename from which to load the game
+>
+
+Game Loaded Successfully
+
+A, it's your turn
+Score for A: 22
+Score for B: 28
+   0  1  2  3  4  5  6  7  8
+  ----------------------------
+A |  |  |  |  |  |  |  |  |  |
+B |  |G2|O2|Y2|R2|P2|  |G2|  |
+C |  |G3|  |  |  |  |  |R2|  |
+D |  |G1|P1|R1|B1|O1|  |B2|  |
+E |  |  |  |  |  |O3|O5|O2|  |
+F |  |  |  |  |  |  |  |  |  |
+
+Your hand is
+B5, G5, B2, Y2, P3, O4
+
+>
+Error - Invalid Input
+>
+Goodbye

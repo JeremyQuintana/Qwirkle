@@ -1,0 +1,50 @@
+Welcome to Qwirkle!
+-------------------
+Menu
+----
+1. New Game
+2. Load Game
+3. Show Student Information
+4. Quit
+
+>
+
+Enter the filename from which to load the game
+>
+
+Game Loaded Successfully
+
+A, it's your turn
+Score for A: 3
+Score for B: 5
+   0  1  2  3
+A |  |  |  |  |
+B |  |Y2|  |  |
+C |  |O2|  |  |
+D |  |G2|G3|  |
+E |  |  |  |  |
+
+Your hand is
+B5, G5, O3, Y2, P3, O4
+
+>
+Error - Invalid tile placement
+>
+Error - Invalid tile placement
+>
+
+B, it's your turn
+Score for A: 7
+Score for B: 5
+   0  1  2  3
+A |  |  |  |  |
+B |  |Y2|  |  |
+C |  |O2|O3|  |
+D |  |G2|G3|  |
+E |  |  |  |  |
+
+Your hand is
+P2, O2, G4, G5, Y1, O3
+
+>
+Goodbye
