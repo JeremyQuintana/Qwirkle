@@ -8,54 +8,49 @@ Menu
 4. Quit
 
 >
-
 Enter the filename from which to load the game
 >
-
 Game Loaded Successfully
 
 B, it's your turn
 Score for A: 5
 Score for B: 5
-   0  1  2  3
-A |  |  |  |  |
-B |  |B2|B1|  |
-C |  |O2|  |  |
-D |  |G2|Y2|  |
-E |  |  |  |  |
+   0  1  2  3  4
+A |  |  |  |  |  |
+B |  |B1|  |Y2|  |
+C |  |B2|O2|G2|  |
+D |  |  |  |  |  |
 
 Your hand is
-B5, B3, G4, Y2, P3, O6
+B5,B3,G4,Y2,P3,O6
 
 >
-
 A, it's your turn
 Score for A: 5
 Score for B: 8
    0  1  2  3  4
 A |  |  |  |  |  |
-B |  |B2|B1|B3|  |
-C |  |O2|  |  |  |
-D |  |G2|Y2|  |  |
+B |  |B1|  |Y2|  |
+C |  |B2|O2|G2|  |
+D |  |B3|  |  |  |
 E |  |  |  |  |  |
 
 Your hand is
-P2, O2, G4, G5, Y1, O3
+P2,O2,G4,G5,Y1,O3
 
 >
-
 B, it's your turn
 Score for A: 8
 Score for B: 8
    0  1  2  3  4
 A |  |  |  |  |  |
-B |  |B2|B1|B3|  |
-C |  |O2|  |  |  |
-D |  |G2|Y2|P2|  |
+B |  |B1|  |Y2|  |
+C |  |B2|O2|G2|  |
+D |  |B3|  |P2|  |
 E |  |  |  |  |  |
 
 Your hand is
-B5, G4, Y2, P3, O6, G2
+B5,G4,Y2,P3,O6,G2
 
 >
 Goodbye

@@ -4,25 +4,19 @@ Menu
 ----
 1. New Game
 2. Load Game
-3. Show student information
+3. Show Student Information
 4. Quit
 
 >
-
 Starting a New Game
 
 Enter amount of players:
 >
-
 Enter a name for player 1 (uppercase characters only)
+>Error - Must be uppercase characters
+>Error - Must be uppercase characters
 >
-Error - Must be uppercase characters
->
-Error - Must be uppercase characters
->
-
 Enter a name for player 2 (uppercase characters only)
->
-Error - Must be uppercase characters
+>Error - Must be uppercase characters
 >
 Goodbye

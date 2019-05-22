@@ -261,6 +261,14 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     // counter for points earned
     int rowScore = 0, colScore = 0;
 
+    //check if the coordinate is within the board
+    if (isValid && (destinationRow < 0 || destinationRow > rowLength-1 ||
+                    destinationColumn < 0 || destinationColumn > colLength-1)){
+                      std::cout << "Error - Outside of board" << std::endl;
+                      isValid = false;
+    }
+
+    //check if tile exists
     if (playerList[currentPlayer]->getTilePtr(tile) == nullptr) {
       std::cout << "Error - Tile not found" << std::endl;
       isValid = false;
@@ -269,23 +277,24 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     if(destinationRow < 0 || destinationRow > rowLength
     || destinationColumn < 0 || destinationColumn > colLength) isValid = false;
     // check coordinate is not currently occupied
-    if(board[destinationRow][destinationColumn]!= NULL) isValid = false;
+    if(isValid &&
+      board[destinationRow][destinationColumn]!= NULL) isValid = false;
     // check tile is placed adjacent to an existing tile after turn 1
     // assuming turn denotes turns passed
-    emptyNorth = (destinationRow <= 0
-      || board[destinationRow-1][destinationColumn] == NULL) ? true : false;
-    emptySouth = (destinationRow >= rowLength-1
-      || board[destinationRow+1][destinationColumn] == NULL) ? true : false;
-    emptyEast = (destinationColumn >= colLength-1
-      || board[destinationRow][destinationColumn+1] == NULL) ? true : false;
-    emptyWest = (destinationColumn <= 0
-      || board[destinationRow][destinationColumn-1] == NULL) ? true : false;
-    if(isValid == true && turn >= 1
+    emptyNorth = (isValid && (destinationRow <= 0
+      || board[destinationRow-1][destinationColumn] == NULL)) ? true : false;
+    emptySouth = (isValid && (destinationRow >= rowLength-1
+      || board[destinationRow+1][destinationColumn] == NULL)) ? true : false;
+    emptyEast = (isValid && (destinationColumn >= colLength-1
+      || board[destinationRow][destinationColumn+1] == NULL)) ? true : false;
+    emptyWest = (isValid && (destinationColumn <= 0
+      || board[destinationRow][destinationColumn-1] == NULL)) ? true : false;
+    if(isValid && turn >= 1
        && emptyNorth && emptySouth && emptyEast && emptyWest){
       isValid = false;
       std::cout << "Error - No surrounding tiles" << std::endl;
     }
-
+    
     // check north
     if(!emptyNorth && isValid == true) {
         currentRow = destinationRow;

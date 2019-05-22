@@ -8,17 +8,14 @@ Menu
 4. Quit
 
 >
-
 Enter the filename from which to load the game
 >
-
 Game Loaded Successfully
 
 A, it's your turn
 Score for A: 11
 Score for B: 12
    0  1  2  3  4
-  ----------------
 A |  |  |  |  |  |
 B |  |R1|  |  |  |
 C |  |G1|G3|G6|  |
@@ -29,9 +26,8 @@ G |  |B1|  |  |  |
 H |  |  |  |  |  |
 
 Your hand is
-O3, O1, G3, Y6, Y2, Y1
+O3,O1,G3,Y6,Y2,Y1
 
->
-Error - Invalid Input
+>Error - Invalid tile placement
 >
 Goodbye
