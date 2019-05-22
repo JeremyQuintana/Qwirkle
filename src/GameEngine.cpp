@@ -225,29 +225,39 @@ bool GameEngine::takeTurn() {
 //function if the player decides to place a tile for their turns
 bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     bool isValid = true;
-    // row player asked for
-    char row = coordinate.at(0);
+
+    char row = 0;
+    std::string column = "";
     int destinationRow = 0;
-    //check for
-    if (row >= 'A' && row <= 'Z') destinationRow = row - 65;
-    else {
-      std::cout << "Error - Invalid row coordinate" << std::endl;
-      isValid = false;
-    }
-    // column player asked for
-    std::string column = coordinate.substr(1, coordinate.length()-1);
-    int columnLength = column.length();
-    bool validCol = true;
-    if (column == "") validCol = false;
-    for (int i = 0; i < columnLength && isValid == true; i++){
-      if (column.at(i) < '0' || column.at(i) > '9') validCol = false;
-    }
-    if (!validCol){
-      isValid = false;
-      std::cout << "Error - Invalid column coordinate" << std::endl;
-    }
     int destinationColumn = 0;
-    if(isValid == true) destinationColumn = std::stoi(column);
+
+    if (coordinate.length() > 1){
+      bool validRow = true;
+      row = coordinate.at(0);
+      //check for row
+      if (row >= 'A' && row <= 'Z') destinationRow = row - 65;
+      else validRow = false;
+      if (!validRow){
+        std::cout << "Error - Invalid row coordinate" << std::endl;
+        isValid = false;
+      }
+      // column player asked for
+      column = coordinate.substr(1, coordinate.length()-1);
+      int columnLength = column.length();
+      bool validCol = true;
+      if (column == "") validCol = false;
+      for (int i = 0; i < columnLength && isValid == true; i++){
+        if (column.at(i) < '0' || column.at(i) > '9') validCol = false;
+      }
+      if (!validCol){
+        isValid = false;
+        std::cout << "Error - Invalid column coordinate" << std::endl;
+      }
+      if(isValid == true) destinationColumn = std::stoi(column);
+    } else {
+      isValid  = false;
+      std::cout << "Error - No coordinate" << std::endl;
+    }
     // copies of these to use as counters
     int currentRow = destinationRow;
     int currentColumn = destinationColumn;
@@ -266,7 +276,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     int rowScore = 0, colScore = 0;
 
     //check if tile exists
-    if (playerList[currentPlayer]->getTilePtr(tile) == nullptr) {
+    if (isValid && playerList[currentPlayer]->getTilePtr(tile) == nullptr) {
       std::cout << "Error - Tile not found" << std::endl;
       isValid = false;
     }
@@ -436,7 +446,8 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
       playerList[currentPlayer]->getTilePtr(tile);
       updateDynamicBoard(destinationRow, destinationColumn);
       //remove tile from hand and draw new tile
-      playerList[currentPlayer]->addScore(colScore+rowScore);
+      if (turn != 0) playerList[currentPlayer]->addScore(colScore+rowScore);
+      else playerList[currentPlayer]->addScore(1);
       Tile* tileToAdd = tileBag.get(0);
       playerList[currentPlayer]->addTile(tileToAdd);
       tileBag.deleteTile(*tileToAdd);
