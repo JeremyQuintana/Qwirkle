@@ -144,6 +144,15 @@ void GameEngine::assembleDynamicBoard(){
     for (int i=0;i<rowLength;i++){
         dynamicBoard[i]= new BoardRow[colLength];
     }
+    for (int i = 0; i < rowLength; i++){
+        if(dynamicBoard[i]) {
+            for(int j=0; j<colLength;j++){
+                if(dynamicBoard[i][j]) {
+                    delete dynamicBoard[i][j];
+                }
+            }
+        }
+    }
 }
 
 //take turn function that decides what the player wants to do with their turn
