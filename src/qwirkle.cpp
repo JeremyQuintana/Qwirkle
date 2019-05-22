@@ -115,13 +115,15 @@ void loadGame(){
   //attempts to open file
   std::ifstream inFile("../src/"+input);
 
-  //reads from file if it can and stores it line by line, in lines array
+
   std::string lines[500];
   int lineNumber = 0;
+  //if the file doesn't exist
   if(!inFile){
     std::cout << "Error - Can not open or find file" << std::endl;
   } else{
-    while (!inFile.eof()){
+      //reads from file if it can and stores it line by line, in lines array
+      while (!inFile.eof()){
       std::getline(inFile, lines[lineNumber]);
       lineNumber++;
     }
@@ -133,7 +135,7 @@ void loadGame(){
       int initColLength= std::stoi(lines[currentLine]);
       currentLine++;
 
-      // check all player deets
+
       std::string line;
       String tempName;
       String tempScore;
@@ -142,6 +144,7 @@ void loadGame(){
       int playerScores[playerNum];
       String playerHands[playerNum];
 
+      // check all player deets
       for(int i=0;i<playerNum;i++){
           tempName= lines[currentLine];
           currentLine++;
@@ -157,18 +160,21 @@ void loadGame(){
 
       String board[initRowLength];
 
-      //check board
+      //loads board into a string array
       for(int i=0;i<initRowLength;i++){
           line = lines[currentLine];
           board[i]= line;
           currentLine++;
       }
+      //gets over an empty line
       currentLine++;
+
       //check bag
       String bag= lines[currentLine];
       currentLine++;
       String turnString = lines[currentLine];
       int turn= std::stoi(turnString);
+      //creates a new game using the existing data
       new GameEngine(playerNum, initRowLength, initColLength, playerNames,
                          playerScores, playerHands, board, bag, turn);
       }

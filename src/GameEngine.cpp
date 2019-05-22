@@ -10,7 +10,7 @@
 using std::cin;
 using std::stoi;
 
-//constructor for a new game
+//a constructor for a new GameEngine for a new game
 GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     turn= 0;
     playerList = new Player*[totalPlayers];
@@ -28,6 +28,7 @@ GameEngine::GameEngine(std::string playerListNames[], int totalPlayers) {
     startGame();
 }
 
+//constructor for a new GameEngine based on a save file after a load
 GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String playerNames[],
                        int playerScores[], String playerHands[], String board[], String bag, int turn){
     std::cout << "Game  successfully loaded" << std::endl;
@@ -37,32 +38,40 @@ GameEngine::GameEngine(int totalPlayers, int rowLength, int colLength, String pl
     this->colLength= colLength;
     this->rowLength= rowLength;
 
+    //loops through the players array and generate new players
     for (int i = 0; i < totalPlayers; i++) {
+        //the total number of cards, after taking into account the formatting of each string line in the savefile
         String hands[(playerHands[i].length()+1)/3];
         int index= 0;
         playerList[i] = new Player(playerNames[i], new LinkedList);
         playerList[i]->addScore(playerScores[i]);
+        //processes each tile in the string and puts into the hand array
         for(unsigned int j=0;j<playerHands[i].length();j+=3){
             hands[index]= playerHands[i].substr(j,2);
             index++;
         }
+        //adds each hand in the hand array as Tiles into each player
         for(String hand:hands){
             playerList[i]->addTile(new Tile(hand));
         }
     }
 
+    //the total number of tiles in the bag after taking into account the string formatting in the savefile
     String bags[(bag.length()+1)/3];
     int index= 0;
+    //processes each tile in the string and put them inside the bag array
     for(unsigned int i=0;i<bag.length();i+=3){
         bags[index]= bag.substr(i,2);
         index++;
     }
+    //adds each tile into the bag linkedlist as a new tile
     for(String bagTile:bags){
         tileBag.addBack(new Tile(bagTile));
     }
 
     assembleDynamicBoard();
 
+    //processes the tiles on the board from the board string array and puts them inside the dynamic board
     for(int i=0;i<rowLength;i++){
         String row[colLength];
         index= 0;
@@ -124,7 +133,7 @@ void GameEngine::assembleBoard(){
     }
 }
 
-//creates a board of default size
+//creates a board of the size rowLength and colLength, with the default value of 3x3
 void GameEngine::assembleDynamicBoard(){
     dynamicBoard= new Board[rowLength];
     for (int i=0;i<rowLength;i++){
@@ -351,6 +360,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     return isValid;
 }
 
+//saves the current game into a savefile
 void GameEngine::saveGame(std::string fileName){
   std::ofstream outFile ("../src/"+fileName);
 
@@ -463,6 +473,7 @@ std::string GameEngine::printBoard() {
     return boardStr;
 }
 
+//takes the state of the curent board and turns it into a simple string
 String GameEngine::boardToString() {
     String stringBoard;
     String tile;
