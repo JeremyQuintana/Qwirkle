@@ -194,7 +194,7 @@ bool GameEngine::takeTurn() {
             std::cout << "place <tile code> at <location code>" << std::endl;
             std::cout << "\teg. place R1 at B2" << std::endl << std::endl;
 
-            std::cout << "To replace a tile from hand with new one, type: "
+            std::cout << "To replace a tile in hand with new one, type: "
                 << std::endl;
             std::cout << "replace <tile code>" << std::endl;
             std::cout << "\teg. replace Y3" << std::endl << std::endl;
