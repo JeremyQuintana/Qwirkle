@@ -82,7 +82,7 @@ void newGame(){
             validate = true;
             amountOfPlayers = input.at(0) - '0';
       }
-      else std::cout << "Error - must choose only 2-4 players" << std::endl;
+      else std::cout << "Error - Must choose only 2-4 players" << std::endl;
     }
   }
 

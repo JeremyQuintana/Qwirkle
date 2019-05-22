@@ -237,11 +237,14 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     // column player asked for
     std::string column = coordinate.substr(1, coordinate.length()-1);
     int columnLength = column.length();
+    bool validCol = true;
+    if (column == "") validCol = false;
     for (int i = 0; i < columnLength && isValid == true; i++){
-      if (column.at(i) < '0' || column.at(i) > '9'){
-        isValid = false;
-        std::cout << "Error - Invalid column coordinate" << std::endl;
-      }
+      if (column.at(i) < '0' || column.at(i) > '9') validCol = false;
+    }
+    if (!validCol){
+      isValid = false;
+      std::cout << "Error - Invalid column coordinate" << std::endl;
     }
     int destinationColumn = 0;
     if(isValid == true) destinationColumn = std::stoi(column);
@@ -262,21 +265,17 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
     // counter for points earned
     int rowScore = 0, colScore = 0;
 
-    //check if the coordinate is within the board
-    if (isValid && (destinationRow < 0 || destinationRow > rowLength-1 ||
-                    destinationColumn < 0 || destinationColumn > colLength-1)){
-                      std::cout << "Error - Outside of board" << std::endl;
-                      isValid = false;
-    }
-
     //check if tile exists
     if (playerList[currentPlayer]->getTilePtr(tile) == nullptr) {
       std::cout << "Error - Tile not found" << std::endl;
       isValid = false;
     }
     //check coordinate exists - needs to be changed for dynamic boards in future
-    if(destinationRow < 0 || destinationRow > rowLength
-    || destinationColumn < 0 || destinationColumn > colLength) isValid = false;
+    if(isValid && (destinationRow < 0 || destinationRow > rowLength-1
+    || destinationColumn < 0 || destinationColumn > colLength-1)){
+      std::cout << "Error - Outside of board" << std::endl;
+      isValid = false;
+    }
     // check coordinate is not currently occupied
     if(isValid &&
       board[destinationRow][destinationColumn]!= NULL) isValid = false;
@@ -295,7 +294,7 @@ bool GameEngine::placeTile(Tile tile, std::string coordinate) {
       isValid = false;
       std::cout << "Error - No surrounding tiles" << std::endl;
     }
-    
+
     // check north
     if(!emptyNorth && isValid == true) {
         currentRow = destinationRow;
