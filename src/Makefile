@@ -2,6 +2,9 @@
 
 all: qwirkle
 
-qwirkle: Tile.cpp Node.cpp LinkedList.cpp qwirkle.cpp
-	g++ -Wall -Werror -std=c++14 -g -O -o $@ $^
+clean:
+	rm -rf qwirkle
+
+qwirkle: *.cpp
+	g++ -Wall -Werror -std=c++14 -O -o $@ $^
 
